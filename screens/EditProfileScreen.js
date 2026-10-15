@@ -10,7 +10,7 @@ const ACTIVITY_OPTIONS = ['Sedentary', 'Lightly Active', 'Moderately Active', 'V
 const GOAL_OPTIONS = ['Lose Fat', 'Build Muscle', 'Maintain Weight', 'Eat Healthier'];
 const DIET_OPTIONS = ['No Restriction', 'Vegetarian', 'Vegan', 'Low Carb', 'High Protein'];
 
-export default function ProfileScreen({ navigation }) {
+export default function EditProfileScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [email, setEmail] = useState('');
@@ -50,16 +50,6 @@ export default function ProfileScreen({ navigation }) {
     else Alert.alert('Saved ✅', 'Your profile has been updated!');
   };
 
-  const handleLogout = async () => {
-    Alert.alert('Log Out', 'Are you sure?', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Log Out', style: 'destructive', onPress: async () => {
-        await supabase.auth.signOut();
-        navigation.replace('Login');
-      }},
-    ]);
-  };
-
   if (loading) return (
     <SafeAreaView style={styles.safe}>
       <ActivityIndicator style={{ flex: 1 }} color="#0D9E8A" />
@@ -69,7 +59,10 @@ export default function ProfileScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        <Text style={styles.title}>Profile</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
+          <Text style={styles.backText}>‹ Settings</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>Edit My Profile</Text>
         <Text style={styles.email}>{email}</Text>
 
         {/* Stats */}
@@ -143,11 +136,6 @@ export default function ProfileScreen({ navigation }) {
         <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.7 }]} onPress={handleSave} disabled={saving}>
           {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>Save Changes</Text>}
         </TouchableOpacity>
-
-        {/* Logout */}
-        <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-          <Text style={styles.logoutText}>Log Out</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
@@ -155,7 +143,7 @@ export default function ProfileScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: '#fff' },
-  container: { paddingHorizontal: 24, paddingTop: 24, paddingBottom: 48 },
+  container: { paddingHorizontal: 24, paddingTop: 12, paddingBottom: 48 },
   title: { fontSize: 28, fontWeight: '800', color: '#1a1a1a', marginBottom: 4 },
   email: { fontSize: 14, color: '#888', marginBottom: 28 },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: '#1a1a1a', marginBottom: 6, marginTop: 8 },
@@ -172,6 +160,6 @@ const styles = StyleSheet.create({
   chipTextSelected: { color: '#0D9E8A', fontWeight: '700' },
   saveBtn: { backgroundColor: '#0D9E8A', borderRadius: 12, padding: 16, alignItems: 'center', marginTop: 24, marginBottom: 12 },
   saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  logoutBtn: { borderWidth: 1.5, borderColor: '#FF4444', borderRadius: 12, padding: 16, alignItems: 'center' },
-  logoutText: { color: '#FF4444', fontSize: 16, fontWeight: '600' },
+  backBtn: { alignSelf: 'flex-start', paddingVertical: 4, marginBottom: 8 },
+  backText: { fontSize: 16, color: '#0D9E8A', fontWeight: '600' },
 });
