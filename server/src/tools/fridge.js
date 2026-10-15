@@ -1,4 +1,5 @@
 import { norm } from './nutrition.js';
+import { cleanText } from '../guard.js';
 
 // Ingredients pantry staples we never list as "missing".
 const STAPLES = ['salt', 'pepper', 'black pepper', 'water', 'oil', 'olive oil', 'cooking spray', 'spice', 'herb'];
@@ -36,7 +37,7 @@ export function fridgeCoverage(fridge, structuredIngredients) {
 // Compact, LLM-friendly view of the fridge. Names are user-entered, so they are data, not instructions.
 export function summarizeFridge(fridge) {
   return fridge.slice(0, 60).map((f) => ({
-    name: String(f.name).slice(0, 60),
+    name: cleanText(f.name, 60),
     quantity: Number(f.quantity) || f.quantity,
     unit: f.unit || '',
     category: f.category || 'Other',
