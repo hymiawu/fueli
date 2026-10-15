@@ -16,6 +16,7 @@ Rules:
 - MAXIMIZE use of fridge ingredients; prefer items that expire soonest.
 - If the fridge is empty or too sparse, still plan complete meals from common groceries; list every ingredient with quantities.
 - Strictly respect the diet. Vegetarian: no meat or seafood. Vegan: no animal products at all.
+- When the profile gives approxCaloriesPerMeal, aim each meal's per-serving calories near it.
 - Use the lookup_nutrition tool to get per-100g values for main ingredients, and base calories/macros on them.
 - structuredIngredients names must match fridge item names when the item comes from the fridge, using units g, ml, piece, cup or tbsp.
 - Use g for meat, fish, tofu, grains, leafy greens, berries and chopped vegetables. Use piece only for whole countable items such as eggs, whole fruit, a head of broccoli or an ear of corn.
@@ -37,12 +38,26 @@ const tools = {
   },
 };
 
+// Rough kcal per kg of body weight per day by activity level, and goal adjustments.
+const KCAL_PER_KG = { sedentary: 28, 'lightly active': 31, 'moderately active': 34, 'very active': 37 };
+const GOAL_FACTOR = { 'lose fat': 0.8, 'build muscle': 1.1 };
+
+// Approximate calories per meal (3 meals a day), rounded to 50 kcal. Computed here so the
+// user's body measurements never reach the model.
+export function mealCalorieTarget(p) {
+  const kg = Number(p.weight);
+  if (!(kg >= 30 && kg <= 300)) return null;
+  const perKg = KCAL_PER_KG[String(p.activity || '').toLowerCase()] ?? 31;
+  const daily = kg * perKg * (GOAL_FACTOR[String(p.goal || '').toLowerCase()] ?? 1);
+  return Math.round(daily / 3 / 50) * 50;
+}
+
+// What the model sees about the user: preferences and a calorie target, never height or weight.
 const profileView = (p) => ({
   goal: cleanText(p.goal || 'Eat Healthier', 40),
   diet: cleanText(p.diet || 'No Restriction', 40),
   activity: cleanText(p.activity || '', 40),
-  heightCm: Number(p.height) || null,
-  weightKg: Number(p.weight) || null,
+  approxCaloriesPerMeal: mealCalorieTarget(p),
 });
 
 function finalize(meals, fridge, profile, servings) {
