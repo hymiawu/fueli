@@ -1,5 +1,5 @@
 // Runs the eval suite against the real agents (in-process, no Supabase needed).
-// Usage: cd server && npm run eval        (needs OPENAI_API_KEY in server/.env)
+// Usage: cd server && npm run eval        (needs ANTHROPIC_API_KEY in server/.env)
 //        npm run eval -- --only meals     (meals | food | workouts)
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { planMeals } from '../server/src/agents/mealPlanner.js';

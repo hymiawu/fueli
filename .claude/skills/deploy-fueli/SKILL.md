@@ -13,7 +13,7 @@ Deploying is outward-facing: confirm with the user before running any `fly deplo
 
 ## API → Fly.io (from `server/`)
 - First time only: `fly launch --no-deploy --copy-config` (keep `fly.toml`, pick a unique app name), then
-  `fly secrets set OPENAI_API_KEY=... SUPABASE_ANON_KEY=...`
+  `fly secrets set ANTHROPIC_API_KEY=... SUPABASE_ANON_KEY=...`
 - Deploy: `fly deploy`
 - Verify: `curl https://<app>.fly.dev/health` → `{"ok":true,...}`
 - Logs: `fly logs` — each AI call logs one JSON line (`evt: "ai"`) with latency, tokens and flags only.

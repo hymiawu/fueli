@@ -91,7 +91,6 @@ Call get_fridge_inventory first, then lookup_nutrition for the main ingredients.
         },
       ],
       schema: MealPlan,
-      maxTokens: 1800,
       trace,
     });
     const fixed = finalize(repaired.meals, fridge, p);

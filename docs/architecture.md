@@ -30,7 +30,7 @@ flowchart LR
     LOG["Metadata logs<br/>latency · tokens · flags"]
   end
 
-  LLM["OpenAI gpt-4o<br/>(chat + vision, JSON mode)"]
+  LLM["Claude Opus 5.5<br/>(Messages API: chat + vision, tool use)"]
 
   UI -- "sign in / CRUD fridge (RLS)" --> Auth
   UI --> DB
@@ -55,7 +55,7 @@ flowchart LR
 | **UI** | Expo SDK 54 / React Native, exported as a static SPA for the web (`expo export -p web`) and hosted on Vercel. The same code runs on iOS/Android via Expo. | `App.js`, `screens/`, `vercel.json` |
 | **Auth & data** | Supabase Auth (email/password; profile stored in `user_metadata`) and Postgres `ingredients` table protected by RLS. Meal/workout history currently lives in device storage. | `lib/supabase.js`, `supabase/migrations/` |
 | **API gateway** | Express 5 on Fly.io: verifies the Supabase JWT, creates a per-request Supabase client *as the user*, enforces the CORS allow-list, rate limit and zod request schemas. | `server/src/index.js`, `auth.js`, `rateLimit.js` |
-| **Model** | OpenAI `gpt-4o` via Chat Completions with JSON mode and function calling. Swappable in one file. | `server/src/llm.js` |
+| **Model** | Anthropic Claude Opus 5.5 (`claude-opus-5-5`) via the Messages API with tool use and zod-validated JSON; server-side refusal fallback enabled. Swappable in one file. | `server/src/llm.js` |
 | **Data / retrieval** | Local nutrition knowledge base (USDA-derived per-100 g values, aliases, piece weights) with fuzzy name matching and unit→gram conversion. | `server/src/data/nutrition.json`, `tools/nutrition.js` |
 | **Context** | The planner receives a compact profile view and pulls the fridge through a tool. All user-controlled text is wrapped in `<user_data>` blocks with an explicit "data, not instructions" rule. | `guard.js`, `agents/mealPlanner.js` |
 | **Tools** | `get_fridge_inventory` (Supabase, read-only), `lookup_nutrition` (KB, read-only). The model has **no write tools**; fridge changes happen only when the user taps "cooked". | `tools/` |

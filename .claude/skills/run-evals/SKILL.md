@@ -5,7 +5,7 @@ description: Run Fueli's AI evaluation suite (meal planner, outside-food analyze
 
 # Run Fueli evals
 
-1. Make sure `server/.env` has `OPENAI_API_KEY`. If not, stop and ask — never print or commit the key.
+1. Make sure `server/.env` has `ANTHROPIC_API_KEY`. If not, stop and ask — never print or commit the key.
 2. Run the deterministic tests first (free, fast): `cd server && npm test`. Fix failures before spending tokens.
 3. Run the suite: `cd server && npm run eval` (or `npm run eval -- --only meals|food|workouts` for one suite).
 4. Read `eval/results/latest.md`. For each failed case:

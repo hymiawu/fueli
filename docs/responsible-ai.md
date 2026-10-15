@@ -7,7 +7,7 @@
 |---|---|---|
 | One user reading another's data | Row Level Security on `ingredients`. The API queries Supabase **with the user's own JWT**, so RLS applies to the server too. No service-role key exists in the API. | `supabase/migrations/001_ingredients_rls.sql`, `server/src/auth.js` |
 | Health data in logs | Logs contain only route name, latency, token counts, tool-call count and flags. No prompts, outputs, emails or images. | `server/src/index.js` |
-| Data sent to the model provider | Minimal profile (goal, diet, activity, height/weight) and the fridge list. No name or email. Images are sent at `detail: low` and not stored. OpenAI API data is not used for training by default. | `agents/` |
+| Data sent to the model provider | Minimal profile (goal, diet, activity, height/weight) and the fridge list. No name or email. Images are not stored. Anthropic does not train on Claude API data by default. | `agents/` |
 | Data retention | Images are never persisted. Users can delete fridge items at any time. *Todo:* account deletion endpoint. | |
 
 ## Hallucination
