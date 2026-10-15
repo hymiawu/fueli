@@ -1,10 +1,13 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-const MODEL = process.env.ANTHROPIC_MODEL || 'claude-opus-5-5';
-// Thinking is always on for this model and counts toward max_tokens, so leave room beyond the JSON answer.
+const MODEL = process.env.ANTHROPIC_MODEL || 'claude-haiku-5-5';
+// Thinking is on by default and counts toward max_tokens, so leave room beyond the JSON answer.
 const MAX_TOKENS = 16000;
 // If a safety classifier declines a request, the API re-runs it on Anthropic's recommended fallback model.
-const FALLBACK = { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' };
+// Haiku has no server-side fallback, so the parameter is only sent for other models.
+const FALLBACK = MODEL.includes('haiku') ? {} : { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' };
+// Users may enter fridge items or goals in other languages; the app's UI is English.
+const LANGUAGE_RULE = 'Write every text value in English, even when the user data is in another language.';
 
 let client;
 const anthropic = () => (client ??= new Anthropic());
@@ -23,7 +26,8 @@ function record(trace, res) {
 }
 
 async function create(params, trace) {
-  const res = await anthropic().beta.messages.create({ model: MODEL, max_tokens: MAX_TOKENS, ...FALLBACK, ...params });
+  const system = `${params.system}\n\n${LANGUAGE_RULE}`;
+  const res = await anthropic().beta.messages.create({ model: MODEL, max_tokens: MAX_TOKENS, ...FALLBACK, ...params, system });
   record(trace, res);
   if (res.stop_reason === 'refusal') {
     trace?.flags.push('refusal');
@@ -62,7 +66,7 @@ export function imageBlock(b64) {
  * Ask for a JSON object, validate it against a zod schema, and retry once with the
  * validation error if it doesn't conform. `effort` trades depth of thinking for speed and cost.
  */
-export async function jsonCompletion({ system, messages, schema, effort = 'medium', trace, extra = {} }) {
+export async function jsonCompletion({ system, messages, schema, effort = 'low', trace, extra = {} }) {
   const convo = [...messages];
   for (let attempt = 0; attempt < 2; attempt++) {
     const res = await create({ system, messages: convo, output_config: { effort }, ...extra }, trace);
@@ -83,7 +87,7 @@ export async function jsonCompletion({ system, messages, schema, effort = 'mediu
  * Minimal tool-using agent loop. `tools` maps name -> { description, parameters, run }.
  * Returns the final answer, validated against `finalSchema`, once the model stops calling tools.
  */
-export async function runAgent({ system, messages, tools, maxSteps = 4, effort = 'medium', trace, finalSchema }) {
+export async function runAgent({ system, messages, tools, maxSteps = 4, effort = 'low', trace, finalSchema }) {
   const toolDefs = Object.entries(tools).map(([name, t]) => ({ name, description: t.description, input_schema: t.parameters }));
   const convo = [...messages];
   for (let step = 0; step < maxSteps; step++) {

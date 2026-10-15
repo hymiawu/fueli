@@ -6,7 +6,7 @@ primary_region = "lax"
 
 [env]
   PORT = "8080"
-  ANTHROPIC_MODEL = "claude-opus-5-5"
+  ANTHROPIC_MODEL = "claude-haiku-5-5"
   SUPABASE_URL = "https://rdtqyizwcmhxirbganhn.supabase.co"
   # Comma-separated. Wildcard prefix allowed for Vercel preview URLs.
   ALLOWED_ORIGINS = "http://localhost:8081,https://fueli.vercel.app,https://*.vercel.app"

@@ -35,7 +35,7 @@
 ### 3.2 Meal planner — `POST /v1/meals/suggest`
 - Input: `{ neededTypes: ["Breakfast"|"Lunch"|"Dinner"] }`. The server loads the fridge (Supabase, as the user) and the profile (Supabase auth metadata) itself, so the client cannot tamper with them.
 - Pipeline:
-  1. **Planner agent** (LLM, ≤ 4 tool steps) with read-only tools `get_fridge_inventory` and `lookup_nutrition`.
+  1. **Planner agent** (LLM, ≤ 4 tool steps) with the fridge inventory in its prompt and the read-only `lookup_nutrition` tool.
   2. **Schema validation** (zod). One automatic retry with the validation error.
   3. **Nutrition Verifier** (deterministic): if ≥ 70% of ingredients resolve in the nutrition DB, the macros are recomputed from the DB (`macroSource: verified|corrected`; the model's original numbers are kept in `claimed` when they drift > 25%). Otherwise `estimated`, made Atwater-consistent. Missing ingredients and `fridgeUtilization` are recomputed from the real fridge.
   4. **Safety Guard** (deterministic): vegetarian/vegan violations are hard failures → one repair round → otherwise the meal is dropped and reported in `blocked`. Low-carb/high-protein/calorie checks become user-visible `warnings`.

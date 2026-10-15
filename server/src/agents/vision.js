@@ -11,7 +11,6 @@ Return JSON: {"isFood":true,"name":"banana","quantity":1,"unit":"g|ml|piece|cup|
 calories/protein/carbs/fat are per 100 g. If the photo is not food, set isFood false and name "Unknown".`,
     messages: [{ role: 'user', content: [imageBlock(image), { type: 'text', text: 'Identify this item.' }] }],
     schema: IngredientScan,
-    effort: 'low',
     trace,
   });
   const food = r.isFood ? lookupFood(r.name) : null;
@@ -32,7 +31,6 @@ Return JSON: {"isFood":true,"name":"<food name>","calories":<kcal>,"protein":<g>
 Base the estimate only on the food actually described or shown. If no identifiable food is described or shown, return {"isFood":false,"name":"Unknown","calories":0,"protein":0,"carbs":0,"fat":0,"confidence":"low"}.`,
     messages: [{ role: 'user', content }],
     schema: OutsideFood,
-    effort: 'low',
     trace,
   });
   return { ...r, nutritionSource: 'ai-estimate' };
