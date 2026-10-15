@@ -388,7 +388,7 @@ export default function MealScreen() {
             {homeMeals.some(m => !m.cooked) && (
               <TouchableOpacity style={[styles.refreshBtn, loading && {opacity:0.7}]} onPress={getSuggestions} disabled={loading}>
                 {loading ? <ActivityIndicator color="#0D9E8A" /> :
-                  <Text style={styles.refreshBtnText}>↻  Refresh {ALL_MEAL_TYPES.filter(t => !selectedMeals.find(m => m.type===t && m.cooked)).join(' & ')} Suggestions</Text>}
+                  <Text style={styles.refreshBtnText}>↻  Refresh My Meals</Text>}
               </TouchableOpacity>
             )}
           </>
