@@ -19,7 +19,7 @@ export function verifyMeal(meal, fridge) {
     if (drift > MAX_DRIFT) out.claimed = { calories: meal.calories, protein: meal.protein, carbs: meal.carbs, fat: meal.fat };
     Object.assign(out, { calories: computed.calories, protein: computed.protein, carbs: computed.carbs, fat: computed.fat });
     out.macroSource = drift > MAX_DRIFT ? 'corrected' : 'verified';
-    if (computed.unmatched.length) out.warnings.push(`Not in nutrition database (not counted): ${computed.unmatched.join(', ')}.`);
+    // Items the database can't price are left out of the totals; nutritionCoverage records how much was counted.
   } else {
     out.macroSource = 'estimated';
     // At least make the model's numbers internally consistent.
