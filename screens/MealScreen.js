@@ -515,6 +515,9 @@ function MacroPill({ label, value, color }) {
   );
 }
 
+// "Get AI Suggestions" and "Log Outside Food" share one width so they line up.
+const ACTION_BTN_WIDTH = 260;
+
 const styles = StyleSheet.create({
   safe: { flex:1, backgroundColor:'#fff' },
   header: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:20, paddingTop:16, paddingBottom:10 },
@@ -542,7 +545,7 @@ const styles = StyleSheet.create({
   emptyIcon: { fontSize:52, marginBottom:16 },
   emptyTitle: { fontSize:20, fontWeight:'700', color:'#1a1a1a', marginBottom:8 },
   emptySubtitle: { fontSize:15, color:'#aaa', textAlign:'center', lineHeight:22, marginBottom:28 },
-  suggestBtn: { backgroundColor:'#0D9E8A', borderRadius:14, paddingHorizontal:28, paddingVertical:14 },
+  suggestBtn: { width:ACTION_BTN_WIDTH, backgroundColor:'#0D9E8A', borderRadius:14, paddingVertical:14, alignItems:'center' },
   suggestBtnText: { color:'#fff', fontSize:16, fontWeight:'700' },
   card: { backgroundColor:'#FAFAFA', borderRadius:16, padding:16, marginBottom:14, borderWidth:1.5, borderColor:'#F0F0F0' },
   cardCooked: { borderColor:'#4CAF5040', backgroundColor:'#F6FFF6' },
@@ -573,7 +576,7 @@ const styles = StyleSheet.create({
   expandBtnText: { fontSize:13, color:'#0D9E8A', fontWeight:'600' },
   refreshBtn: { borderWidth:1.5, borderColor:'#0D9E8A', borderRadius:12, padding:14, alignItems:'center', marginTop:8, marginBottom:8 },
   refreshBtnText: { color:'#0D9E8A', fontSize:15, fontWeight:'700' },
-  outsideBtn: { marginTop:16, borderWidth:1.5, borderColor:'#9C27B0', borderRadius:12, padding:14, alignItems:'center' },
+  outsideBtn: { width:ACTION_BTN_WIDTH, alignSelf:'center', marginTop:16, borderWidth:1.5, borderColor:'#9C27B0', borderRadius:14, paddingVertical:14, alignItems:'center' },
   outsideBtnText: { color:'#9C27B0', fontSize:15, fontWeight:'700' },
   modalOverlay: { flex:1, backgroundColor:'rgba(0,0,0,0.4)', justifyContent:'flex-end' },
   modalSheet: { backgroundColor:'#fff', borderTopLeftRadius:24, borderTopRightRadius:24, padding:24, maxHeight:'85%' },
