@@ -515,7 +515,7 @@ function MacroPill({ label, value, color }) {
   );
 }
 
-// "Get AI Suggestions" and "Log Outside Food" share one width so they line up.
+// "Get AI Suggestions", "Refresh My Meals" and "Log Outside Food" share one width so they line up.
 const ACTION_BTN_WIDTH = 260;
 
 const styles = StyleSheet.create({
@@ -576,7 +576,7 @@ const styles = StyleSheet.create({
   recipeText: { fontSize:14, color:'#555', lineHeight:22 },
   expandBtn: { marginTop:12, alignItems:'center' },
   expandBtnText: { fontSize:13, color:'#0D9E8A', fontWeight:'600' },
-  refreshBtn: { borderWidth:1.5, borderColor:'#0D9E8A', borderRadius:12, padding:14, alignItems:'center', marginTop:8, marginBottom:8 },
+  refreshBtn: { width:ACTION_BTN_WIDTH, alignSelf:'center', borderWidth:1.5, borderColor:'#0D9E8A', borderRadius:14, paddingVertical:14, alignItems:'center', marginTop:8, marginBottom:8 },
   refreshBtnText: { color:'#0D9E8A', fontSize:15, fontWeight:'700' },
   outsideBtn: { width:ACTION_BTN_WIDTH, alignSelf:'center', marginTop:16, borderWidth:1.5, borderColor:'#9C27B0', borderRadius:14, paddingVertical:14, alignItems:'center' },
   outsideBtnText: { color:'#9C27B0', fontSize:15, fontWeight:'700' },
