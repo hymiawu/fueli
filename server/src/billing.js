@@ -74,6 +74,16 @@ export async function getMembership(req) {
   return out;
 }
 
+// Grandfathered accounts have no Stripe subscription: canceling ends their free access right away.
+// Paid accounts cancel at the end of the period they paid for.
+export async function cancelMembership(req) {
+  const row = await readStatus(req);
+  if (row?.status !== 'grandfathered') return setCancelAtPeriodEnd(req, true);
+  if (!admin) throw fail(503, 'Payments are not configured');
+  await save(req.user.id, { status: 'canceled' });
+  return getMembership(req);
+}
+
 // Cancel at the end of the paid period (access continues until then), or undo that.
 export async function setCancelAtPeriodEnd(req, cancel) {
   requireStripe();
