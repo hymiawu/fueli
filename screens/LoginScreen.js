@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
   StyleSheet, KeyboardAvoidingView, Platform,
@@ -7,11 +7,21 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
+import { enterApp } from '../lib/route';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+
+  // Already signed in (or returning from Stripe Checkout): skip the form.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) enterApp(navigation);
+      else setChecking(false);
+    });
+  }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -20,13 +30,21 @@ export default function LoginScreen({ navigation }) {
     }
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       Alert.alert('Login failed', error.message);
     } else {
-      navigation.replace('Home');
+      await enterApp(navigation);
     }
   };
+
+  if (checking) {
+    return (
+      <SafeAreaView style={[styles.safe, { justifyContent: 'center' }]}>
+        <ActivityIndicator color="#fff" size="large" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safe}>

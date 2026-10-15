@@ -4,7 +4,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 
 // Verify the Supabase access token and give the request a client that acts *as the user*,
-// so Row Level Security still applies. The server never holds a service-role key.
+// so Row Level Security still applies. (Only billing.js uses a service-role key, to write subscription rows.)
 export async function requireUser(req, res, next) {
   const token = (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
   if (!token) return res.status(401).json({ error: 'Not signed in' });

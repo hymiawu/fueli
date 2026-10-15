@@ -45,7 +45,7 @@ export default function OnboardingScreen({ navigation }) {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -55,12 +55,15 @@ export default function OnboardingScreen({ navigation }) {
     setLoading(false);
     if (error) {
       Alert.alert('Sign Up Failed', error.message);
+    } else if (!data.session) {
+      // Email confirmation is on: the user must confirm, then log in and subscribe.
+      Alert.alert('Confirm your email', 'We sent you a confirmation link. After confirming, log in to start your subscription.', [
+        { text: 'OK', onPress: () => navigation.replace('Login') },
+      ]);
     } else {
-      Alert.alert(
-        'Account Created!',
-        'Welcome to Fueli 🎉',
-        [{ text: 'Get Started', onPress: () => navigation.replace('Home') }]
-      );
+      Alert.alert('Account Created!', 'Welcome to Fueli 🎉 One last step: start your subscription.', [
+        { text: 'Continue', onPress: () => navigation.replace('Paywall') },
+      ]);
     }
   };
 

@@ -6,6 +6,7 @@ import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
 import AddIngredientScreen from './screens/AddIngredientScreen';
 import ScanIngredientScreen from './screens/ScanIngredientScreen';
+import PaywallScreen from './screens/PaywallScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,7 @@ export default function App() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <Stack.Screen name="Paywall" component={PaywallScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="AddIngredient" component={AddIngredientScreen} />
           <Stack.Screen name="ScanIngredient" component={ScanIngredientScreen} />

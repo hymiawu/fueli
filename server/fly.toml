@@ -7,6 +7,8 @@ primary_region = "lax"
 [env]
   PORT = "8080"
   ANTHROPIC_MODEL = "claude-haiku-5-5"
+  # Where Stripe Checkout returns users when the request has no allowed Origin.
+  APP_URL = "https://fueli.vercel.app"
   SUPABASE_URL = "https://rdtqyizwcmhxirbganhn.supabase.co"
   # Comma-separated. Wildcard prefix allowed for Vercel preview URLs.
   ALLOWED_ORIGINS = "http://localhost:8081,https://fueli.vercel.app,https://*.vercel.app"
