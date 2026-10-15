@@ -2,6 +2,8 @@
 
 AI meal and workout planner that cooks from **your fridge**: snap ingredients, get a goal-aligned day of meals with database-verified macros, and get workouts matched to your level.
 
+**Live demo:** https://fueli.vercel.app. On a desktop browser the app is shown inside a phone frame, since the UI is designed for phones.
+
 - **Web app:** Expo (React Native Web) → Vercel
 - **API / agents:** Node + Express → Fly.io
 - **Auth & data:** Supabase (RLS)
@@ -56,11 +58,16 @@ curl https://<app>.fly.dev/health
 ```
 
 **Web → Vercel** (from repo root)
+
+In the Vercel project settings (Build and Deployment), leave **Root Directory** empty (the repo root) and set **Framework Preset** to **Other**. Vercel may pick `server/` as an Express app on import, which breaks the build with `expo: command not found`. Build and output settings come from [vercel.json](vercel.json).
 ```bash
 vercel link
-vercel env add EXPO_PUBLIC_API_URL     # https://<app>.fly.dev  (Production + Preview)
+vercel env add EXPO_PUBLIC_API_URL            # https://<app>.fly.dev  (Production + Preview)
+vercel env add EXPO_PUBLIC_SUPABASE_URL
+vercel env add EXPO_PUBLIC_SUPABASE_ANON_KEY
 vercel --prod
 ```
+If the repo is connected to Vercel on GitHub, pushing to `main` deploys to production and each pull request gets a preview URL. `EXPO_PUBLIC_*` values are built into the app, so redeploy after changing them.
 Then make sure the Vercel domain is listed in `ALLOWED_ORIGINS` in `server/fly.toml`, and redeploy the API if you changed it.
 
 **Supabase:** run `supabase/migrations/001_ingredients_rls.sql` in the SQL editor once.
