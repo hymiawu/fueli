@@ -479,7 +479,7 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
           {meal.warnings.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
         </View>
       )}
-      {meal.planned && meal.missingIngredients?.length > 0 && (
+      {meal.missingIngredients?.length > 0 && (
         <View style={styles.shoppingBox}>
           <Text style={styles.shoppingTitle}>🛒 Need to buy:</Text>
           {meal.missingIngredients.map((item, i) => <Text key={i} style={styles.shoppingItem}>• {item}</Text>)}
