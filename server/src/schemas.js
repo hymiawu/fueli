@@ -60,6 +60,7 @@ export const WorkoutPlan = z.object({ workouts: z.array(Workout).min(1).max(3) }
 // Request bodies
 export const MealRequest = z.object({
   neededTypes: z.array(z.enum(['Breakfast', 'Lunch', 'Dinner'])).min(1).max(3).default(['Breakfast', 'Lunch', 'Dinner']),
+  servings: z.number().int().min(1).max(8).default(1),
 });
 export const WorkoutRequest = z.object({
   filterType: z.enum(['Strength', 'Cardio', 'HIIT', 'Flexibility']).nullable().optional(),

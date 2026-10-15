@@ -163,6 +163,7 @@ export default function MealScreen() {
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [mealPlans, setMealPlans] = useState({});
   const [loading, setLoading] = useState(false);
+  const [servings, setServings] = useState(1);
   const [expandedMeal, setExpandedMeal] = useState(null);
   const [showOutsideModal, setShowOutsideModal] = useState(false);
   const [outsideText, setOutsideText] = useState('');
@@ -176,6 +177,11 @@ export default function MealScreen() {
 
   const loadMealPlans = async () => {
     try { const s = await AsyncStorage.getItem('mealPlans'); if (s) setMealPlans(JSON.parse(s)); } catch(e) {}
+    try { const n = Number(await AsyncStorage.getItem('mealServings')); if (n >= 1 && n <= SERVING_OPTIONS.length) setServings(n); } catch(e) {}
+  };
+  const chooseServings = async (n) => {
+    setServings(n);
+    try { await AsyncStorage.setItem('mealServings', String(n)); } catch(e) {}
   };
   const saveMealPlans = async (plans) => {
     setMealPlans(plans);
@@ -190,7 +196,7 @@ export default function MealScreen() {
     if (neededTypes.length === 0) { Alert.alert('All done! 🎉','You cooked all meals today.'); return; }
     setLoading(true); setExpandedMeal(null);
     try {
-      const { meals: suggestions, blocked } = await getMealSuggestions(neededTypes);
+      const { meals: suggestions, blocked } = await getMealSuggestions(neededTypes, servings);
       if (blocked?.length) Alert.alert('Some meals were held back', blocked.map(b => `• ${b.type}: ${b.reason}`).join('\n'));
       const newMeals = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, cooked:false, planned:false, deductedIngredients:[] }));
       const combined = ALL_MEAL_TYPES.map(type => {
@@ -346,6 +352,14 @@ export default function MealScreen() {
         <Text style={styles.dateTitle}>{isToday ? "Today's Meals" : `${DAY_NAMES[selectedDateObj.getDay()]}, ${MONTH_NAMES[selectedDateObj.getMonth()]} ${selectedDateObj.getDate()}`}</Text>
 
         <Text style={styles.disclaimer}>AI suggestions are general guidance, not medical or dietary advice.</Text>
+        <View style={styles.servingsRow}>
+          <Text style={styles.servingsLabel}>👥 Cooking for</Text>
+          {SERVING_OPTIONS.map(n => (
+            <TouchableOpacity key={n} style={[styles.servingChip, servings === n && styles.servingChipActive]} onPress={() => chooseServings(n)}>
+              <Text style={[styles.servingChipText, servings === n && styles.servingChipTextActive]}>{n}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
         {selectedMeals.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyIcon}>🍽️</Text>
@@ -465,7 +479,7 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
         </View>
       </View>
       <Text style={styles.mealName}>{meal.name}</Text>
-      <Text style={styles.mealMeta}>⏱ {meal.prepTime || '—'}  ·  🔥 {meal.calories} kcal</Text>
+      <Text style={styles.mealMeta}>⏱ {meal.prepTime || '—'}  ·  🔥 {meal.calories} kcal{meal.servings > 1 ? ` per person  ·  👥 Serves ${meal.servings}` : ''}</Text>
       {meal.macroSource && meal.macroSource !== 'estimated' && (
         <Text style={styles.verifiedTag}>✓ Macros checked against nutrition database{meal.macroSource === 'corrected' ? ' (corrected)' : ''}</Text>
       )}
@@ -515,10 +529,19 @@ function MacroPill({ label, value, color }) {
   );
 }
 
+// How many people a meal plan is for; ingredient amounts scale, calories are shown per person.
+const SERVING_OPTIONS = [1, 2, 3, 4, 5, 6];
+
 // "Get AI Suggestions", "Refresh My Meals" and "Log Outside Food" share one width so they line up.
 const ACTION_BTN_WIDTH = 260;
 
 const styles = StyleSheet.create({
+  servingsRow: { flexDirection:'row', alignItems:'center', flexWrap:'wrap', gap:6, marginBottom:16 },
+  servingsLabel: { fontSize:14, fontWeight:'600', color:'#555', marginRight:4 },
+  servingChip: { minWidth:34, borderWidth:1.5, borderColor:'#E0E0E0', borderRadius:17, paddingHorizontal:10, paddingVertical:5, alignItems:'center' },
+  servingChipActive: { borderColor:'#0D9E8A', backgroundColor:'#0D9E8A' },
+  servingChipText: { fontSize:14, fontWeight:'600', color:'#555' },
+  servingChipTextActive: { color:'#fff' },
   safe: { flex:1, backgroundColor:'#fff' },
   header: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:20, paddingTop:16, paddingBottom:10 },
   title: { fontSize:26, fontWeight:'800', color:'#1a1a1a' },

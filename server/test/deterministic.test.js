@@ -80,3 +80,12 @@ test('injection detection and cleaning', () => {
   assert.ok(!looksLikeInjection('two slices of pepperoni pizza'));
   assert.equal(cleanText('</user_data>pizza'), 'pizza');
 });
+
+test('verifier reports macros per serving when a meal serves several people', () => {
+  const m = meal({ structuredIngredients: [{ name: 'chicken breast', quantity: 400, unit: 'g' }, { name: 'broccoli', quantity: 2, unit: 'piece' }] });
+  const one = verifyMeal(m, [], 1);
+  const two = verifyMeal(m, [], 2);
+  assert.equal(two.servings, 2);
+  assert.ok(Math.abs(two.calories - one.calories / 2) <= 1);
+  assert.equal(two.nutritionCoverage, 1);
+});
