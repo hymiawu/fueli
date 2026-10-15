@@ -8,7 +8,7 @@ import { MealRequest, WorkoutRequest, ScanRequest, OutsideRequest, CheckoutConfi
 import { planMeals } from './agents/mealPlanner.js';
 import { suggestWorkouts } from './agents/workoutCoach.js';
 import { scanIngredient, analyzeOutsideFood } from './agents/vision.js';
-import { getStatus, requirePaid, createCheckout, confirmCheckout, handleWebhook } from './billing.js';
+import { getStatus, getMembership, setCancelAtPeriodEnd, requirePaid, createCheckout, confirmCheckout, handleWebhook } from './billing.js';
 
 for (const k of ['ANTHROPIC_API_KEY', 'SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY', 'STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET']) {
   if (!process.env[k]) console.warn(`[config] missing ${k}`);
@@ -115,7 +115,10 @@ const billing = (handler) => [
 ];
 
 app.get('/v1/billing/status', ...billing((req) => getStatus(req)));
+app.get('/v1/billing/membership', ...billing((req) => getMembership(req)));
 app.post('/v1/billing/checkout', ...billing((req) => createCheckout(req, appUrl(req))));
+app.post('/v1/billing/cancel', ...billing((req) => setCancelAtPeriodEnd(req, true)));
+app.post('/v1/billing/resume', ...billing((req) => setCancelAtPeriodEnd(req, false)));
 app.post(
   '/v1/billing/confirm',
   ...billing((req) => {

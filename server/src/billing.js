@@ -34,7 +34,7 @@ function requireStripe() {
 async function readStatus(req) {
   const { data, error } = await req.db
     .from('subscriptions')
-    .select('status, stripe_customer_id')
+    .select('status, stripe_customer_id, stripe_subscription_id')
     .eq('user_id', req.user.id)
     .maybeSingle();
   if (error) throw fail(502, 'Could not read subscription');
@@ -58,6 +58,30 @@ export async function getStatus(req) {
   const row = await readStatus(req);
   const status = row?.status ?? 'none';
   return { active: ACTIVE.has(status), status, price: '$4.99/month' };
+}
+
+// Status plus live renewal details from Stripe, for the Membership screen.
+export async function getMembership(req) {
+  const row = await readStatus(req);
+  const out = { ...(await getStatus(req)), cancelAtPeriodEnd: false, periodEnd: null };
+  if (stripe && row?.stripe_subscription_id && out.status !== 'canceled') {
+    const sub = await stripe.subscriptions.retrieve(row.stripe_subscription_id);
+    out.cancelAtPeriodEnd = Boolean(sub.cancel_at_period_end || sub.cancel_at);
+    // Newer Stripe API versions report the billing period on the subscription item.
+    const end = sub.cancel_at ?? sub.items?.data?.[0]?.current_period_end ?? sub.current_period_end;
+    out.periodEnd = end ? new Date(end * 1000).toISOString() : null;
+  }
+  return out;
+}
+
+// Cancel at the end of the paid period (access continues until then), or undo that.
+export async function setCancelAtPeriodEnd(req, cancel) {
+  requireStripe();
+  const row = await readStatus(req);
+  if (!row?.stripe_subscription_id || !['active', 'trialing'].includes(row.status)) throw fail(409, 'No active subscription to change');
+  const sub = await stripe.subscriptions.update(row.stripe_subscription_id, { cancel_at_period_end: cancel });
+  await save(req.user.id, fromSubscription(sub));
+  return getMembership(req);
 }
 
 // Express middleware: only paying (or grandfathered) accounts can use the AI endpoints.

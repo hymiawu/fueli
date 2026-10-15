@@ -4,7 +4,7 @@ import { Platform, Text } from 'react-native';
 import FridgeScreen from './FridgeScreen';
 import MealScreen from './MealScreen';
 import ExerciseScreen from './ExerciseScreen';
-import ProfileScreen from './ProfileScreen';
+import SettingsScreen from './SettingsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,7 +52,7 @@ export default function HomeScreen() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={SettingsScreen}
         options={{ tabBarIcon: icon('👤'), tabBarLabel: 'Profile' }}
       />
     </Tab.Navigator>

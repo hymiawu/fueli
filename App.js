@@ -7,6 +7,8 @@ import HomeScreen from './screens/HomeScreen';
 import AddIngredientScreen from './screens/AddIngredientScreen';
 import ScanIngredientScreen from './screens/ScanIngredientScreen';
 import PaywallScreen from './screens/PaywallScreen';
+import EditProfileScreen from './screens/EditProfileScreen';
+import MembershipScreen from './screens/MembershipScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +49,8 @@ export default function App() {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="AddIngredient" component={AddIngredientScreen} />
           <Stack.Screen name="ScanIngredient" component={ScanIngredientScreen} />
+          <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+          <Stack.Screen name="Membership" component={MembershipScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </PhoneFrame>
