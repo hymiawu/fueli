@@ -25,6 +25,26 @@ export default function MembershipScreen({ navigation }) {
   };
 
   const cancel = () => {
+    if (status === 'grandfathered') {
+      Alert.alert(
+        'Cancel membership?',
+        'Your free access ends right away. To use Fueli again you will need a $4.99/month subscription.',
+        [
+          { text: 'Keep It', style: 'cancel' },
+          { text: 'Cancel Membership', style: 'destructive', onPress: async () => {
+            setBusy(true);
+            try {
+              await cancelMembership();
+              navigation.reset({ index: 0, routes: [{ name: 'Paywall' }] });
+            } catch (e) {
+              setError(e.message);
+              setBusy(false);
+            }
+          }},
+        ],
+      );
+      return;
+    }
     Alert.alert(
       'Cancel subscription?',
       `You'll keep access until ${formatDate(info.periodEnd)}, and you won't be charged again.`,
@@ -51,7 +71,7 @@ export default function MembershipScreen({ navigation }) {
   const status = info?.status;
   const subscribed = status === 'active' || status === 'trialing';
   let detail = 'Subscribe to use AI meal plans, workouts and food scans.';
-  if (status === 'grandfathered') detail = 'You joined before memberships started, so Fueli is free for you. Nothing to manage here.';
+  if (status === 'grandfathered') detail = '';
   else if (subscribed && info.cancelAtPeriodEnd) detail = `Canceled. You have access until ${formatDate(info.periodEnd)}.`;
   else if (subscribed) detail = `Renews on ${formatDate(info.periodEnd)}.`;
 
@@ -76,15 +96,15 @@ export default function MembershipScreen({ navigation }) {
                 <View style={[styles.badge, (subscribed || status === 'grandfathered') && !info.cancelAtPeriodEnd ? styles.badgeOn : styles.badgeOff]}>
                   <Text style={styles.badgeText}>{info.cancelAtPeriodEnd ? 'Canceling' : membershipLabel(status).split(' · ')[0]}</Text>
                 </View>
-                <Text style={styles.detail}>{detail}</Text>
+                {detail ? <Text style={styles.detail}>{detail}</Text> : null}
               </View>
             )}
 
             {error ? <Text style={styles.error}>{error}</Text> : null}
 
-            {info && subscribed && !info.cancelAtPeriodEnd && (
+            {info && ((subscribed && !info.cancelAtPeriodEnd) || status === 'grandfathered') && (
               <TouchableOpacity style={[styles.cancelBtn, busy && styles.dim]} onPress={cancel} disabled={busy}>
-                {busy ? <ActivityIndicator color="#FF4444" /> : <Text style={styles.cancelText}>Cancel Subscription</Text>}
+                {busy ? <ActivityIndicator color="#FF4444" /> : <Text style={styles.cancelText}>Cancel Membership</Text>}
               </TouchableOpacity>
             )}
             {info && subscribed && info.cancelAtPeriodEnd && (
@@ -102,8 +122,6 @@ export default function MembershipScreen({ navigation }) {
                 <Text style={styles.primaryText}>Try Again</Text>
               </TouchableOpacity>
             )}
-
-            <Text style={styles.note}>Payments run in Stripe test mode. No real money is charged.</Text>
           </>
         )}
       </ScrollView>
@@ -132,5 +150,4 @@ const styles = StyleSheet.create({
   cancelBtn: { backgroundColor: '#fff', borderWidth: 1.5, borderColor: '#FF4444', borderRadius: 12, padding: 16, alignItems: 'center', marginBottom: 12 },
   cancelText: { color: '#FF4444', fontSize: 16, fontWeight: '600' },
   dim: { opacity: 0.7 },
-  note: { fontSize: 12, color: '#999', textAlign: 'center', marginTop: 8 },
 });
