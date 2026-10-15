@@ -22,12 +22,7 @@ Rules:
 Final JSON format:
 {"meals":[{"name":"","type":"Breakfast|Lunch|Dinner","ingredients":["200g chicken breast"],"structuredIngredients":[{"name":"chicken breast","quantity":200,"unit":"g"}],"recipe":"Step 1: ...","calories":0,"protein":0,"carbs":0,"fat":0,"prepTime":"20 min","missingIngredients":[]}]}`;
 
-const tools = (fridge) => ({
-  get_fridge_inventory: {
-    description: "Return the user's current fridge inventory (name, quantity, unit, category, expiry).",
-    parameters: { type: 'object', properties: {}, additionalProperties: false },
-    run: () => summarizeFridge(fridge),
-  },
+const tools = {
   lookup_nutrition: {
     description: 'Look up per-100g calories, protein, carbs and fat for ingredients in the nutrition database.',
     parameters: {
@@ -38,7 +33,7 @@ const tools = (fridge) => ({
     },
     run: lookupNutritionTool,
   },
-});
+};
 
 const profileView = (p) => ({
   goal: cleanText(p.goal || 'Eat Healthier', 40),
@@ -65,10 +60,11 @@ export async function planMeals({ fridge, profile, neededTypes, trace }) {
         role: 'user',
         content: `Plan exactly ${neededTypes.length} meal(s), one for each of: ${neededTypes.join(', ')}.
 ${asData('profile', p)}
-Call get_fridge_inventory first, then lookup_nutrition for the main ingredients.`,
+${asData('fridge', summarizeFridge(fridge))}
+Call lookup_nutrition for the main ingredients, then return the final JSON.`,
       },
     ],
-    tools: tools(fridge),
+    tools,
     finalSchema: MealPlan,
     trace,
   });
@@ -91,7 +87,6 @@ Call get_fridge_inventory first, then lookup_nutrition for the main ingredients.
         },
       ],
       schema: MealPlan,
-      maxTokens: 1800,
       trace,
     });
     const fixed = finalize(repaired.meals, fridge, p);

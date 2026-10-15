@@ -31,7 +31,7 @@ docs/                       Capstone documents
 ```bash
 # 1. API
 cd server
-cp .env.example .env              # fill OPENAI_API_KEY and SUPABASE_ANON_KEY
+cp .env.example .env              # fill ANTHROPIC_API_KEY and SUPABASE_ANON_KEY
 npm install
 npm test                          # deterministic tests, no API key needed
 npm run dev                       # http://localhost:8080/health
@@ -52,7 +52,7 @@ cd server && npm run eval          # writes eval/results/latest.md
 **API → Fly.io** (from `server/`)
 ```bash
 fly launch --no-deploy --copy-config   # first time; pick a unique app name and update fly.toml
-fly secrets set OPENAI_API_KEY=sk-... SUPABASE_ANON_KEY=sb_publishable_...
+fly secrets set ANTHROPIC_API_KEY=sk-ant-... SUPABASE_ANON_KEY=sb_publishable_...
 fly deploy
 curl https://<app>.fly.dev/health
 ```

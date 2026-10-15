@@ -35,8 +35,6 @@ ${asData('recent_workouts', recent.length ? recent : 'none')}`,
       },
     ],
     schema: WorkoutPlan,
-    maxTokens: 2600,
-    temperature: 0.7,
     trace,
   });
   const workouts = plan.workouts

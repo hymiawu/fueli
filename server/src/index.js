@@ -9,7 +9,7 @@ import { planMeals } from './agents/mealPlanner.js';
 import { suggestWorkouts } from './agents/workoutCoach.js';
 import { scanIngredient, analyzeOutsideFood } from './agents/vision.js';
 
-for (const k of ['OPENAI_API_KEY', 'SUPABASE_URL', 'SUPABASE_ANON_KEY']) {
+for (const k of ['ANTHROPIC_API_KEY', 'SUPABASE_URL', 'SUPABASE_ANON_KEY']) {
   if (!process.env[k]) console.warn(`[config] missing ${k}`);
 }
 
