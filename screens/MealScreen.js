@@ -461,6 +461,8 @@ export default function MealScreen() {
 function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlanned }) {
   const color = MEAL_COLORS[meal.type] || '#607D8B';
   const isOutside = meal.type === 'Outside';
+  // Meals saved before the API stopped sending this note still carry it; don't show it.
+  const visibleWarnings = (meal.warnings || []).filter(w => !w.startsWith('Not in nutrition database'));
   return (
     <View style={[styles.card, meal.cooked && styles.cardCooked]}>
       <View style={styles.cardTop}>
@@ -488,9 +490,9 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
         <MacroPill label="Carbs" value={meal.carbs} color="#FF9800" />
         <MacroPill label="Fat" value={meal.fat} color="#2196F3" />
       </View>
-      {meal.warnings?.length > 0 && (
+      {visibleWarnings.length > 0 && (
         <View style={styles.warnBox}>
-          {meal.warnings.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
+          {visibleWarnings.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
         </View>
       )}
       {meal.missingIngredients?.length > 0 && (
