@@ -316,7 +316,7 @@ export default function MealScreen() {
         <Text style={styles.monthYear}>{MONTH_NAMES[selectedDateObj.getMonth()]} {selectedDateObj.getFullYear()}</Text>
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.calendarStrip}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.calendarScroll} contentContainerStyle={styles.calendarStrip}>
         {days.map(date => {
           const dateStr = toDateStr(date);
           const isSelected = dateStr === selectedDate;
@@ -523,6 +523,8 @@ const styles = StyleSheet.create({
   header: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:20, paddingTop:16, paddingBottom:10 },
   title: { fontSize:26, fontWeight:'800', color:'#1a1a1a' },
   monthYear: { fontSize:14, color:'#888', fontWeight:'600' },
+  // Without this the strip shrinks on web and the day numbers get clipped by the list below.
+  calendarScroll: { flexGrow:0, flexShrink:0 },
   calendarStrip: { paddingHorizontal:12, paddingBottom:12 },
   dayItem: { width:52, alignItems:'center', paddingVertical:10, borderRadius:14, marginHorizontal:3 },
   dayItemSelected: { backgroundColor:'#0D9E8A' },
