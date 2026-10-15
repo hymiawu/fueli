@@ -1,0 +1,187 @@
+import React, { useState, useCallback } from 'react';
+import {
+  View, Text, FlatList, TouchableOpacity,
+  StyleSheet, ActivityIndicator,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert } from '../lib/alert';
+import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { supabase } from '../lib/supabase';
+
+const CATEGORY_COLORS = {
+  Produce: '#4CAF50', Protein: '#F44336', Dairy: '#2196F3',
+  Grains: '#FF9800', Beverages: '#9C27B0', Condiments: '#795548', Other: '#607D8B',
+};
+
+export default function FridgeScreen({ navigation }) {
+  const [ingredients, setIngredients] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Reload every time this tab comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadIngredients();
+    }, [])
+  );
+
+  const syncToCache = async (data) => {
+    await AsyncStorage.setItem('ingredients', JSON.stringify(data));
+  };
+
+  const loadIngredients = async () => {
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data, error } = await supabase
+        .from('ingredients')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        setIngredients(data);
+        await syncToCache(data);
+      }
+    } catch (e) {}
+    setLoading(false);
+  };
+
+  const handleSave = async (item) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      const { data, error } = await supabase
+        .from('ingredients')
+        .insert([{ ...item, user_id: user.id }])
+        .select()
+        .single();
+      if (!error && data) {
+        const newList = [data, ...ingredients];
+        setIngredients(newList);
+        await syncToCache(newList);
+      }
+    } catch (e) {
+      Alert.alert('Error', 'Could not save ingredient.');
+    }
+  };
+
+  const handleDelete = (id) => {
+    Alert.alert('Remove Item', 'Remove this ingredient from your fridge?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Remove', style: 'destructive',
+        onPress: async () => {
+          await supabase.from('ingredients').delete().eq('id', id);
+          const newList = ingredients.filter(i => i.id !== id);
+          setIngredients(newList);
+          await syncToCache(newList);
+        },
+      },
+    ]);
+  };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <View style={[styles.categoryDot, { backgroundColor: CATEGORY_COLORS[item.category] || '#607D8B' }]} />
+      <View style={styles.cardContent}>
+        <Text style={styles.itemName}>{item.name}</Text>
+        <Text style={styles.itemSub}>
+          {item.quantity} {item.unit} · {item.category}
+          {item.calories ? `  ·  ${item.calories} kcal/100g` : ''}
+        </Text>
+        {(item.protein || item.carbs || item.fat) ? (
+          <View style={styles.macroRow}>
+            {item.protein ? <Text style={styles.macro}>P: {item.protein}g</Text> : null}
+            {item.carbs ? <Text style={styles.macro}>C: {item.carbs}g</Text> : null}
+            {item.fat ? <Text style={styles.macro}>F: {item.fat}g</Text> : null}
+          </View>
+        ) : null}
+        {item.expiry ? <Text style={styles.expiry}>Expires: {item.expiry}</Text> : null}
+      </View>
+      <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(item.id)}>
+        <Text style={styles.deleteText}>✕</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
+  return (
+    <SafeAreaView style={styles.safe}>
+      <View style={styles.header}>
+        <Text style={styles.title}>My Fridge</Text>
+        <View style={styles.headerBtns}>
+          <TouchableOpacity
+            style={styles.scanBtn}
+            onPress={() => navigation.navigate('ScanIngredient', { onSave: handleSave })}
+          >
+            <Text style={styles.scanBtnText}>📷 Scan</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.addBtn}
+            onPress={() => navigation.navigate('AddIngredient', { onSave: handleSave })}
+          >
+            <Text style={styles.addBtnText}>+ Add</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {loading ? (
+        <ActivityIndicator style={{ marginTop: 60 }} color="#0D9E8A" />
+      ) : ingredients.length === 0 ? (
+        <View style={styles.empty}>
+          <Text style={styles.emptyIcon}>🧊</Text>
+          <Text style={styles.emptyTitle}>Your fridge is empty</Text>
+          <Text style={styles.emptySubtitle}>
+            Tap Scan to add ingredients with AI,{'\n'}or Add to enter manually.
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          data={ingredients}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.list}
+        />
+      )}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: '#fff' },
+  header: {
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+    paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12,
+    borderBottomWidth: 1, borderBottomColor: '#F0F0F0',
+  },
+  title: { fontSize: 26, fontWeight: '800', color: '#1a1a1a' },
+  headerBtns: { flexDirection: 'row', gap: 8 },
+  scanBtn: {
+    backgroundColor: '#F0FAF8', borderRadius: 10, paddingHorizontal: 14,
+    paddingVertical: 8, borderWidth: 1.5, borderColor: '#0D9E8A',
+  },
+  scanBtnText: { fontSize: 14, color: '#0D9E8A', fontWeight: '700' },
+  addBtn: { backgroundColor: '#0D9E8A', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8 },
+  addBtnText: { fontSize: 14, color: '#fff', fontWeight: '700' },
+  list: { padding: 16 },
+  card: {
+    flexDirection: 'row', alignItems: 'center', backgroundColor: '#FAFAFA',
+    borderRadius: 14, padding: 14, marginBottom: 10, borderWidth: 1, borderColor: '#F0F0F0',
+  },
+  categoryDot: { width: 10, height: 10, borderRadius: 5, marginRight: 12, marginTop: 4, alignSelf: 'flex-start' },
+  cardContent: { flex: 1 },
+  itemName: { fontSize: 16, fontWeight: '700', color: '#1a1a1a', marginBottom: 3 },
+  itemSub: { fontSize: 13, color: '#888' },
+  macroRow: { flexDirection: 'row', gap: 10, marginTop: 5 },
+  macro: {
+    fontSize: 12, color: '#0D9E8A', fontWeight: '600',
+    backgroundColor: '#F0FAF8', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6,
+  },
+  expiry: { fontSize: 12, color: '#FF9800', marginTop: 4 },
+  deleteBtn: { padding: 8 },
+  deleteText: { fontSize: 16, color: '#ccc' },
+  empty: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 40 },
+  emptyIcon: { fontSize: 56, marginBottom: 16 },
+  emptyTitle: { fontSize: 20, fontWeight: '700', color: '#1a1a1a', marginBottom: 8 },
+  emptySubtitle: { fontSize: 15, color: '#aaa', textAlign: 'center', lineHeight: 22 },
+});

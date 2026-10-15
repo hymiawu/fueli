@@ -1,0 +1,10 @@
+# The Vercel CLI uses this file instead of .gitignore, so list everything that must not upload.
+node_modules
+dist
+.expo
+.env
+.env*.local
+server
+eval
+docs
+supabase

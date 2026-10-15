@@ -1,0 +1,66 @@
+# Fueli
+
+AI meal and workout planner that cooks from **your fridge**: snap ingredients, get a goal-aligned day of meals with database-verified macros, and get workouts matched to your level.
+
+- **Web app:** Expo (React Native Web) → Vercel
+- **API / agents:** Node + Express → Fly.io
+- **Auth & data:** Supabase (RLS)
+
+| Capstone deliverable | Location |
+|---|---|
+| Product brief | [docs/product-brief.md](docs/product-brief.md) |
+| PRD | [docs/PRD.md](docs/PRD.md) |
+| Architecture diagram | [docs/architecture.md](docs/architecture.md) |
+| Evaluation package (rubric, cases, results, failure log) | [docs/evaluation.md](docs/evaluation.md), [eval/](eval/) |
+| Responsible-deployment notes | [docs/responsible-ai.md](docs/responsible-ai.md) |
+| Claude Code reflection, Skills, subagents | [docs/claude-code-reflection.md](docs/claude-code-reflection.md), [.claude/skills/](.claude/skills/), [.claude/agents/](.claude/agents/) |
+
+## Repo layout
+```
+App.js, screens/, lib/      Expo client (lib/api.js calls the Fly API)
+server/                     Fly.io API: agents, tools, guardrails, nutrition KB
+eval/                       Eval cases, rubric, runner, results
+supabase/migrations/        RLS policies
+docs/                       Capstone documents
+.claude/                    Claude Code Skills and subagents
+```
+
+## Run locally
+```bash
+# 1. API
+cd server
+cp .env.example .env              # fill OPENAI_API_KEY and SUPABASE_ANON_KEY
+npm install
+npm test                          # deterministic tests, no API key needed
+npm run dev                       # http://localhost:8080/health
+
+# 2. App (repo root, another terminal)
+cp .env.example .env.local        # EXPO_PUBLIC_API_URL=http://localhost:8080
+npm install
+npm run web                       # or: npm run ios / npm run android
+```
+On a physical phone, set `EXPO_PUBLIC_API_URL` to your computer's LAN IP (e.g. `http://192.168.1.20:8080`) or to the Fly URL.
+
+## Evaluate
+```bash
+cd server && npm run eval          # writes eval/results/latest.md
+```
+
+## Deploy
+**API → Fly.io** (from `server/`)
+```bash
+fly launch --no-deploy --copy-config   # first time; pick a unique app name and update fly.toml
+fly secrets set OPENAI_API_KEY=sk-... SUPABASE_ANON_KEY=sb_publishable_...
+fly deploy
+curl https://<app>.fly.dev/health
+```
+
+**Web → Vercel** (from repo root)
+```bash
+vercel link
+vercel env add EXPO_PUBLIC_API_URL     # https://<app>.fly.dev  (Production + Preview)
+vercel --prod
+```
+Then make sure the Vercel domain is listed in `ALLOWED_ORIGINS` in `server/fly.toml`, and redeploy the API if you changed it.
+
+**Supabase:** run `supabase/migrations/001_ingredients_rls.sql` in the SQL editor once.

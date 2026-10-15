@@ -1,0 +1,824 @@
+{
+ "source": "Approximate per-100g values based on USDA FoodData Central (SR Legacy / Foundation). Verify before clinical use.",
+ "foods": [
+  {
+   "name": "chicken breast",
+   "aliases": [
+    "chicken",
+    "chicken breast skinless"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 165,
+    "protein": 31,
+    "carbs": 0,
+    "fat": 3.6
+   }
+  },
+  {
+   "name": "chicken thigh",
+   "aliases": [
+    "chicken thighs"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 209,
+    "protein": 26,
+    "carbs": 0,
+    "fat": 10.9
+   }
+  },
+  {
+   "name": "ground beef",
+   "aliases": [
+    "beef mince",
+    "minced beef"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 250,
+    "protein": 26,
+    "carbs": 0,
+    "fat": 15
+   }
+  },
+  {
+   "name": "beef steak",
+   "aliases": [
+    "steak",
+    "sirloin"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 271,
+    "protein": 25,
+    "carbs": 0,
+    "fat": 19
+   }
+  },
+  {
+   "name": "pork loin",
+   "aliases": [
+    "pork",
+    "pork chop"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 242,
+    "protein": 27,
+    "carbs": 0,
+    "fat": 14
+   }
+  },
+  {
+   "name": "bacon",
+   "aliases": [],
+   "category": "Protein",
+   "per100g": {
+    "calories": 541,
+    "protein": 37,
+    "carbs": 1.4,
+    "fat": 42
+   },
+   "gramsPerPiece": 10
+  },
+  {
+   "name": "salmon",
+   "aliases": [
+    "salmon fillet"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 208,
+    "protein": 20,
+    "carbs": 0,
+    "fat": 13
+   }
+  },
+  {
+   "name": "tuna",
+   "aliases": [
+    "canned tuna",
+    "tuna in water"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 116,
+    "protein": 26,
+    "carbs": 0,
+    "fat": 0.8
+   }
+  },
+  {
+   "name": "shrimp",
+   "aliases": [
+    "prawns",
+    "prawn"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 99,
+    "protein": 24,
+    "carbs": 0.2,
+    "fat": 0.3
+   }
+  },
+  {
+   "name": "tofu",
+   "aliases": [
+    "firm tofu"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 144,
+    "protein": 17,
+    "carbs": 3,
+    "fat": 9
+   }
+  },
+  {
+   "name": "tempeh",
+   "aliases": [],
+   "category": "Protein",
+   "per100g": {
+    "calories": 192,
+    "protein": 20,
+    "carbs": 7.6,
+    "fat": 11
+   }
+  },
+  {
+   "name": "egg",
+   "aliases": [
+    "eggs",
+    "large egg"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 143,
+    "protein": 12.6,
+    "carbs": 0.7,
+    "fat": 9.5
+   },
+   "gramsPerPiece": 50
+  },
+  {
+   "name": "black beans",
+   "aliases": [
+    "black bean"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 132,
+    "protein": 8.9,
+    "carbs": 23.7,
+    "fat": 0.5
+   }
+  },
+  {
+   "name": "chickpeas",
+   "aliases": [
+    "chickpea",
+    "garbanzo beans"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 164,
+    "protein": 8.9,
+    "carbs": 27.4,
+    "fat": 2.6
+   }
+  },
+  {
+   "name": "lentils",
+   "aliases": [
+    "lentil"
+   ],
+   "category": "Protein",
+   "per100g": {
+    "calories": 116,
+    "protein": 9,
+    "carbs": 20,
+    "fat": 0.4
+   }
+  },
+  {
+   "name": "milk",
+   "aliases": [
+    "whole milk"
+   ],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 61,
+    "protein": 3.2,
+    "carbs": 4.8,
+    "fat": 3.3
+   }
+  },
+  {
+   "name": "greek yogurt",
+   "aliases": [
+    "yogurt",
+    "plain greek yogurt"
+   ],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 97,
+    "protein": 9,
+    "carbs": 3.9,
+    "fat": 5
+   }
+  },
+  {
+   "name": "cheddar cheese",
+   "aliases": [
+    "cheddar",
+    "cheese"
+   ],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 403,
+    "protein": 25,
+    "carbs": 1.3,
+    "fat": 33
+   }
+  },
+  {
+   "name": "mozzarella",
+   "aliases": [
+    "mozzarella cheese"
+   ],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 280,
+    "protein": 28,
+    "carbs": 3.1,
+    "fat": 17
+   }
+  },
+  {
+   "name": "parmesan",
+   "aliases": [
+    "parmesan cheese"
+   ],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 431,
+    "protein": 38,
+    "carbs": 4.1,
+    "fat": 29
+   }
+  },
+  {
+   "name": "butter",
+   "aliases": [],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 717,
+    "protein": 0.9,
+    "carbs": 0.1,
+    "fat": 81
+   }
+  },
+  {
+   "name": "cottage cheese",
+   "aliases": [],
+   "category": "Dairy",
+   "per100g": {
+    "calories": 98,
+    "protein": 11,
+    "carbs": 3.4,
+    "fat": 4.3
+   }
+  },
+  {
+   "name": "white rice",
+   "aliases": [
+    "rice",
+    "cooked rice",
+    "cooked white rice"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 130,
+    "protein": 2.7,
+    "carbs": 28,
+    "fat": 0.3
+   }
+  },
+  {
+   "name": "brown rice",
+   "aliases": [
+    "cooked brown rice"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 123,
+    "protein": 2.7,
+    "carbs": 25.6,
+    "fat": 1
+   }
+  },
+  {
+   "name": "pasta",
+   "aliases": [
+    "spaghetti",
+    "penne",
+    "cooked pasta"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 158,
+    "protein": 5.8,
+    "carbs": 31,
+    "fat": 0.9
+   }
+  },
+  {
+   "name": "oats",
+   "aliases": [
+    "rolled oats",
+    "oatmeal"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 389,
+    "protein": 16.9,
+    "carbs": 66,
+    "fat": 6.9
+   }
+  },
+  {
+   "name": "bread",
+   "aliases": [
+    "whole wheat bread",
+    "toast",
+    "bread slice"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 247,
+    "protein": 13,
+    "carbs": 41,
+    "fat": 3.4
+   },
+   "gramsPerPiece": 30
+  },
+  {
+   "name": "tortilla",
+   "aliases": [
+    "flour tortilla",
+    "tortillas"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 312,
+    "protein": 8.3,
+    "carbs": 52,
+    "fat": 8
+   },
+   "gramsPerPiece": 45
+  },
+  {
+   "name": "quinoa",
+   "aliases": [
+    "cooked quinoa"
+   ],
+   "category": "Grains",
+   "per100g": {
+    "calories": 120,
+    "protein": 4.4,
+    "carbs": 21.3,
+    "fat": 1.9
+   }
+  },
+  {
+   "name": "potato",
+   "aliases": [
+    "potatoes"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 77,
+    "protein": 2,
+    "carbs": 17,
+    "fat": 0.1
+   },
+   "gramsPerPiece": 170
+  },
+  {
+   "name": "sweet potato",
+   "aliases": [
+    "sweet potatoes"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 86,
+    "protein": 1.6,
+    "carbs": 20,
+    "fat": 0.1
+   },
+   "gramsPerPiece": 130
+  },
+  {
+   "name": "broccoli",
+   "aliases": [],
+   "category": "Produce",
+   "per100g": {
+    "calories": 34,
+    "protein": 2.8,
+    "carbs": 6.6,
+    "fat": 0.4
+   }
+  },
+  {
+   "name": "spinach",
+   "aliases": [],
+   "category": "Produce",
+   "per100g": {
+    "calories": 23,
+    "protein": 2.9,
+    "carbs": 3.6,
+    "fat": 0.4
+   }
+  },
+  {
+   "name": "kale",
+   "aliases": [],
+   "category": "Produce",
+   "per100g": {
+    "calories": 49,
+    "protein": 4.3,
+    "carbs": 8.8,
+    "fat": 0.9
+   }
+  },
+  {
+   "name": "lettuce",
+   "aliases": [
+    "romaine"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 17,
+    "protein": 1.2,
+    "carbs": 3.3,
+    "fat": 0.3
+   }
+  },
+  {
+   "name": "tomato",
+   "aliases": [
+    "tomatoes"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 18,
+    "protein": 0.9,
+    "carbs": 3.9,
+    "fat": 0.2
+   },
+   "gramsPerPiece": 120
+  },
+  {
+   "name": "cucumber",
+   "aliases": [],
+   "category": "Produce",
+   "per100g": {
+    "calories": 15,
+    "protein": 0.7,
+    "carbs": 3.6,
+    "fat": 0.1
+   },
+   "gramsPerPiece": 300
+  },
+  {
+   "name": "carrot",
+   "aliases": [
+    "carrots"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 41,
+    "protein": 0.9,
+    "carbs": 9.6,
+    "fat": 0.2
+   },
+   "gramsPerPiece": 60
+  },
+  {
+   "name": "onion",
+   "aliases": [
+    "onions",
+    "yellow onion"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 40,
+    "protein": 1.1,
+    "carbs": 9.3,
+    "fat": 0.1
+   },
+   "gramsPerPiece": 110
+  },
+  {
+   "name": "garlic",
+   "aliases": [
+    "garlic clove"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 149,
+    "protein": 6.4,
+    "carbs": 33,
+    "fat": 0.5
+   },
+   "gramsPerPiece": 3
+  },
+  {
+   "name": "bell pepper",
+   "aliases": [
+    "pepper",
+    "red bell pepper",
+    "capsicum"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 31,
+    "protein": 1,
+    "carbs": 6,
+    "fat": 0.3
+   },
+   "gramsPerPiece": 120
+  },
+  {
+   "name": "mushroom",
+   "aliases": [
+    "mushrooms"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 22,
+    "protein": 3.1,
+    "carbs": 3.3,
+    "fat": 0.3
+   },
+   "gramsPerPiece": 18
+  },
+  {
+   "name": "zucchini",
+   "aliases": [
+    "courgette"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 17,
+    "protein": 1.2,
+    "carbs": 3.1,
+    "fat": 0.3
+   },
+   "gramsPerPiece": 200
+  },
+  {
+   "name": "avocado",
+   "aliases": [],
+   "category": "Produce",
+   "per100g": {
+    "calories": 160,
+    "protein": 2,
+    "carbs": 8.5,
+    "fat": 14.7
+   },
+   "gramsPerPiece": 150
+  },
+  {
+   "name": "banana",
+   "aliases": [
+    "bananas"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 89,
+    "protein": 1.1,
+    "carbs": 22.8,
+    "fat": 0.3
+   },
+   "gramsPerPiece": 118
+  },
+  {
+   "name": "apple",
+   "aliases": [
+    "apples"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 52,
+    "protein": 0.3,
+    "carbs": 13.8,
+    "fat": 0.2
+   },
+   "gramsPerPiece": 180
+  },
+  {
+   "name": "orange",
+   "aliases": [
+    "oranges"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 47,
+    "protein": 0.9,
+    "carbs": 11.8,
+    "fat": 0.1
+   },
+   "gramsPerPiece": 130
+  },
+  {
+   "name": "strawberries",
+   "aliases": [
+    "strawberry"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 32,
+    "protein": 0.7,
+    "carbs": 7.7,
+    "fat": 0.3
+   },
+   "gramsPerPiece": 12
+  },
+  {
+   "name": "blueberries",
+   "aliases": [
+    "blueberry"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 57,
+    "protein": 0.7,
+    "carbs": 14.5,
+    "fat": 0.3
+   }
+  },
+  {
+   "name": "lemon",
+   "aliases": [
+    "lemons"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 29,
+    "protein": 1.1,
+    "carbs": 9.3,
+    "fat": 0.3
+   },
+   "gramsPerPiece": 60
+  },
+  {
+   "name": "corn",
+   "aliases": [
+    "sweet corn"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 86,
+    "protein": 3.3,
+    "carbs": 19,
+    "fat": 1.4
+   }
+  },
+  {
+   "name": "peas",
+   "aliases": [
+    "green peas"
+   ],
+   "category": "Produce",
+   "per100g": {
+    "calories": 81,
+    "protein": 5.4,
+    "carbs": 14.5,
+    "fat": 0.4
+   }
+  },
+  {
+   "name": "olive oil",
+   "aliases": [
+    "extra virgin olive oil",
+    "oil"
+   ],
+   "category": "Condiments",
+   "per100g": {
+    "calories": 884,
+    "protein": 0,
+    "carbs": 0,
+    "fat": 100
+   }
+  },
+  {
+   "name": "peanut butter",
+   "aliases": [],
+   "category": "Condiments",
+   "per100g": {
+    "calories": 588,
+    "protein": 25,
+    "carbs": 20,
+    "fat": 50
+   }
+  },
+  {
+   "name": "soy sauce",
+   "aliases": [],
+   "category": "Condiments",
+   "per100g": {
+    "calories": 53,
+    "protein": 8,
+    "carbs": 4.9,
+    "fat": 0.6
+   }
+  },
+  {
+   "name": "honey",
+   "aliases": [],
+   "category": "Condiments",
+   "per100g": {
+    "calories": 304,
+    "protein": 0.3,
+    "carbs": 82,
+    "fat": 0
+   }
+  },
+  {
+   "name": "almonds",
+   "aliases": [
+    "almond"
+   ],
+   "category": "Other",
+   "per100g": {
+    "calories": 579,
+    "protein": 21,
+    "carbs": 22,
+    "fat": 50
+   },
+   "gramsPerPiece": 1.2
+  },
+  {
+   "name": "walnuts",
+   "aliases": [
+    "walnut"
+   ],
+   "category": "Other",
+   "per100g": {
+    "calories": 654,
+    "protein": 15,
+    "carbs": 14,
+    "fat": 65
+   }
+  },
+  {
+   "name": "hummus",
+   "aliases": [],
+   "category": "Condiments",
+   "per100g": {
+    "calories": 166,
+    "protein": 7.9,
+    "carbs": 14.3,
+    "fat": 9.6
+   }
+  },
+  {
+   "name": "orange juice",
+   "aliases": [],
+   "category": "Beverages",
+   "per100g": {
+    "calories": 45,
+    "protein": 0.7,
+    "carbs": 10.4,
+    "fat": 0.2
+   }
+  },
+  {
+   "name": "almond milk",
+   "aliases": [
+    "unsweetened almond milk"
+   ],
+   "category": "Beverages",
+   "per100g": {
+    "calories": 15,
+    "protein": 0.6,
+    "carbs": 0.3,
+    "fat": 1.2
+   }
+  },
+  {
+   "name": "soy milk",
+   "aliases": [],
+   "category": "Beverages",
+   "per100g": {
+    "calories": 54,
+    "protein": 3.3,
+    "carbs": 6,
+    "fat": 1.8
+   }
+  }
+ ]
+}

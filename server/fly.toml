@@ -1,0 +1,31 @@
+# Fly.io config for the Fueli API. Change `app` to a globally unique name before `fly launch`.
+app = "fueli-api"
+primary_region = "lax"
+
+[build]
+
+[env]
+  PORT = "8080"
+  OPENAI_MODEL = "gpt-4o"
+  SUPABASE_URL = "https://rdtqyizwcmhxirbganhn.supabase.co"
+  # Comma-separated. Wildcard prefix allowed for Vercel preview URLs.
+  ALLOWED_ORIGINS = "http://localhost:8081,https://fueli.vercel.app,https://*.vercel.app"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    path = "/health"
+    timeout = "5s"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
