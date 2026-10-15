@@ -8,10 +8,13 @@ const MAX_DRIFT = 0.25;
 
 export const atwaterCalories = (m) => Math.round(4 * m.protein + 4 * m.carbs + 9 * m.fat);
 
-export function verifyMeal(meal, fridge) {
-  const computed = computeMacros(meal.structuredIngredients);
+// Ingredient quantities are for the whole recipe; calories and macros are per serving.
+export function verifyMeal(meal, fridge, servings = 1) {
+  const total = computeMacros(meal.structuredIngredients);
+  const perServing = (v) => Math.round(v / servings);
+  const computed = { ...total, calories: perServing(total.calories), protein: perServing(total.protein), carbs: perServing(total.carbs), fat: perServing(total.fat) };
   const coverage = fridgeCoverage(fridge, meal.structuredIngredients);
-  const out = { ...meal, warnings: [...(meal.warnings || [])] };
+  const out = { ...meal, servings, warnings: [...(meal.warnings || [])] };
 
   if (computed.coverage >= MIN_COVERAGE && computed.calories > 0) {
     // The database is the source of truth whenever it can price the meal.

@@ -18,6 +18,8 @@ Rules:
 - Strictly respect the diet. Vegetarian: no meat or seafood. Vegan: no animal products at all.
 - Use the lookup_nutrition tool to get per-100g values for main ingredients, and base calories/macros on them.
 - structuredIngredients names must match fridge item names when the item comes from the fridge, using units g, ml, piece, cup or tbsp.
+- Use g for meat, fish, tofu, grains, leafy greens, berries and chopped vegetables. Use piece only for whole countable items such as eggs, whole fruit, a head of broccoli or an ear of corn.
+- The user message says how many people each meal serves. Ingredient quantities are for all servings together; calories, protein, carbs and fat are per serving.
 - Keep recipes practical (under 60 minutes) and write steps as "Step 1: ...\\nStep 2: ...".
 Final JSON format:
 {"meals":[{"name":"","type":"Breakfast|Lunch|Dinner","ingredients":["200g chicken breast"],"structuredIngredients":[{"name":"chicken breast","quantity":200,"unit":"g"}],"recipe":"Step 1: ...","calories":0,"protein":0,"carbs":0,"fat":0,"prepTime":"20 min","missingIngredients":[]}]}`;
@@ -43,22 +45,23 @@ const profileView = (p) => ({
   weightKg: Number(p.weight) || null,
 });
 
-function finalize(meals, fridge, profile) {
+function finalize(meals, fridge, profile, servings) {
   return meals.map((m) => {
-    const verified = verifyMeal(m, fridge);
+    const verified = verifyMeal(m, fridge, servings);
     const { violations, warnings } = checkMeal(verified, profile);
     return { ...verified, violations, warnings: [...verified.warnings, ...warnings] };
   });
 }
 
-export async function planMeals({ fridge, profile, neededTypes, trace }) {
+export async function planMeals({ fridge, profile, neededTypes, servings = 1, trace }) {
+  const serves = `Each meal serves ${servings} ${servings === 1 ? 'person' : 'people'}.`;
   const p = profileView(profile);
   const draft = await runAgent({
     system: SYSTEM,
     messages: [
       {
         role: 'user',
-        content: `Plan exactly ${neededTypes.length} meal(s), one for each of: ${neededTypes.join(', ')}.
+        content: `Plan exactly ${neededTypes.length} meal(s), one for each of: ${neededTypes.join(', ')}. ${serves}
 ${asData('profile', p)}
 ${asData('fridge', summarizeFridge(fridge))}
 Call lookup_nutrition for the main ingredients, then return the final JSON.`,
@@ -69,7 +72,7 @@ Call lookup_nutrition for the main ingredients, then return the final JSON.`,
     trace,
   });
 
-  let meals = finalize(draft.meals.filter((m) => neededTypes.includes(m.type)), fridge, p);
+  let meals = finalize(draft.meals.filter((m) => neededTypes.includes(m.type)), fridge, p, servings);
 
   // One repair round for hard violations.
   const bad = meals.filter((m) => m.violations.length);
@@ -83,13 +86,13 @@ Call lookup_nutrition for the main ingredients, then return the final JSON.`,
           role: 'user',
           content: `These meals broke the rules and must be replaced with compliant meals of the same type:\n${bad
             .map((m) => `- ${m.type}: "${m.name}" — ${m.violations.join('; ')}`)
-            .join('\n')}\nReturn {"meals":[...]} with only the replacements.`,
+            .join('\n')}\n${serves}\nReturn {"meals":[...]} with only the replacements.`,
         },
       ],
       schema: MealPlan,
       trace,
     });
-    const fixed = finalize(repaired.meals, fridge, p);
+    const fixed = finalize(repaired.meals, fridge, p, servings);
     meals = meals.map((m) => (m.violations.length ? fixed.find((f) => f.type === m.type) ?? m : m));
   }
 
