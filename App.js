@@ -10,17 +10,25 @@ import ScanIngredientScreen from './screens/ScanIngredientScreen';
 const Stack = createNativeStackNavigator();
 
 // On wide web screens the app is shown inside a phone-sized frame, since the UI is designed for phones.
-const PHONE_WIDTH = 390;
-const PHONE_HEIGHT = 844;
+// Screen size matches an iPhone 15/16 (393×852 pt); the whole phone scales down evenly on short windows.
+const SCREEN_WIDTH = 393;
+const SCREEN_HEIGHT = 852;
+const BEZEL = 12;
+const SCREEN_RADIUS = 47;
 const FRAME_BREAKPOINT = 600;
+const MARGIN = 24;
 
 function PhoneFrame({ children }) {
   const { width, height } = useWindowDimensions();
   if (Platform.OS !== 'web' || width < FRAME_BREAKPOINT) return children;
 
+  const phoneWidth = SCREEN_WIDTH + BEZEL * 2;
+  const phoneHeight = SCREEN_HEIGHT + BEZEL * 2;
+  const scale = Math.min(1, (height - MARGIN * 2) / phoneHeight, (width - MARGIN * 2) / phoneWidth);
+
   return (
     <View style={styles.backdrop}>
-      <View style={[styles.phone, { height: Math.min(PHONE_HEIGHT, height - 48) }]}>
+      <View style={[styles.phone, { width: phoneWidth, height: phoneHeight, transform: [{ scale }] }]}>
         {children}
       </View>
     </View>
@@ -48,13 +56,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     backgroundColor: '#E8EEED',
   },
   phone: {
-    width: PHONE_WIDTH,
     overflow: 'hidden',
-    borderRadius: 36,
-    borderWidth: 8,
+    borderRadius: SCREEN_RADIUS + BEZEL,
+    borderWidth: BEZEL,
     borderColor: '#1A1A1A',
     backgroundColor: '#fff',
     boxShadow: '0 20px 60px rgba(0, 0, 0, 0.25)',

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text } from 'react-native';
+import { Platform, Text } from 'react-native';
 import FridgeScreen from './FridgeScreen';
 import MealScreen from './MealScreen';
 import ExerciseScreen from './ExerciseScreen';
@@ -20,12 +20,15 @@ export default function HomeScreen() {
         tabBarStyle: {
           backgroundColor: '#fff',
           borderTopColor: '#F0F0F0',
-          paddingBottom: 24,
+          // Web has no home-indicator inset, so give the icon + label more of the bar's height.
+          paddingBottom: Platform.OS === 'web' ? 14 : 24,
           paddingTop: 8,
           height: 80,
         },
         tabBarActiveTintColor: '#0D9E8A',
         tabBarInactiveTintColor: '#aaa',
+        // Keep labels under the icons; on wide web windows React Navigation would otherwise put them beside the icons.
+        tabBarLabelPosition: 'below-icon',
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: '600',
