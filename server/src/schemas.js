@@ -70,3 +70,4 @@ export const WorkoutRequest = z.object({
 });
 export const ScanRequest = z.object({ image: z.string().min(100) });
 export const OutsideRequest = z.object({ text: z.string().max(300).optional(), image: z.string().optional() });
+export const CheckoutConfirm = z.object({ sessionId: z.string().regex(/^cs_(test|live)_[A-Za-z0-9]+$/) });
