@@ -12,6 +12,7 @@ AI meal and workout planner that cooks from **your fridge**: snap ingredients, g
 |---|---|
 | Write-up (4–5 pages) | [docs/write-up.md](docs/write-up.md), [docs/write-up.pdf](docs/write-up.pdf) |
 | Product brief | [docs/product-brief.md](docs/product-brief.md) |
+| Demo-day checklist | [docs/demo-day.md](docs/demo-day.md) |
 | PRD | [docs/PRD.md](docs/PRD.md) |
 | Architecture diagram | [docs/architecture.md](docs/architecture.md) |
 | Evaluation package (rubric, cases, results, failure log) | [docs/evaluation.md](docs/evaluation.md), [eval/](eval/) |
