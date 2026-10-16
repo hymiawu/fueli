@@ -68,10 +68,11 @@ function finalize(meals, fridge, profile, servings) {
   });
 }
 
-export async function planMeals({ fridge, profile, neededTypes, servings = 1, trace }) {
+// `deps` lets tests replace the model calls; production always uses the real ones.
+export async function planMeals({ fridge, profile, neededTypes, servings = 1, trace }, deps = { runAgent, jsonCompletion }) {
   const serves = `Each meal serves ${servings} ${servings === 1 ? 'person' : 'people'}.`;
   const p = profileView(profile);
-  const draft = await runAgent({
+  const draft = await deps.runAgent({
     system: SYSTEM,
     messages: [
       {
@@ -93,7 +94,7 @@ Call lookup_nutrition for the main ingredients, then return the final JSON.`,
   const bad = meals.filter((m) => m.violations.length);
   if (bad.length) {
     trace?.flags.push('diet_repair');
-    const repaired = await jsonCompletion({
+    const repaired = await deps.jsonCompletion({
       system: SYSTEM,
       messages: [
         { role: 'user', content: `${asData('profile', p)}\n${asData('fridge', summarizeFridge(fridge))}` },

@@ -1,18 +1,17 @@
 import { useState } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity,
-  StyleSheet, SafeAreaView, ScrollView,
+  StyleSheet, ScrollView,
   KeyboardAvoidingView, Platform
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
-
-const CATEGORIES = ['🥩 Meat', '🥦 Veggie', '🍎 Fruit', '🥛 Dairy', '🌾 Grain', '🧂 Other'];
-const UNITS = ['pcs', 'g', 'kg', 'ml', 'L', 'cup'];
+import { CATEGORIES, UNITS } from '../lib/constants';
 
 export default function AddIngredientScreen({ navigation, route }) {
   const [name, setName]         = useState('');
   const [quantity, setQuantity] = useState('');
-  const [unit, setUnit]         = useState('pcs');
+  const [unit, setUnit]         = useState('piece');
   const [category, setCategory] = useState(null);
   const [expiry, setExpiry]     = useState('');
 

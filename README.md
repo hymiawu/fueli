@@ -10,7 +10,9 @@ AI meal and workout planner that cooks from **your fridge**: snap ingredients, g
 
 | Capstone deliverable | Location |
 |---|---|
+| Write-up (4–5 pages) | [docs/write-up.md](docs/write-up.md), [docs/write-up.pdf](docs/write-up.pdf) |
 | Product brief | [docs/product-brief.md](docs/product-brief.md) |
+| Demo-day checklist | [docs/demo-day.md](docs/demo-day.md) |
 | PRD | [docs/PRD.md](docs/PRD.md) |
 | Architecture diagram | [docs/architecture.md](docs/architecture.md) |
 | Evaluation package (rubric, cases, results, failure log) | [docs/evaluation.md](docs/evaluation.md), [eval/](eval/) |
@@ -70,7 +72,7 @@ vercel --prod
 If the repo is connected to Vercel on GitHub, pushing to `main` deploys to production and each pull request gets a preview URL. `EXPO_PUBLIC_*` values are built into the app, so redeploy after changing them.
 Then make sure the Vercel domain is listed in `ALLOWED_ORIGINS` in `server/fly.toml`, and redeploy the API if you changed it.
 
-**Supabase:** run `supabase/migrations/001_ingredients_rls.sql` and `002_subscriptions.sql` in the SQL editor once. The second one creates the subscription table and marks accounts that already exist as `grandfathered` (free).
+**Supabase:** run `supabase/migrations/000_ingredients.sql`, `001_ingredients_rls.sql` and `002_subscriptions.sql`, in that order, in the SQL editor once. The second one creates the subscription table and marks accounts that already exist as `grandfathered` (free).
 
 **Payments → Stripe (test mode).** New accounts must subscribe ($4.99/month) before using the app; the API refuses AI requests from unpaid accounts (HTTP 402).
 1. In the Stripe Dashboard with **Test mode** on, copy the secret key (`sk_test_...`).
@@ -79,3 +81,6 @@ Then make sure the Vercel domain is listed in `ALLOWED_ORIGINS` in `server/fly.t
 4. `fly secrets set STRIPE_SECRET_KEY=sk_test_... STRIPE_WEBHOOK_SECRET=whsec_... SUPABASE_SERVICE_ROLE_KEY=...` and `fly deploy`.
 
 Test card: `4242 4242 4242 4242`, any future expiry, any CVC.
+
+## License
+MIT. See [LICENSE](LICENSE).

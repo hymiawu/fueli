@@ -36,7 +36,9 @@ Students and young professionals (18–30) who are trying to eat better and trai
 | Fridge deduction on "cooked" | **Deterministic code** | State changes need a human action |
 
 ## Success metrics (for the capstone)
-- ≥ 90% of eval cases pass (see `docs/evaluation.md`).
-- 100% diet compliance on vegetarian/vegan eval cases.
-- ≥ 50% of meal ingredients come from the user's fridge on average.
-- p50 meal-plan latency under 20 s.
+| Metric | Target | Measured (Claude Haiku 5.5, 2026-10-16) |
+|---|---|---|
+| Eval cases passing (see `docs/evaluation.md`) | ≥ 90% | 17/17 (100%) |
+| Diet compliance on vegetarian/vegan cases | 100% | 3/3 cases, 100% |
+| Meal ingredients from the user's fridge | ≥ 50% on average | 92% across 15 meals |
+| p50 meal-plan latency | < 20 s | 8.5 s |

@@ -22,14 +22,16 @@ const allowed = (process.env.ALLOWED_ORIGINS || 'http://localhost:8081')
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
-const isAllowedOrigin = (origin) =>
-  allowed.some((a) => (a.startsWith('https://*.') ? origin.endsWith(a.slice(9)) && origin.startsWith('https://') : a === origin));
+// An entry may contain one `*`, which matches a single DNS label part (letters, digits, hyphens),
+// e.g. https://fueli-*-miawu.vercel.app for this project's preview deploys.
+const originPatterns = allowed.map((a) => new RegExp(`^${a.split('*').map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('[a-z0-9-]+')}$`));
+const isAllowedOrigin = (origin) => originPatterns.some((re) => re.test(origin));
 // Where Stripe Checkout sends the user back: the calling web app if it is allowed, otherwise the production site.
 const appUrl = (req) => (req.headers.origin && isAllowedOrigin(req.headers.origin) ? req.headers.origin : process.env.APP_URL || 'https://fueli.vercel.app');
 app.use(
   cors({
     // Native apps send no Origin header. Browsers must come from an allowed origin
-    // (entries may use a leading wildcard, e.g. https://*.vercel.app for preview deploys).
+    // (entries may contain one wildcard, e.g. https://fueli-*-miawu.vercel.app for preview deploys).
     origin: (origin, cb) => cb(null, !origin || isAllowedOrigin(origin)),
   }),
 );
@@ -127,6 +129,13 @@ app.post(
     return confirmCheckout(req, parsed.data.sessionId);
   }),
 );
+
+// Errors thrown before a route handler (for example malformed JSON or an oversized body) also return JSON.
+app.use((err, _req, res, _next) => {
+  const status = err.status || err.statusCode || 500;
+  const message = err.type === 'entity.parse.failed' ? 'Invalid JSON' : err.type === 'entity.too.large' ? 'Request too large' : 'Request failed';
+  res.status(status).json({ error: message });
+});
 
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 
