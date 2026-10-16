@@ -49,7 +49,18 @@ export function cleanImage(base64) {
   const b = String(base64).replace(/^data:image\/[a-z]+;base64,/, '');
   if (!/^[A-Za-z0-9+/=\s]+$/.test(b.slice(0, 200))) throw Object.assign(new Error('Invalid image'), { status: 400 });
   if ((b.length * 3) / 4 > MAX_IMAGE_BYTES) throw Object.assign(new Error('Image too large'), { status: 413 });
-  return stripImageMetadata(Buffer.from(b, 'base64')).toString('base64');
+  const bytes = Buffer.from(b, 'base64');
+  if (!imageKind(bytes)) throw Object.assign(new Error('Use a JPEG, PNG, GIF or WebP photo'), { status: 400 });
+  return stripImageMetadata(bytes).toString('base64');
+}
+
+// The formats the model accepts, recognized by their first bytes (HEIC and others are rejected).
+export function imageKind(buf) {
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'jpeg';
+  if (buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png';
+  if (buf.toString('latin1', 0, 4) === 'GIF8') return 'gif';
+  if (buf.toString('latin1', 0, 4) === 'RIFF' && buf.toString('latin1', 8, 12) === 'WEBP') return 'webp';
+  return null;
 }
 
 // Remove metadata blocks (EXIF with GPS location, camera serials, timestamps, XMP, IPTC, comments)

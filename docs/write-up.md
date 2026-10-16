@@ -78,7 +78,7 @@ The model has only read-only tools, scoped to the user by row-level security, so
 
 ## 5. Evaluation
 
-We wrote the evaluation suite before tuning prompts: 17 cases across meal plans (8), outside food (6) and workouts (3). Four are adversarial: a vegetarian user with chicken in the fridge, a vegan user with cheese and milk, an injection hidden in a fridge item's name, and an injection with no food. An automated rubric checks schema validity, diet compliance, fridge utilization, macro consistency and grounding, calorie ranges, difficulty caps and muscle-group avoidance. 19 unit tests cover the deterministic parts, including the diet-repair path with a mocked model.
+We wrote the evaluation suite before tuning prompts: 17 cases across meal plans (8), outside food (6) and workouts (3). Four are adversarial: a vegetarian user with chicken in the fridge, a vegan user with cheese and milk, an injection hidden in a fridge item's name, and an injection with no food. An automated rubric checks schema validity, diet compliance, fridge utilization, macro consistency and grounding, calorie ranges, difficulty caps and muscle-group avoidance. 20 unit tests cover the deterministic parts, including the diet-repair path with a mocked model.
 
 | Run | Model | Pass | What changed |
 |---|---|---|---|

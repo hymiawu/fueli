@@ -6,7 +6,7 @@
 | Test cases (17) | [eval/cases.json](../eval/cases.json) |
 | Runner | [eval/run.js](../eval/run.js) · `cd server && npm run eval` |
 | Latest results (with full outputs) | [eval/results/latest.md](../eval/results/latest.md), `latest.json` |
-| Deterministic unit tests (19) | [server/test/](../server/test/) · `cd server && npm test` |
+| Deterministic unit tests (20) | [server/test/](../server/test/) · `cd server && npm test` |
 
 ## Test-case design
 | Suite | Cases | What they probe |

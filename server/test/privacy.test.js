@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { redactPII, cleanText, stripImageMetadata } from '../src/guard.js';
+import { redactPII, cleanText, stripImageMetadata, cleanImage } from '../src/guard.js';
 import { mealCalorieTarget } from '../src/agents/mealPlanner.js';
 import { summarizeFridge } from '../src/tools/fridge.js';
 
@@ -54,4 +54,11 @@ test('PNG text and EXIF chunks are removed', () => {
 test('meal calorie target replaces body measurements', () => {
   assert.equal(mealCalorieTarget({ weight: '62', activity: 'Moderately Active', goal: 'Build Muscle' }), 750);
   assert.equal(mealCalorieTarget({ weight: '', activity: 'Sedentary' }), null);
+});
+
+test('only JPEG, PNG, GIF and WebP images are accepted', () => {
+  const png = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(200)]);
+  assert.ok(cleanImage(png.toString('base64')));
+  const heic = Buffer.concat([Buffer.from([0, 0, 0, 0x18]), Buffer.from('ftypheic', 'latin1'), Buffer.alloc(200)]);
+  assert.throws(() => cleanImage(heic.toString('base64')), (e) => e.status === 400 && /JPEG, PNG, GIF or WebP/.test(e.message));
 });
