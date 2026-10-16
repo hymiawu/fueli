@@ -48,7 +48,11 @@ export default function ScanIngredientScreen({ navigation, route }) {
     setAnalyzing(true);
     try {
       const data = await analyzeIngredientImage(base64);
-      if (data.isFood === false) throw new Error('not food');
+      if (data.isFood === false) {
+        Alert.alert('Not food?', "We couldn't see a food item. Try another photo, or add it manually.");
+        setAnalyzing(false);
+        return;
+      }
       setResult({
         name: data.name || '',
         quantity: String(data.quantity || '1'),
@@ -60,7 +64,8 @@ export default function ScanIngredientScreen({ navigation, route }) {
         fat: String(data.fat || ''),
       });
     } catch (e) {
-      Alert.alert('Analysis Failed', 'Could not identify ingredient. Please try again.');
+      // The API's message says what went wrong (subscription, image too large, rate limit, ...).
+      Alert.alert('Analysis failed', e.message || 'Could not identify the ingredient. Please try again.');
     }
     setAnalyzing(false);
   };
