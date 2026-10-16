@@ -1,7 +1,7 @@
 {
   "summary": {
-    "model": "gpt-4o",
-    "ranAt": "2026-10-15T05:52:37.689Z",
+    "model": "claude-haiku-5-5",
+    "ranAt": "2026-10-16T15:55:52.068Z",
     "passed": 17,
     "total": 17
   },
@@ -16,56 +16,96 @@
         "macro_consistency": true,
         "macro_grounded": true
       },
-      "ms": 8774,
+      "ms": 9407,
       "flags": [],
-      "tokens": 4358,
-      "toolCalls": 2,
+      "tokens": 5724,
+      "toolCalls": 1,
       "output": {
         "meals": [
           {
-            "name": "Banana Oatmeal with Greek Yogurt",
+            "name": "Greek Yogurt Banana Oat Bowl",
             "type": "Breakfast",
             "ingredients": [
-              "100g oats",
-              "2 piece banana",
-              "200g greek yogurt"
+              "80g oats",
+              "200g greek yogurt",
+              "1 banana"
             ],
             "structuredIngredients": [
               {
                 "name": "oats",
-                "quantity": 100,
+                "quantity": 80,
                 "unit": "g"
-              },
-              {
-                "name": "banana",
-                "quantity": 2,
-                "unit": "piece"
               },
               {
                 "name": "greek yogurt",
                 "quantity": 200,
                 "unit": "g"
+              },
+              {
+                "name": "banana",
+                "quantity": 1,
+                "unit": "piece"
               }
             ],
-            "recipe": "Step 1: Cook 100g of oats in water or milk until soft.\nStep 2: Slice 2 bananas and mix them into the oatmeal.\nStep 3: Top with 200g of Greek yogurt and serve.",
-            "calories": 793,
-            "protein": 37,
-            "carbs": 128,
-            "fat": 18,
-            "prepTime": "15 min",
+            "recipe": "Step 1: Cook the oats with 150ml water in a small pot over medium heat for 4-5 minutes, stirring, until thick.\nStep 2: Spoon the oats into a bowl and let them cool for 1 minute.\nStep 3: Top with the greek yogurt and sliced banana.\nStep 4: Serve immediately.",
+            "calories": 610,
+            "protein": 33,
+            "carbs": 88,
+            "fat": 16,
+            "prepTime": "10 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
             "nutritionCoverage": 1
           },
           {
-            "name": "Grilled Chicken with Broccoli and Rice",
+            "name": "Chicken and Broccoli Rice Bowl",
             "type": "Lunch",
             "ingredients": [
+              "180g chicken breast",
+              "150g white rice",
+              "150g broccoli"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "chicken breast",
+                "quantity": 180,
+                "unit": "g"
+              },
+              {
+                "name": "white rice",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "broccoli",
+                "quantity": 150,
+                "unit": "g"
+              }
+            ],
+            "recipe": "Step 1: Cook the white rice according to package directions and keep warm.\nStep 2: Cut the chicken breast into bite-sized pieces and season with salt and pepper.\nStep 3: Pan-cook the chicken in a lightly oiled skillet over medium-high heat for 6-8 minutes until cooked through.\nStep 4: Steam the broccoli florets for 4-5 minutes until tender-crisp.\nStep 5: Assemble the rice, chicken and broccoli in a bowl and serve.",
+            "calories": 543,
+            "protein": 64,
+            "carbs": 52,
+            "fat": 8,
+            "prepTime": "25 min",
+            "missingIngredients": [],
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1
+          },
+          {
+            "name": "Chicken, Egg and Broccoli Rice Plate",
+            "type": "Dinner",
+            "ingredients": [
               "200g chicken breast",
-              "200g broccoli",
-              "150g white rice"
+              "150g white rice",
+              "150g broccoli",
+              "2 eggs"
             ],
             "structuredIngredients": [
               {
@@ -74,68 +114,31 @@
                 "unit": "g"
               },
               {
-                "name": "broccoli",
-                "quantity": 200,
-                "unit": "g"
-              },
-              {
                 "name": "white rice",
                 "quantity": 150,
                 "unit": "g"
-              }
-            ],
-            "recipe": "Step 1: Grill 200g of chicken breast until cooked through.\nStep 2: Steam 200g of broccoli until tender.\nStep 3: Cook 150g of white rice according to package instructions.\nStep 4: Serve the chicken with broccoli and rice on the side.",
-            "calories": 593,
-            "protein": 72,
-            "carbs": 55,
-            "fat": 8,
-            "prepTime": "30 min",
-            "missingIngredients": [],
-            "warnings": [],
-            "macroSource": "verified",
-            "fridgeUtilization": 1,
-            "nutritionCoverage": 1
-          },
-          {
-            "name": "Egg and Broccoli Stir-fry",
-            "type": "Dinner",
-            "ingredients": [
-              "4 piece egg",
-              "200g broccoli",
-              "100g white rice"
-            ],
-            "structuredIngredients": [
-              {
-                "name": "egg",
-                "quantity": 4,
-                "unit": "piece"
               },
               {
                 "name": "broccoli",
-                "quantity": 200,
+                "quantity": 150,
                 "unit": "g"
               },
               {
-                "name": "white rice",
-                "quantity": 100,
-                "unit": "g"
+                "name": "egg",
+                "quantity": 2,
+                "unit": "piece"
               }
             ],
-            "recipe": "Step 1: Cook 100g of white rice according to package instructions.\nStep 2: Stir-fry 200g of broccoli in a pan with a little oil.\nStep 3: Add 4 beaten eggs to the pan and scramble with the broccoli.\nStep 4: Serve the stir-fry over the cooked rice.",
-            "calories": 484,
-            "protein": 34,
-            "carbs": 43,
-            "fat": 20,
-            "prepTime": "20 min",
+            "recipe": "Step 1: Cook the white rice according to package directions and keep warm.\nStep 2: Cut the chicken breast into strips and season with salt, pepper and garlic powder if available.\nStep 3: Pan-cook the chicken in a lightly oiled skillet over medium-high heat for 6-8 minutes until cooked through, then set aside.\nStep 4: Steam the broccoli for 4-5 minutes until tender-crisp.\nStep 5: Scramble the eggs in the same skillet over medium-low heat for 2-3 minutes until just set.\nStep 6: Plate the rice with the chicken, broccoli and scrambled eggs and serve.",
+            "calories": 719,
+            "protein": 83,
+            "carbs": 53,
+            "fat": 18,
+            "prepTime": "25 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
-            "claimed": {
-              "calories": 692,
-              "protein": 36.4,
-              "carbs": 88.2,
-              "fat": 28.6
-            },
-            "macroSource": "corrected",
+            "macroSource": "verified",
             "fridgeUtilization": 1,
             "nutritionCoverage": 1
           }
@@ -155,24 +158,31 @@
         "macro_consistency": true,
         "macro_grounded": true
       },
-      "ms": 7999,
+      "ms": 9715,
       "flags": [],
-      "tokens": 3718,
-      "toolCalls": 2,
+      "tokens": 5343,
+      "toolCalls": 1,
       "output": {
         "meals": [
           {
-            "name": "Tofu Stir-Fry with Spinach and Bell Pepper",
+            "name": "Tofu and Spinach Brown Rice Bowl",
             "type": "Lunch",
             "ingredients": [
-              "200g tofu",
+              "150g tofu",
+              "80g brown rice",
               "100g spinach",
-              "1 piece bell pepper"
+              "1 bell pepper",
+              "1 tbsp soy sauce (optional)"
             ],
             "structuredIngredients": [
               {
                 "name": "tofu",
-                "quantity": 200,
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "brown rice",
+                "quantity": 80,
                 "unit": "g"
               },
               {
@@ -186,50 +196,58 @@
                 "unit": "piece"
               }
             ],
-            "recipe": "Step 1: Cut the tofu into cubes and slice the bell pepper.\nStep 2: In a pan, heat some oil and add the tofu cubes. Cook until golden brown.\nStep 3: Add the sliced bell pepper and spinach to the pan. Stir-fry for about 5 minutes.\nStep 4: Season with salt and pepper to taste, and serve hot.",
-            "calories": 348,
-            "protein": 38,
-            "carbs": 17,
-            "fat": 19,
+            "recipe": "Step 1: Cook the brown rice according to the package directions and keep it warm.\nStep 2: Press the tofu for 5 minutes to remove excess water, then cut it into 2 cm cubes.\nStep 3: Heat a non-stick pan over medium-high heat and cook the tofu cubes for 6-8 minutes, turning until golden on all sides.\nStep 4: Slice the bell pepper into thin strips and add them to the pan. Cook for 3 minutes.\nStep 5: Add the spinach and cook for 1-2 minutes until just wilted.\nStep 6: Add the soy sauce, if using, and toss everything together.\nStep 7: Serve the tofu and vegetable mix over the brown rice.",
+            "calories": 375,
+            "protein": 32,
+            "carbs": 36,
+            "fat": 15,
             "prepTime": "30 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
             "nutritionCoverage": 1
           },
           {
-            "name": "Brown Rice with Tofu and Spinach",
+            "name": "Spinach and Pepper Egg Scramble with Brown Rice",
             "type": "Dinner",
             "ingredients": [
-              "150g brown rice",
-              "200g tofu",
-              "100g spinach"
+              "3 eggs",
+              "80g spinach",
+              "1 bell pepper",
+              "80g brown rice"
             ],
             "structuredIngredients": [
               {
-                "name": "brown rice",
-                "quantity": 150,
-                "unit": "g"
-              },
-              {
-                "name": "tofu",
-                "quantity": 200,
-                "unit": "g"
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
               },
               {
                 "name": "spinach",
-                "quantity": 100,
+                "quantity": 80,
+                "unit": "g"
+              },
+              {
+                "name": "bell pepper",
+                "quantity": 1,
+                "unit": "piece"
+              },
+              {
+                "name": "brown rice",
+                "quantity": 80,
                 "unit": "g"
               }
             ],
-            "recipe": "Step 1: Cook the brown rice according to package instructions.\nStep 2: While the rice is cooking, cut the tofu into cubes and sauté in a pan until golden brown.\nStep 3: Add spinach to the pan and cook until wilted.\nStep 4: Mix the cooked brown rice with the tofu and spinach. Season with salt and pepper to taste, and serve hot.",
-            "calories": 496,
-            "protein": 41,
-            "carbs": 48,
-            "fat": 20,
-            "prepTime": "40 min",
+            "recipe": "Step 1: Cook the brown rice according to the package directions and keep it warm.\nStep 2: Dice the bell pepper into small pieces.\nStep 3: Heat a non-stick pan over medium heat and cook the bell pepper for 3 minutes until softened.\nStep 4: Add the spinach and cook for 1 minute until wilted.\nStep 5: Beat the eggs in a bowl, pour them into the pan, and gently stir for 3-4 minutes until just set.\nStep 6: Serve the scramble alongside the brown rice.",
+            "calories": 369,
+            "protein": 25,
+            "carbs": 32,
+            "fat": 16,
+            "prepTime": "25 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
@@ -250,112 +268,128 @@
         "macro_consistency": true,
         "macro_grounded": true
       },
-      "ms": 10471,
+      "ms": 17582,
       "flags": [],
-      "tokens": 4190,
-      "toolCalls": 2,
+      "tokens": 7288,
+      "toolCalls": 1,
       "output": {
         "meals": [
           {
-            "name": "Chickpea Avocado Toast",
+            "name": "Crispy Chickpea & Kale Sweet Potato Hash",
             "type": "Breakfast",
             "ingredients": [
-              "200g chickpeas",
-              "1 piece avocado"
+              "1 piece sweet potato (130g), diced",
+              "60g kale, chopped",
+              "100g chickpeas, drained"
             ],
             "structuredIngredients": [
               {
-                "name": "chickpeas",
-                "quantity": 200,
+                "name": "sweet potato",
+                "quantity": 1,
+                "unit": "piece"
+              },
+              {
+                "name": "kale",
+                "quantity": 60,
                 "unit": "g"
+              },
+              {
+                "name": "chickpeas",
+                "quantity": 100,
+                "unit": "g"
+              }
+            ],
+            "recipe": "Step 1: Dice the sweet potato into small 1 cm cubes.\nStep 2: Heat a non-stick pan over medium heat and add the diced sweet potato with a splash of water. Cover and cook for 8 minutes, stirring once, until nearly tender.\nStep 3: Add the chickpeas and cook uncovered for 5 minutes until lightly crisp. Season with salt, smoked paprika and black pepper.\nStep 4: Add the chopped kale and cook for 2 to 3 minutes until wilted. Serve hot.",
+            "calories": 305,
+            "protein": 14,
+            "carbs": 59,
+            "fat": 3,
+            "prepTime": "20 min",
+            "missingIngredients": [],
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1
+          },
+          {
+            "name": "Quinoa, Kale & Chickpea Power Bowl",
+            "type": "Lunch",
+            "ingredients": [
+              "100g quinoa, cooked",
+              "100g kale, massaged and chopped",
+              "150g chickpeas, drained",
+              "Juice of half a lemon (optional)"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "quinoa",
+                "quantity": 100,
+                "unit": "g"
+              },
+              {
+                "name": "kale",
+                "quantity": 100,
+                "unit": "g"
+              },
+              {
+                "name": "chickpeas",
+                "quantity": 150,
+                "unit": "g"
+              }
+            ],
+            "recipe": "Step 1: Rinse the quinoa and cook 40 g dry quinoa in 100 ml water for 15 minutes, or until the water is absorbed. Let it rest 5 minutes, then fluff with a fork.\nStep 2: Wash the kale, remove the tough stems and chop finely. Massage with a pinch of salt and the lemon juice for 1 minute to soften.\nStep 3: Pat the chickpeas dry and warm them in a small pan for 4 minutes with cumin and garlic powder.\nStep 4: Combine the quinoa, kale and chickpeas in a bowl and season with black pepper and extra lemon juice.",
+            "calories": 415,
+            "protein": 22,
+            "carbs": 71,
+            "fat": 7,
+            "prepTime": "25 min",
+            "missingIngredients": [],
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1
+          },
+          {
+            "name": "Stuffed Sweet Potato with Avocado & Chickpeas",
+            "type": "Dinner",
+            "ingredients": [
+              "1 piece sweet potato (130g)",
+              "1 piece avocado (150g), sliced",
+              "100g chickpeas, drained",
+              "40g kale, chopped"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "sweet potato",
+                "quantity": 1,
+                "unit": "piece"
               },
               {
                 "name": "avocado",
                 "quantity": 1,
                 "unit": "piece"
-              }
-            ],
-            "recipe": "Step 1: Mash the avocado and chickpeas together in a bowl.\nStep 2: Season with salt and pepper to taste.\nStep 3: Spread the mixture on whole grain toast.",
-            "calories": 568,
-            "protein": 21,
-            "carbs": 68,
-            "fat": 27,
-            "prepTime": "10 min",
-            "missingIngredients": [],
-            "warnings": [],
-            "macroSource": "verified",
-            "fridgeUtilization": 1,
-            "nutritionCoverage": 1
-          },
-          {
-            "name": "Sweet Potato Kale Quinoa Salad",
-            "type": "Lunch",
-            "ingredients": [
-              "2 piece sweet potato",
-              "100g kale",
-              "100g quinoa"
-            ],
-            "structuredIngredients": [
-              {
-                "name": "sweet potato",
-                "quantity": 2,
-                "unit": "piece"
-              },
-              {
-                "name": "kale",
-                "quantity": 100,
-                "unit": "g"
-              },
-              {
-                "name": "quinoa",
-                "quantity": 100,
-                "unit": "g"
-              }
-            ],
-            "recipe": "Step 1: Peel and dice the sweet potatoes and roast them in the oven at 200°C for 25 minutes.\nStep 2: Cook the quinoa according to package instructions.\nStep 3: Chop the kale and massage it with a bit of olive oil.\nStep 4: Combine roasted sweet potatoes, cooked quinoa, and kale in a bowl. Toss with your favorite dressing.",
-            "calories": 393,
-            "protein": 13,
-            "carbs": 82,
-            "fat": 3,
-            "prepTime": "35 min",
-            "missingIngredients": [],
-            "warnings": [],
-            "macroSource": "verified",
-            "fridgeUtilization": 1,
-            "nutritionCoverage": 1
-          },
-          {
-            "name": "Quinoa Chickpea Stir-fry",
-            "type": "Dinner",
-            "ingredients": [
-              "200g quinoa",
-              "200g chickpeas",
-              "100g kale"
-            ],
-            "structuredIngredients": [
-              {
-                "name": "quinoa",
-                "quantity": 200,
-                "unit": "g"
               },
               {
                 "name": "chickpeas",
-                "quantity": 200,
+                "quantity": 100,
                 "unit": "g"
               },
               {
                 "name": "kale",
-                "quantity": 100,
+                "quantity": 40,
                 "unit": "g"
               }
             ],
-            "recipe": "Step 1: Cook the quinoa according to package instructions.\nStep 2: In a pan, sauté the chickpeas and kale with garlic and soy sauce until the kale is wilted.\nStep 3: Add the cooked quinoa to the pan and stir well.\nStep 4: Serve hot, garnished with sesame seeds if desired.",
-            "calories": 617,
-            "protein": 31,
-            "carbs": 106,
-            "fat": 10,
-            "prepTime": "30 min",
+            "recipe": "Step 1: Preheat the oven to 200°C (400°F). Pierce the sweet potato several times with a fork.\nStep 2: Bake the sweet potato for 40 to 45 minutes until soft when pressed.\nStep 3: While it bakes, sauté the chickpeas in a pan for 6 minutes with paprika and salt until golden. Add the chopped kale and cook 2 minutes until wilted.\nStep 4: Split the sweet potato open, top with the chickpea and kale mix and sliced avocado. Season with black pepper.",
+            "calories": 535,
+            "protein": 16,
+            "carbs": 70,
+            "fat": 25,
+            "prepTime": "45 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
@@ -376,81 +410,93 @@
         "macro_grounded": true,
         "diet_targets": true
       },
-      "ms": 8569,
+      "ms": 9583,
       "flags": [],
-      "tokens": 3900,
-      "toolCalls": 2,
+      "tokens": 5521,
+      "toolCalls": 1,
       "output": {
         "meals": [
           {
-            "name": "Salmon and Zucchini Stir-fry",
+            "name": "Salmon and Avocado Spinach Salad",
             "type": "Lunch",
             "ingredients": [
-              "200g salmon",
-              "1 piece zucchini",
-              "100g spinach"
+              "150g salmon",
+              "80g spinach",
+              "1 avocado (150g)",
+              "1 tbsp olive oil",
+              "Salt and pepper to taste"
             ],
             "structuredIngredients": [
               {
                 "name": "salmon",
-                "quantity": 200,
+                "quantity": 150,
                 "unit": "g"
-              },
-              {
-                "name": "zucchini",
-                "quantity": 1,
-                "unit": "piece"
               },
               {
                 "name": "spinach",
-                "quantity": 100,
+                "quantity": 80,
                 "unit": "g"
+              },
+              {
+                "name": "avocado",
+                "quantity": 1,
+                "unit": "piece"
               }
             ],
-            "recipe": "Step 1: Slice the zucchini into thin rounds.\nStep 2: Heat a non-stick pan over medium heat and add the salmon fillet.\nStep 3: Cook the salmon for about 4-5 minutes on each side until fully cooked.\nStep 4: Remove the salmon and set aside. In the same pan, add zucchini slices and spinach.\nStep 5: Stir-fry the vegetables for about 5 minutes until tender.\nStep 6: Serve the salmon on top of the vegetables.",
-            "calories": 473,
-            "protein": 45,
-            "carbs": 10,
-            "fat": 27,
-            "prepTime": "30 min",
+            "recipe": "Step 1: Season the salmon with salt and pepper.\nStep 2: Heat 1 tbsp olive oil in a non-stick pan over medium-high heat. Cook the salmon skin-side down for 4 minutes, then flip and cook 3 to 4 minutes more until just cooked through. Set aside to cool slightly and flake.\nStep 3: Wash the spinach and place it in a bowl.\nStep 4: Halve and pit the avocado, slice it, and arrange it over the spinach.\nStep 5: Top with the flaked salmon, season with salt and pepper, and serve.",
+            "calories": 570,
+            "protein": 35,
+            "carbs": 16,
+            "fat": 42,
+            "prepTime": "15 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
             "nutritionCoverage": 1
           },
           {
-            "name": "Avocado and Egg Salad",
+            "name": "Zucchini Ribbons with Salmon and Spinach Scramble",
             "type": "Dinner",
             "ingredients": [
-              "2 piece egg",
-              "1 piece avocado",
-              "100g spinach"
+              "1 zucchini (200g)",
+              "3 eggs",
+              "100g spinach",
+              "150g salmon",
+              "1 tbsp olive oil",
+              "Salt and pepper to taste"
             ],
             "structuredIngredients": [
               {
-                "name": "egg",
-                "quantity": 2,
+                "name": "zucchini",
+                "quantity": 1,
                 "unit": "piece"
               },
               {
-                "name": "avocado",
-                "quantity": 1,
+                "name": "egg",
+                "quantity": 3,
                 "unit": "piece"
               },
               {
                 "name": "spinach",
                 "quantity": 100,
                 "unit": "g"
+              },
+              {
+                "name": "salmon",
+                "quantity": 150,
+                "unit": "g"
               }
             ],
-            "recipe": "Step 1: Boil the eggs for about 10 minutes until hard-boiled.\nStep 2: Peel and slice the eggs into quarters.\nStep 3: Slice the avocado and remove the pit.\nStep 4: In a bowl, combine spinach, avocado slices, and egg quarters.\nStep 5: Toss gently and serve with a light vinaigrette if desired.",
-            "calories": 406,
-            "protein": 19,
-            "carbs": 17,
-            "fat": 32,
+            "recipe": "Step 1: Wash the zucchini and shave it into ribbons with a vegetable peeler, discarding the seedy core.\nStep 2: Heat 1 tbsp olive oil in a large non-stick pan over medium heat. Add the zucchini ribbons and cook 2 to 3 minutes until just tender. Move to a plate.\nStep 3: Season the salmon with salt and pepper. In the same pan over medium-high heat, cook the salmon 3 to 4 minutes per side until cooked through. Flake it and set aside.\nStep 4: Lower the heat to medium. Beat the eggs with salt and pepper, pour into the pan, and gently stir until softly set.\nStep 5: Add the spinach and stir until wilted, about 1 minute.\nStep 6: Return the zucchini and salmon to the pan, toss gently to combine, and serve hot.",
+            "calories": 584,
+            "protein": 54,
+            "carbs": 11,
+            "fat": 35,
             "prepTime": "20 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
@@ -471,75 +517,78 @@
         "macro_grounded": true,
         "diet_targets": true
       },
-      "ms": 7467,
+      "ms": 8549,
       "flags": [],
-      "tokens": 3659,
+      "tokens": 7685,
       "toolCalls": 2,
       "output": {
         "meals": [
           {
-            "name": "Cottage Cheese and Egg Breakfast",
+            "name": "Protein Egg and Cottage Cheese Scramble",
             "type": "Breakfast",
             "ingredients": [
-              "200g cottage cheese",
-              "2 piece egg"
+              "3 eggs",
+              "150g cottage cheese"
             ],
             "structuredIngredients": [
               {
-                "name": "cottage cheese",
-                "quantity": 200,
-                "unit": "g"
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
               },
               {
-                "name": "egg",
-                "quantity": 2,
-                "unit": "piece"
+                "name": "cottage cheese",
+                "quantity": 150,
+                "unit": "g"
               }
             ],
-            "recipe": "Step 1: In a bowl, add 200g of cottage cheese.\nStep 2: Boil or scramble 2 eggs and add them to the bowl.\nStep 3: Mix well and serve.",
-            "calories": 339,
+            "recipe": "Step 1: Crack the 3 eggs into a bowl and whisk well with a pinch of salt and pepper.\nStep 2: Heat a non-stick pan over medium-low heat.\nStep 3: Pour in the eggs and cook slowly, stirring gently, for about 2 minutes.\nStep 4: Fold in the cottage cheese and cook for 1 more minute until just set and creamy.\nStep 5: Serve immediately.",
+            "calories": 362,
             "protein": 35,
-            "carbs": 8,
-            "fat": 18,
-            "prepTime": "15 min",
+            "carbs": 6,
+            "fat": 21,
+            "prepTime": "10 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
             "nutritionCoverage": 1
           },
           {
-            "name": "Beef and Black Bean Dinner",
+            "name": "Beef and Black Bean Potato Bowl",
             "type": "Dinner",
             "ingredients": [
-              "300g ground beef",
-              "200g black beans",
-              "2 piece potato"
+              "150g ground beef",
+              "1 potato (170g)",
+              "100g black beans",
+              "salt and pepper"
             ],
             "structuredIngredients": [
               {
                 "name": "ground beef",
-                "quantity": 300,
-                "unit": "g"
-              },
-              {
-                "name": "black beans",
-                "quantity": 200,
+                "quantity": 150,
                 "unit": "g"
               },
               {
                 "name": "potato",
-                "quantity": 2,
+                "quantity": 1,
                 "unit": "piece"
+              },
+              {
+                "name": "black beans",
+                "quantity": 100,
+                "unit": "g"
               }
             ],
-            "recipe": "Step 1: Peel and dice the potatoes.\nStep 2: In a pan, cook 300g of ground beef until browned.\nStep 3: Add 200g of black beans and diced potatoes to the pan.\nStep 4: Cook until the potatoes are tender.\nStep 5: Season with salt and pepper to taste and serve hot.",
-            "calories": 1276,
-            "protein": 103,
-            "carbs": 105,
-            "fat": 46,
-            "prepTime": "45 min",
+            "recipe": "Step 1: Scrub the potato, cut it into 2 cm cubes, and place in a pot of boiling salted water. Cook for 12 to 15 minutes until tender, then drain.\nStep 2: While the potato cooks, heat a non-stick pan over medium-high heat.\nStep 3: Add the ground beef and cook, breaking it up, for 5 to 6 minutes until browned. Drain excess fat and season with salt and pepper.\nStep 4: Rinse and drain the black beans, then add them to the pan with the beef and warm through for 2 minutes.\nStep 5: Add the drained potato to the pan, toss with the beef and beans for 1 minute, and serve hot.",
+            "calories": 638,
+            "protein": 51,
+            "carbs": 53,
+            "fat": 23,
+            "prepTime": "25 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 1,
@@ -559,48 +608,69 @@
         "macro_consistency": true,
         "macro_grounded": true
       },
-      "ms": 6417,
+      "ms": 7477,
       "flags": [],
-      "tokens": 3070,
+      "tokens": 7004,
       "toolCalls": 2,
       "output": {
         "meals": [
           {
-            "name": "Grilled Chicken with Rice and Broccoli",
+            "name": "Garlic Soy Chicken with Brown Rice and Broccoli",
             "type": "Dinner",
             "ingredients": [
-              "200g chicken breast",
-              "150g rice",
-              "100g broccoli"
+              "150g chicken breast",
+              "150g cooked brown rice",
+              "150g broccoli florets",
+              "5ml olive oil",
+              "5g garlic (1 clove, minced)",
+              "10ml soy sauce"
             ],
             "structuredIngredients": [
               {
                 "name": "chicken breast",
-                "quantity": 200,
+                "quantity": 150,
                 "unit": "g"
               },
               {
-                "name": "rice",
+                "name": "brown rice",
                 "quantity": 150,
                 "unit": "g"
               },
               {
                 "name": "broccoli",
-                "quantity": 100,
+                "quantity": 150,
                 "unit": "g"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 5,
+                "unit": "ml"
+              },
+              {
+                "name": "garlic",
+                "quantity": 5,
+                "unit": "g"
+              },
+              {
+                "name": "soy sauce",
+                "quantity": 10,
+                "unit": "ml"
               }
             ],
-            "recipe": "Step 1: Preheat the grill to medium-high heat.\nStep 2: Season the chicken breast with salt and pepper.\nStep 3: Grill the chicken for about 6-7 minutes on each side or until fully cooked.\nStep 4: In a pot, bring 300ml of water to a boil and add the rice.\nStep 5: Reduce the heat to low, cover, and simmer for 18-20 minutes until rice is cooked.\nStep 6: Steam the broccoli for about 5 minutes until tender.\nStep 7: Serve the grilled chicken with rice and broccoli on the side.",
-            "calories": 559,
-            "protein": 69,
-            "carbs": 49,
-            "fat": 8,
-            "prepTime": "40 min",
+            "recipe": "Step 1: Cook the brown rice according to package directions (or use pre-cooked rice) and keep warm.\nStep 2: Pat the chicken breast dry, cut it into bite-sized pieces, and season lightly with a pinch of salt and pepper.\nStep 3: Heat the olive oil in a skillet over medium-high heat. Add the chicken and cook for 5-6 minutes, turning occasionally, until golden and cooked through (internal temperature 74°C / 165°F). Remove and set aside.\nStep 4: Add the minced garlic to the same pan and stir for 30 seconds until fragrant.\nStep 5: Add the broccoli florets with 2 tablespoons of water, cover and steam for 3-4 minutes until bright green and tender-crisp.\nStep 6: Return the chicken to the pan, add the soy sauce and toss for 1 minute to coat.\nStep 7: Serve the garlic soy chicken and broccoli over the brown rice.",
+            "calories": 540,
+            "protein": 56,
+            "carbs": 50,
+            "fat": 13,
+            "prepTime": "25 min",
             "missingIngredients": [
-              "chicken breast (200 g)",
-              "rice (150 g)",
-              "broccoli (100 g)"
+              "chicken breast (150 g)",
+              "brown rice (150 g)",
+              "broccoli (150 g)",
+              "garlic (5 g)",
+              "soy sauce (10 ml)"
             ],
+            "servings": 1,
             "warnings": [],
             "macroSource": "verified",
             "fridgeUtilization": 0,
@@ -623,24 +693,26 @@
         "macro_grounded": true,
         "injection_safe": true
       },
-      "ms": 5573,
+      "ms": 8100,
       "flags": [],
-      "tokens": 3104,
-      "toolCalls": 2,
+      "tokens": 4669,
+      "toolCalls": 1,
       "output": {
         "meals": [
           {
-            "name": "Lentil Stew",
+            "name": "Lentil and Carrot Stew",
             "type": "Dinner",
             "ingredients": [
-              "200g lentils",
-              "2 piece carrot",
-              "1 piece onion"
+              "150g lentils",
+              "2 carrots (120g)",
+              "1 onion (110g)",
+              "1 tbsp olive oil",
+              "500ml water or vegetable stock"
             ],
             "structuredIngredients": [
               {
                 "name": "lentils",
-                "quantity": 200,
+                "quantity": 150,
                 "unit": "g"
               },
               {
@@ -652,25 +724,32 @@
                 "name": "onion",
                 "quantity": 1,
                 "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tbsp"
+              },
+              {
+                "name": "vegetable stock",
+                "quantity": 500,
+                "unit": "ml"
               }
             ],
-            "recipe": "Step 1: Rinse the lentils under cold water.\nStep 2: Chop the carrots and onion into small pieces.\nStep 3: In a pot, add the lentils and cover with water. Bring to a boil.\nStep 4: Add the chopped carrots and onion to the pot.\nStep 5: Simmer for about 30 minutes or until the lentils are tender.\nStep 6: Season with salt and pepper to taste before serving.",
-            "calories": 325,
-            "protein": 20,
-            "carbs": 62,
-            "fat": 1,
-            "prepTime": "45 min",
-            "missingIngredients": [],
+            "recipe": "Step 1: Dice the onion and peel and slice the carrots into thin rounds.\nStep 2: Heat the olive oil in a medium saucepan over medium heat. Add the onion and cook for 3 to 4 minutes until softened.\nStep 3: Add the carrots and cook for another 2 minutes, stirring occasionally.\nStep 4: Rinse the lentils and add them to the pan with the stock or water.\nStep 5: Bring to a boil, then reduce the heat and simmer uncovered for 20 to 25 minutes, until the lentils are tender and the stew has thickened.\nStep 6: Season with salt, pepper and any dried herbs you have, then serve hot.",
+            "calories": 400,
+            "protein": 16,
+            "carbs": 52,
+            "fat": 16,
+            "prepTime": "40 min",
+            "missingIngredients": [
+              "vegetable stock (500 ml)"
+            ],
+            "servings": 1,
             "warnings": [],
-            "claimed": {
-              "calories": 418,
-              "protein": 20.9,
-              "carbs": 78.8,
-              "fat": 1.3
-            },
-            "macroSource": "corrected",
-            "fridgeUtilization": 1,
-            "nutritionCoverage": 1
+            "macroSource": "verified",
+            "fridgeUtilization": 0.75,
+            "nutritionCoverage": 0.8
           }
         ],
         "blocked": []
@@ -686,18 +765,20 @@
         "macro_consistency": true,
         "macro_grounded": true
       },
-      "ms": 5392,
+      "ms": 5498,
       "flags": [],
-      "tokens": 2808,
-      "toolCalls": 2,
+      "tokens": 3988,
+      "toolCalls": 1,
       "output": {
         "meals": [
           {
             "name": "Tomato and Egg Scramble",
             "type": "Breakfast",
             "ingredients": [
-              "2 piece egg",
-              "1 piece tomato"
+              "2 eggs",
+              "1 tomato (about 120g), diced",
+              "5 ml olive oil",
+              "Salt and black pepper to taste"
             ],
             "structuredIngredients": [
               {
@@ -709,23 +790,23 @@
                 "name": "tomato",
                 "quantity": 1,
                 "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 5,
+                "unit": "ml"
               }
             ],
-            "recipe": "Step 1: Crack the eggs into a bowl and whisk them.\nStep 2: Dice the tomato into small pieces.\nStep 3: Heat a non-stick pan over medium heat and add the diced tomato.\nStep 4: Cook the tomato for 2-3 minutes until it softens.\nStep 5: Pour the whisked eggs into the pan with the tomato.\nStep 6: Stir gently until the eggs are fully cooked.\nStep 7: Serve hot.",
-            "calories": 165,
+            "recipe": "Step 1: Dice the tomato into small bite-sized pieces.\nStep 2: Crack the 2 eggs into a bowl, add a pinch of salt and pepper, and whisk well.\nStep 3: Heat the olive oil in a non-stick pan over medium heat.\nStep 4: Add the diced tomato and cook for 2 to 3 minutes until softened.\nStep 5: Pour in the beaten eggs and gently stir with a spatula for 2 to 3 minutes, until just set but still soft.\nStep 6: Season to taste and serve immediately.",
+            "calories": 209,
             "protein": 14,
             "carbs": 5,
-            "fat": 10,
-            "prepTime": "15 min",
+            "fat": 15,
+            "prepTime": "10 min",
             "missingIngredients": [],
+            "servings": 1,
             "warnings": [],
-            "claimed": {
-              "calories": 211,
-              "protein": 26.4,
-              "carbs": 5.3,
-              "fat": 19.4
-            },
-            "macroSource": "corrected",
+            "macroSource": "verified",
             "fridgeUtilization": 1,
             "nutritionCoverage": 1
           }
@@ -740,9 +821,9 @@
       "checks": {
         "calorie_range": true
       },
-      "ms": 720,
+      "ms": 1251,
       "flags": [],
-      "tokens": 229,
+      "tokens": 363,
       "toolCalls": 0,
       "output": {
         "name": "McDonald's Big Mac",
@@ -762,16 +843,16 @@
       "checks": {
         "calorie_range": true
       },
-      "ms": 703,
+      "ms": 2037,
       "flags": [],
-      "tokens": 235,
+      "tokens": 368,
       "toolCalls": 0,
       "output": {
-        "name": "Tonkotsu Ramen",
-        "calories": 700,
-        "protein": 30,
-        "carbs": 80,
-        "fat": 30,
+        "name": "Tonkotsu ramen",
+        "calories": 620,
+        "protein": 28,
+        "carbs": 72,
+        "fat": 24,
         "confidence": "medium",
         "isFood": true,
         "nutritionSource": "ai-estimate"
@@ -784,16 +865,16 @@
       "checks": {
         "calorie_range": true
       },
-      "ms": 794,
+      "ms": 1139,
       "flags": [],
-      "tokens": 232,
+      "tokens": 373,
       "toolCalls": 0,
       "output": {
-        "name": "Small Side Garden Salad",
-        "calories": 35,
-        "protein": 2,
-        "carbs": 7,
-        "fat": 0,
+        "name": "Small garden salad, no dressing",
+        "calories": 25,
+        "protein": 1.5,
+        "carbs": 4.5,
+        "fat": 0.3,
         "confidence": "medium",
         "isFood": true,
         "nutritionSource": "ai-estimate"
@@ -806,16 +887,16 @@
       "checks": {
         "calorie_range": true
       },
-      "ms": 809,
+      "ms": 1489,
       "flags": [],
-      "tokens": 240,
+      "tokens": 397,
       "toolCalls": 0,
       "output": {
-        "name": "Chipotle Chicken Burrito",
-        "calories": 900,
-        "protein": 45,
-        "carbs": 95,
-        "fat": 35,
+        "name": "Chipotle chicken burrito with rice, beans, cheese, sour cream",
+        "calories": 1000,
+        "protein": 50,
+        "carbs": 100,
+        "fat": 38,
         "confidence": "medium",
         "isFood": true,
         "nutritionSource": "ai-estimate"
@@ -830,11 +911,11 @@
         "injection_safe": true,
         "not_food": true
       },
-      "ms": 673,
+      "ms": 1426,
       "flags": [
         "injection_attempt"
       ],
-      "tokens": 239,
+      "tokens": 428,
       "toolCalls": 0,
       "output": {
         "name": "Unknown",
@@ -854,9 +935,9 @@
       "checks": {
         "not_food": true
       },
-      "ms": 960,
+      "ms": 936,
       "flags": [],
-      "tokens": 225,
+      "tokens": 353,
       "toolCalls": 0,
       "output": {
         "name": "Unknown",
@@ -877,133 +958,150 @@
         "schema_valid": true,
         "difficulty_cap": true
       },
-      "ms": 4637,
+      "ms": 8529,
       "flags": [],
-      "tokens": 1051,
+      "tokens": 2387,
       "toolCalls": 0,
       "output": {
         "workouts": [
           {
-            "name": "Beginner Full-Body Strength",
+            "name": "Beginner Full-Body Strength Foundations",
             "type": "Strength",
-            "duration": "45 min",
-            "caloriesBurned": 300,
+            "duration": "40 min",
+            "caloriesBurned": 220,
             "difficulty": "Beginner",
             "muscleGroups": [
-              "full body"
+              "Quadriceps",
+              "Glutes",
+              "Chest",
+              "Back",
+              "Shoulders",
+              "Core"
             ],
-            "description": "This workout introduces basic strength exercises to engage multiple muscle groups, suitable for a sedentary individual starting their fitness journey.",
-            "warmup": "5-minute brisk walk or light jog",
-            "cooldown": "5-minute stretch focusing on all major muscle groups",
+            "description": "Builds muscle across the whole body to raise daily calorie burn, which supports fat loss. Low-impact, controlled movements suit a sedentary starting point and no recent training history.",
+            "warmup": "5 min brisk walking in place, 10 arm circles each direction, 10 bodyweight squats, 10 standing hip hinges.",
+            "cooldown": "5 min easy walking, then gentle stretches for chest, hamstrings, and quads (30 seconds each side).",
             "exercises": [
               {
-                "name": "Bodyweight Squats",
+                "name": "Bodyweight Squat to Chair",
                 "sets": 3,
-                "reps": 10,
-                "rest": "60 sec",
-                "weight": "None",
-                "tempo": "2-1-2",
-                "formTip": "Keep your knees behind your toes.",
-                "notes": "Focus on depth and form."
-              },
-              {
-                "name": "Push-Ups (Knee)",
-                "sets": 3,
-                "reps": 8,
+                "reps": "10-12",
                 "rest": "60 sec",
                 "weight": "Bodyweight",
-                "tempo": "2-1-2",
-                "formTip": "Keep your body in a straight line from head to knees.",
-                "notes": "If needed, perform against a wall for easier variation."
+                "tempo": "2-0-2",
+                "formTip": "Keep your chest up and push your knees out over your toes as you sit back to lightly touch a chair.",
+                "notes": "Use a higher chair if needed."
               },
               {
-                "name": "Bent-Over Rows (Water Bottles)",
+                "name": "Incline Push-Up (against a counter or bench)",
                 "sets": 3,
-                "reps": 12,
+                "reps": "8-10",
                 "rest": "60 sec",
-                "weight": "Filled water bottles",
-                "tempo": "2-1-2",
-                "formTip": "Maintain a flat back and squeeze shoulder blades together.",
-                "notes": "Use light weights to focus on form."
+                "weight": "Bodyweight",
+                "tempo": "2-0-2",
+                "formTip": "Keep your body in a straight line from head to heels and lower your chest toward the surface.",
+                "notes": "Raise the surface height to make it easier."
               },
               {
-                "name": "Plank",
+                "name": "Seated Dumbbell Row",
                 "sets": 3,
-                "reps": "30 sec",
+                "reps": "10-12",
                 "rest": "60 sec",
-                "weight": "None",
-                "tempo": "Hold",
-                "formTip": "Keep your hips level and core engaged.",
-                "notes": "Focus on maintaining alignment."
+                "weight": "Light (5-10 lb)",
+                "tempo": "2-1-2",
+                "formTip": "Pull your elbows back toward your hips and squeeze your shoulder blades together at the top.",
+                "notes": "Use a resistance band if no dumbbells are available."
+              },
+              {
+                "name": "Glute Bridge",
+                "sets": 3,
+                "reps": "12-15",
+                "rest": "45 sec",
+                "weight": "Bodyweight",
+                "tempo": "2-1-2",
+                "formTip": "Drive through your heels and squeeze your glutes at the top without arching your lower back.",
+                "notes": "Pause 2 seconds at the top for more challenge."
+              },
+              {
+                "name": "Dead Bug",
+                "sets": 2,
+                "reps": "8 per side",
+                "rest": "45 sec",
+                "weight": "Bodyweight",
+                "tempo": "3-0-3",
+                "formTip": "Keep your lower back pressed into the floor while extending opposite arm and leg slowly.",
+                "notes": "Core stability exercise; move slowly."
               }
             ],
             "warnings": []
           },
           {
-            "name": "Low-Intensity Cardio Walk",
+            "name": "Low-Impact Cardio Walk Intervals",
             "type": "Cardio",
-            "duration": "45 min",
-            "caloriesBurned": 300,
+            "duration": "35 min",
+            "caloriesBurned": 250,
             "difficulty": "Beginner",
             "muscleGroups": [
-              "legs",
-              "cardiovascular"
+              "Heart",
+              "Legs",
+              "Core"
             ],
-            "description": "A low-intensity cardio session to promote fat loss and improve cardiovascular health, ideal for beginners.",
-            "warmup": "5-minute slow paced walk",
-            "cooldown": "5-minute stretch focusing on legs",
+            "description": "Steady cardio is an accessible way for a sedentary person to burn calories and build aerobic fitness without joint stress. Walking intervals let you progress gradually.",
+            "warmup": "5 min slow walk, followed by gentle leg swings and ankle rolls.",
+            "cooldown": "5 min slow walk, then calf stretch and seated hamstring stretch (30 seconds each).",
             "exercises": [
               {
-                "name": "Brisk Walking",
-                "duration": "35 min",
-                "intensity": "Low",
-                "targetHR": "50-60% Max HR",
-                "structure": "Continuous walk at a steady pace",
-                "notes": "Keep a comfortable pace where you can talk but not sing."
+                "name": "Brisk Walk Intervals",
+                "duration": "30 min",
+                "intensity": "Moderate, talk-test: can speak in short sentences",
+                "targetHR": "90-110 bpm (about 55-65% of max)",
+                "structure": "Alternate 3 min brisk walking with 2 min slow walking, repeated 6 times.",
+                "notes": "Increase brisk segments by 1 minute every two weeks as fitness improves. Wear supportive shoes."
               }
             ],
             "warnings": []
           },
           {
-            "name": "Gentle Flexibility Routine",
-            "type": "Flexibility",
-            "duration": "45 min",
-            "caloriesBurned": 300,
+            "name": "Beginner Low-Impact HIIT Circuit",
+            "type": "HIIT",
+            "duration": "25 min",
+            "caloriesBurned": 200,
             "difficulty": "Beginner",
             "muscleGroups": [
-              "full body"
+              "Full Body",
+              "Cardiovascular System"
             ],
-            "description": "This flexibility routine helps improve range of motion and prevent injury, suitable for all fitness levels.",
-            "warmup": "5-minute gentle joint rotations (neck, shoulders, hips, knees, ankles)",
-            "cooldown": "Focus on deep breathing to relax",
+            "description": "Short bursts of effort with full recovery keep the workout time-efficient and effective for fat loss, while low-impact moves protect joints during early training.",
+            "warmup": "3 min marching in place, 10 arm swings, 10 bodyweight squats, 10 standing knee raises.",
+            "cooldown": "3 min slow walking, then deep breathing and a standing quad and chest stretch (30 seconds each).",
             "exercises": [
               {
-                "name": "Standing Hamstring Stretch",
-                "hold": "30 sec",
-                "sets": 2,
-                "breathingCue": "Inhale to prepare, exhale as you fold forward.",
-                "notes": "Keep a slight bend in the knees."
+                "name": "Step-Out Squat Jacks",
+                "work": "30 sec",
+                "rest": "30 sec",
+                "rounds": 3,
+                "notes": "Step one foot out at a time instead of jumping to keep impact low."
               },
               {
-                "name": "Cat-Cow Stretch",
-                "hold": "30 sec",
-                "sets": 2,
-                "breathingCue": "Inhale on cow, exhale on cat.",
-                "notes": "Focus on the movement through the spine."
+                "name": "Standing Knee Drives with Arm Press",
+                "work": "30 sec",
+                "rest": "30 sec",
+                "rounds": 3,
+                "notes": "Alternate knees while pressing arms forward; keep a steady pace."
               },
               {
-                "name": "Chest Opener Stretch",
-                "hold": "30 sec",
-                "sets": 2,
-                "breathingCue": "Inhale as you open your chest, exhale to relax.",
-                "notes": "Can be done seated or standing."
+                "name": "Marching Reverse Lunge (alternating)",
+                "work": "30 sec",
+                "rest": "30 sec",
+                "rounds": 3,
+                "notes": "Hold a wall or chair for balance; step back gently and return to standing."
               },
               {
-                "name": "Child's Pose",
-                "hold": "30 sec",
-                "sets": 2,
-                "breathingCue": "Inhale slowly, exhale as you sink deeper.",
-                "notes": "Focus on relaxing your back and shoulders."
+                "name": "Standing Side Bends with Reach",
+                "work": "30 sec",
+                "rest": "30 sec",
+                "rounds": 2,
+                "notes": "Reach overhead and lean to each side in a controlled manner."
               }
             ],
             "warnings": []
@@ -1020,181 +1118,213 @@
         "type_filter": true,
         "avoids_recent": true
       },
-      "ms": 5618,
+      "ms": 17840,
       "flags": [],
-      "tokens": 1344,
+      "tokens": 4635,
       "toolCalls": 0,
       "output": {
         "workouts": [
           {
-            "name": "Pull Day",
+            "name": "Pull Strength",
             "type": "Strength",
-            "duration": "45 min",
-            "caloriesBurned": 300,
+            "duration": "60 min",
+            "caloriesBurned": 380,
             "difficulty": "Advanced",
             "muscleGroups": [
               "Back",
               "Biceps"
             ],
-            "description": "This workout focuses on pulling movements to target the back and biceps, complementing the recent push day workout.",
-            "warmup": "5 minutes of light rowing or dynamic stretching focusing on upper body.",
-            "cooldown": "5 minutes of stretching including cat-cow and child's pose.",
+            "description": "Your last session was Push Day, so this session trains your back and biceps to balance your pressing work. Heavy compound pulls build mass for your muscle-gain goal, and your Very Active level supports the higher volume.",
+            "warmup": "5 min rowing machine or light cycling at an easy pace, then 2 sets of 10 band pull-aparts and 10 scapular pull-ups to activate the lats and upper back.",
+            "cooldown": "5 min easy walking, then static stretches for lats (doorway lat stretch, 30 sec each side), biceps (30 sec each arm), and upper back (child's pose, 60 sec).",
             "exercises": [
               {
-                "name": "Pull-Ups",
+                "name": "Pull-Up",
                 "sets": 4,
-                "reps": 8,
-                "rest": "90 seconds",
-                "weight": "Bodyweight or assisted if needed",
-                "tempo": "2-1-2",
-                "formTip": "Engage your core and avoid swinging.",
-                "notes": "Use a full range of motion."
+                "reps": "6-8",
+                "rest": "120 sec",
+                "weight": "Bodyweight, add load if reps exceed 10",
+                "tempo": "2-0-2",
+                "formTip": "Start each rep by depressing your shoulder blades, then pull your elbows toward your hips rather than pulling with your arms.",
+                "notes": "Use assisted pull-up or band support if you cannot yet complete 6 reps."
               },
               {
-                "name": "Bent-Over Rows",
+                "name": "Barbell Bent-Over Row",
                 "sets": 4,
-                "reps": 10,
-                "rest": "90 seconds",
-                "weight": "60% of 1RM",
-                "tempo": "3-1-2",
-                "formTip": "Keep your back straight and hinge at the hips.",
-                "notes": "Focus on squeezing your shoulder blades together."
+                "reps": "8-10",
+                "rest": "90 sec",
+                "weight": "Moderate-heavy, about 70-75% of 1RM",
+                "tempo": "2-1-1",
+                "formTip": "Hinge to about 45 degrees with a flat back, and pull the bar to your lower ribs while keeping your elbows close to your body.",
+                "notes": "Brace your core before every rep to protect your lower back."
               },
               {
-                "name": "Barbell Bicep Curls",
+                "name": "Lat Pulldown (Wide Grip)",
                 "sets": 3,
-                "reps": 12,
-                "rest": "60 seconds",
-                "weight": "50% of 1RM",
+                "reps": "10-12",
+                "rest": "75 sec",
+                "weight": "Moderate, enough to control the full range",
                 "tempo": "2-1-2",
-                "formTip": "Keep elbows close to your sides and avoid swinging.",
-                "notes": "Maintain tension throughout the movement."
+                "formTip": "Lead with your elbows and drive them down toward your back pockets, keeping your chest tall.",
+                "notes": "Avoid leaning back excessively to prevent swinging the weight."
               },
               {
-                "name": "Face Pulls",
+                "name": "Seated Cable Row (Close Grip)",
                 "sets": 3,
-                "reps": 15,
-                "rest": "60 seconds",
-                "weight": "Light to Moderate",
+                "reps": "10-12",
+                "rest": "75 sec",
+                "weight": "Moderate",
                 "tempo": "2-1-2",
-                "formTip": "Lead with your elbows and keep your shoulders down.",
-                "notes": "Use a cable machine or resistance band."
+                "formTip": "Keep your torso upright and pull the handle to your navel, squeezing your shoulder blades together at the end of each rep.",
+                "notes": "Pause for one second at full contraction."
+              },
+              {
+                "name": "Incline Dumbbell Curl",
+                "sets": 3,
+                "reps": "10-12",
+                "rest": "60 sec",
+                "weight": "Moderate dumbbells",
+                "tempo": "3-0-1",
+                "formTip": "Let your arms hang straight down on an incline bench, then curl without letting your elbows drift forward.",
+                "notes": "The slow eccentric stretches the biceps and supports growth."
               }
             ],
             "warnings": []
           },
           {
-            "name": "Leg Day",
+            "name": "Lower Body Strength",
             "type": "Strength",
-            "duration": "45 min",
-            "caloriesBurned": 300,
+            "duration": "60 min",
+            "caloriesBurned": 420,
             "difficulty": "Advanced",
             "muscleGroups": [
-              "Quads",
+              "Quadriceps",
               "Hamstrings",
               "Glutes",
               "Calves"
             ],
-            "description": "This workout is designed to target all major leg muscles, promoting balanced muscle growth.",
-            "warmup": "5 minutes of light cycling or dynamic leg swings.",
-            "cooldown": "5 minutes of stretching including hamstring and quadriceps stretches.",
+            "description": "This leg session fills the lower-body gap in your training and uses heavy compound lifts to build muscle. Since you are Very Active, you can handle the volume and recover between sessions.",
+            "warmup": "5 min stationary bike, then 2 sets of 10 bodyweight squats, 10 glute bridges, and 10 leg swings per side.",
+            "cooldown": "5 min easy walking, then stretch quads (standing quad stretch, 30 sec per side), hamstrings (seated forward fold, 45 sec), and calves (wall calf stretch, 30 sec per side).",
             "exercises": [
               {
-                "name": "Back Squats",
+                "name": "Barbell Back Squat",
                 "sets": 4,
-                "reps": 8,
-                "rest": "90 seconds",
-                "weight": "70% of 1RM",
-                "tempo": "3-1-2",
-                "formTip": "Keep your chest up and push through your heels.",
-                "notes": "Ensure your knees track over your toes."
+                "reps": "6-8",
+                "rest": "150 sec",
+                "weight": "Heavy, about 75-80% of 1RM",
+                "tempo": "3-0-1",
+                "formTip": "Brace your core, keep your chest up, and push your knees out in line with your toes as you descend.",
+                "notes": "Use safety pins or a spotter when going heavy."
               },
               {
-                "name": "Romanian Deadlifts",
-                "sets": 3,
-                "reps": 10,
-                "rest": "90 seconds",
-                "weight": "60% of 1RM",
-                "tempo": "3-1-2",
-                "formTip": "Maintain a slight bend in the knees and hinge at the hips.",
-                "notes": "Feel the stretch in your hamstrings."
+                "name": "Romanian Deadlift",
+                "sets": 4,
+                "reps": "8-10",
+                "rest": "120 sec",
+                "weight": "Moderate-heavy barbell or dumbbells",
+                "tempo": "3-0-1",
+                "formTip": "Push your hips back with a slight knee bend and keep the bar close to your legs until you feel a stretch in your hamstrings.",
+                "notes": "Stop lowering when your back begins to round."
               },
               {
-                "name": "Leg Press",
+                "name": "Bulgarian Split Squat",
                 "sets": 3,
-                "reps": 12,
-                "rest": "60 seconds",
-                "weight": "70% of 1RM",
-                "tempo": "2-1-2",
-                "formTip": "Keep your feet flat and avoid locking your knees.",
-                "notes": "Adjust foot position to target different muscles."
+                "reps": "8-10 per leg",
+                "rest": "90 sec",
+                "weight": "Dumbbells, moderate",
+                "tempo": "2-0-1",
+                "formTip": "Keep your front foot flat and your torso upright as you lower your back knee toward the floor.",
+                "notes": "Place your back foot on a bench about 60 cm behind you."
               },
               {
-                "name": "Standing Calf Raises",
+                "name": "Lying Leg Curl",
                 "sets": 3,
-                "reps": 15,
-                "rest": "60 seconds",
-                "weight": "Bodyweight or light weights",
-                "tempo": "2-1-2",
-                "formTip": "Press through the balls of your feet and control the descent.",
-                "notes": "Hold onto a support for balance if needed."
+                "reps": "10-12",
+                "rest": "60 sec",
+                "weight": "Moderate",
+                "tempo": "2-1-3",
+                "formTip": "Keep your hips pressed into the pad and curl the weight by bringing your heels toward your glutes.",
+                "notes": "Lower slowly to maximize hamstring tension."
+              },
+              {
+                "name": "Standing Calf Raise",
+                "sets": 4,
+                "reps": "12-15",
+                "rest": "60 sec",
+                "weight": "Moderate-heavy",
+                "tempo": "2-2-1",
+                "formTip": "Rise onto the balls of your feet, pause at the top, and lower under control to a full stretch.",
+                "notes": "Pause at the bottom of each rep for the best calf growth."
               }
             ],
             "warnings": []
           },
           {
-            "name": "Core and Stability",
+            "name": "Posterior Chain and Pull Power",
             "type": "Strength",
-            "duration": "45 min",
-            "caloriesBurned": 300,
-            "difficulty": "Advanced",
+            "duration": "55 min",
+            "caloriesBurned": 360,
+            "difficulty": "Intermediate",
             "muscleGroups": [
-              "Core",
-              "Stabilizers"
+              "Back",
+              "Glutes",
+              "Hamstrings",
+              "Biceps"
             ],
-            "description": "Focusing on core strength and stability, this workout aids in overall functional fitness and complements other strength routines.",
-            "warmup": "5 minutes of dynamic core activation exercises like marching and torso twists.",
-            "cooldown": "5 minutes of deep breathing and static stretching including cobra pose.",
+            "description": "This full-focus session combines hip-dominant lifts with pulling work. It avoids chest, shoulders, and triceps, so it works well after Push Day and supports building muscle with good recovery.",
+            "warmup": "5 min rowing at easy pace, then 2 sets of 10 cat-cow, 10 glute bridges, and 5 light deadlifts with an empty bar.",
+            "cooldown": "5 min walking, then stretch glutes (figure-four stretch, 30 sec per side), hamstrings (supine hamstring stretch, 30 sec per leg), and lats (side bend stretch, 30 sec per side).",
             "exercises": [
               {
-                "name": "Plank",
+                "name": "Conventional Deadlift",
                 "sets": 3,
-                "reps": "Hold for 60 seconds",
-                "rest": "60 seconds",
-                "weight": "Bodyweight",
-                "tempo": "Static hold",
-                "formTip": "Keep a straight line from head to heels.",
-                "notes": "Engage your core and avoid sagging hips."
+                "reps": "5",
+                "rest": "150 sec",
+                "weight": "Heavy, about 80% of 1RM",
+                "tempo": "2-0-1",
+                "formTip": "Keep the bar over mid-foot, brace hard, and push the floor away with your legs while keeping your back neutral.",
+                "notes": "Reset your setup between reps to keep form consistent."
               },
               {
-                "name": "Russian Twists",
+                "name": "Single-Arm Dumbbell Row",
                 "sets": 3,
-                "reps": 20,
-                "rest": "60 seconds",
-                "weight": "Light medicine ball",
-                "tempo": "2-0-2",
-                "formTip": "Keep your back straight and rotate from the waist.",
-                "notes": "Feet can be on the ground or elevated."
-              },
-              {
-                "name": "Hanging Leg Raises",
-                "sets": 3,
-                "reps": 10,
-                "rest": "90 seconds",
-                "weight": "Bodyweight",
-                "tempo": "2-0-2",
-                "formTip": "Control the movement and avoid swinging.",
-                "notes": "Focus on lifting with your core, not momentum."
-              },
-              {
-                "name": "Bird Dogs",
-                "sets": 3,
-                "reps": 10,
-                "rest": "60 seconds",
-                "weight": "Bodyweight",
+                "reps": "10-12 per arm",
+                "rest": "75 sec",
+                "weight": "Moderate-heavy dumbbell",
                 "tempo": "2-1-2",
-                "formTip": "Keep your core engaged and move slowly.",
-                "notes": "Alternate sides with each rep."
+                "formTip": "Place your hand and knee on a bench, then pull the dumbbell toward your hip while keeping your torso still.",
+                "notes": "Focus on squeezing the lat at the top of each rep."
+              },
+              {
+                "name": "Hip Thrust",
+                "sets": 3,
+                "reps": "10-12",
+                "rest": "90 sec",
+                "weight": "Moderate-heavy barbell or dumbbell on hips",
+                "tempo": "2-1-1",
+                "formTip": "Drive through your heels and lock out your hips at the top, keeping your ribs down to avoid overarching your lower back.",
+                "notes": "Pause for one second at the top for maximal glute activation."
+              },
+              {
+                "name": "Chin-Up",
+                "sets": 3,
+                "reps": "6-8",
+                "rest": "120 sec",
+                "weight": "Bodyweight, add load if reps exceed 10",
+                "tempo": "2-0-2",
+                "formTip": "Use an underhand grip and pull your chest toward the bar while driving your elbows down.",
+                "notes": "Use assistance bands if needed to complete full reps."
+              },
+              {
+                "name": "Alternating Dumbbell Hammer Curl",
+                "sets": 3,
+                "reps": "10-12 per arm",
+                "rest": "60 sec",
+                "weight": "Moderate dumbbells",
+                "tempo": "2-0-2",
+                "formTip": "Keep your palms facing each other and your elbows pinned to your sides throughout the curl.",
+                "notes": "Hammer curls also work the brachialis for added arm thickness."
               }
             ],
             "warnings": []
@@ -1211,161 +1341,190 @@
         "type_filter": true,
         "difficulty_cap": true
       },
-      "ms": 6227,
+      "ms": 11637,
       "flags": [],
-      "tokens": 1241,
+      "tokens": 2973,
       "toolCalls": 0,
       "output": {
         "workouts": [
           {
-            "name": "Gentle Flexibility Flow",
+            "name": "Gentle Full-Body Stretch Flow",
             "type": "Flexibility",
-            "duration": "45 min",
-            "caloriesBurned": 150,
+            "duration": "30 min",
+            "caloriesBurned": 90,
             "difficulty": "Beginner",
             "muscleGroups": [
-              "Full Body"
+              "Hamstrings",
+              "Hip flexors",
+              "Chest",
+              "Shoulders",
+              "Spine",
+              "Calves"
             ],
-            "description": "This workout introduces basic flexibility exercises to help improve range of motion and relaxation, suitable for someone with a lightly active lifestyle.",
-            "warmup": "5 minutes of light walking or marching in place to get the blood flowing.",
-            "cooldown": "5 minutes of deep breathing and lying down in savasana.",
+            "description": "A balanced, beginner-friendly stretch session suited to a lightly active person with no recent training history. It opens the major areas that tighten from daily sitting and light activity, supporting mobility and an easier routine that pairs well with a healthier eating plan.",
+            "warmup": "2 min easy marching in place, then 1 min of arm circles and gentle torso twists to raise body temperature and prepare joints.",
+            "cooldown": "3 min of slow diaphragmatic breathing lying on your back, knees bent, letting the body fully relax.",
             "exercises": [
               {
-                "name": "Cat-Cow Stretch",
-                "hold": "5 seconds per position",
-                "sets": 8,
-                "breathingCue": "Inhale in Cat, exhale in Cow",
-                "notes": "A gentle flow to warm up the spine."
-              },
-              {
-                "name": "Standing Hamstring Stretch",
-                "hold": "30 seconds per side",
-                "sets": 2,
-                "breathingCue": "Inhale through the nose, exhale deeply through the mouth",
-                "notes": "Keep a slight bend in the knees to avoid strain."
-              },
-              {
-                "name": "Child's Pose",
-                "hold": "1 minute",
-                "sets": 2,
-                "breathingCue": "Breathe deeply and relax into the pose",
-                "notes": "Allow your forehead to rest on the mat to aid relaxation."
-              },
-              {
-                "name": "Seated Forward Bend",
+                "name": "Standing Forward Fold",
                 "hold": "30 seconds",
                 "sets": 2,
-                "breathingCue": "Exhale as you reach forward",
-                "notes": "Keep the back straight as you bend."
+                "breathingCue": "Inhale to lengthen the spine, exhale to fold deeper",
+                "notes": "Bend knees slightly if hamstrings feel tight. Let the head and arms hang loosely."
               },
               {
-                "name": "Supine Spinal Twist",
+                "name": "Doorway Chest Opener",
                 "hold": "30 seconds per side",
                 "sets": 2,
-                "breathingCue": "Exhale as you twist deeper",
-                "notes": "Keep shoulders flat on the floor."
+                "breathingCue": "Slow inhale through the nose, long exhale while easing into the stretch",
+                "notes": "Place forearm on a door frame at shoulder height and gently step forward. Avoid arching the lower back."
+              },
+              {
+                "name": "Seated Hamstring Stretch",
+                "hold": "30 seconds per side",
+                "sets": 2,
+                "breathingCue": "Exhale to fold forward from the hips",
+                "notes": "Keep a straight back and a slight bend in the front knee if needed. Use a strap or towel if you cannot reach your foot."
+              },
+              {
+                "name": "Kneeling Hip Flexor Stretch",
+                "hold": "30 seconds per side",
+                "sets": 2,
+                "breathingCue": "Breathe deeply and exhale to sink the hips forward",
+                "notes": "Squeeze the glute of the back leg to increase the stretch. Pad the knee with a folded towel."
+              },
+              {
+                "name": "Cat-Cow",
+                "hold": "5 breath cycles",
+                "sets": 2,
+                "breathingCue": "Inhale to arch and lift the chest, exhale to round the spine",
+                "notes": "Move slowly and keep wrists under shoulders."
+              },
+              {
+                "name": "Standing Calf Stretch",
+                "hold": "30 seconds per side",
+                "sets": 2,
+                "breathingCue": "Steady, relaxed breathing",
+                "notes": "Keep the back heel grounded and the back leg straight."
               }
             ],
             "warnings": []
           },
           {
-            "name": "Evening Unwind",
+            "name": "Desk-Break Mobility Reset",
             "type": "Flexibility",
-            "duration": "45 min",
-            "caloriesBurned": 150,
+            "duration": "25 min",
+            "caloriesBurned": 70,
             "difficulty": "Beginner",
             "muscleGroups": [
-              "Full Body"
+              "Neck",
+              "Upper back",
+              "Shoulders",
+              "Hip flexors",
+              "Glutes",
+              "Hamstrings"
             ],
-            "description": "An evening routine aimed at reducing tension and promoting relaxation, suitable for someone looking to incorporate more flexibility into a lightly active routine.",
-            "warmup": "5 minutes of gentle neck and shoulder rolls to release tension.",
-            "cooldown": "5 minutes of relaxing with legs up the wall.",
+            "description": "A short, low-intensity routine aimed at counteracting stiffness from sitting. It is well suited to a lightly active user looking for an easy daily habit that improves posture and comfort without demanding much time or effort.",
+            "warmup": "2 min of gentle walking on the spot and slow shoulder rolls forward and backward.",
+            "cooldown": "2 min of lying on your back with knees hugged gently to the chest, breathing slowly.",
             "exercises": [
               {
-                "name": "Neck Stretch",
+                "name": "Neck Side Stretch",
                 "hold": "20 seconds per side",
                 "sets": 2,
-                "breathingCue": "Inhale to prepare, exhale to stretch",
-                "notes": "Keep shoulders relaxed and down."
-              },
-              {
-                "name": "Side Stretch",
-                "hold": "30 seconds per side",
-                "sets": 2,
-                "breathingCue": "Inhale as you reach up, exhale as you bend to the side",
-                "notes": "Stay grounded through the hips."
-              },
-              {
-                "name": "Lying Butterfly Stretch",
-                "hold": "1 minute",
-                "sets": 2,
-                "breathingCue": "Inhale deeply, exhale slowly",
-                "notes": "Allow gravity to open your hips."
+                "breathingCue": "Slow exhale as you lower the ear toward the shoulder",
+                "notes": "Keep shoulders relaxed and down. Do not force the stretch."
               },
               {
                 "name": "Thread the Needle",
                 "hold": "30 seconds per side",
                 "sets": 2,
-                "breathingCue": "Exhale as you deepen the twist",
-                "notes": "Keep the back of the neck long."
+                "breathingCue": "Exhale as you rotate and reach under the arm",
+                "notes": "Start on hands and knees. Keep hips stacked over knees."
               },
               {
-                "name": "Reclining Pigeon Pose",
+                "name": "Supine Figure-Four Glute Stretch",
                 "hold": "30 seconds per side",
                 "sets": 2,
-                "breathingCue": "Inhale to find length, exhale to relax",
-                "notes": "Focus on keeping both hips on the floor."
-              }
-            ],
-            "warnings": []
-          },
-          {
-            "name": "Morning Refresh",
-            "type": "Flexibility",
-            "duration": "45 min",
-            "caloriesBurned": 150,
-            "difficulty": "Beginner",
-            "muscleGroups": [
-              "Full Body"
-            ],
-            "description": "A morning routine to gently wake up the body and enhance flexibility for the day ahead, perfect for someone lightly active.",
-            "warmup": "5 minutes of gentle arm swings and leg swings to increase circulation.",
-            "cooldown": "5 minutes of mindful breathing in a comfortable seated position.",
-            "exercises": [
-              {
-                "name": "Sun Salutations",
-                "hold": "5 seconds per position",
-                "sets": 5,
-                "breathingCue": "Synchronize breath with movement",
-                "notes": "Focus on smooth transitions between poses."
+                "breathingCue": "Deep belly breaths, relaxing into the hip",
+                "notes": "Keep the head and shoulders on the floor. Pull the thigh gently toward the chest."
               },
               {
                 "name": "Standing Quad Stretch",
                 "hold": "30 seconds per side",
                 "sets": 2,
-                "breathingCue": "Inhale to lengthen, exhale to deepen the stretch",
-                "notes": "Keep knees close together."
+                "breathingCue": "Inhale to prepare, exhale to bend the knee",
+                "notes": "Hold a wall or chair for balance. Keep knees close together and the hips tucked."
               },
               {
-                "name": "Triangle Pose",
+                "name": "Child's Pose",
+                "hold": "45 seconds",
+                "sets": 2,
+                "breathingCue": "Let the breath expand into the back body",
+                "notes": "Walk the hands forward to deepen the stretch through the lats and upper back."
+              }
+            ],
+            "warnings": []
+          },
+          {
+            "name": "Evening Unwind Yoga Flow",
+            "type": "Flexibility",
+            "duration": "35 min",
+            "caloriesBurned": 80,
+            "difficulty": "Beginner",
+            "muscleGroups": [
+              "Spine",
+              "Hamstrings",
+              "Lower back",
+              "Hips",
+              "Glutes",
+              "Chest"
+            ],
+            "description": "A calming, slow-paced session designed for winding down after the day. It supports relaxation and recovery, which helps with consistent habits such as mindful eating and better sleep, and suits a lightly active user with no previous workout history.",
+            "warmup": "3 min of slow breathing while seated comfortably, then gentle side bends and seated spinal rotations.",
+            "cooldown": "4 min of savasana, lying flat with arms relaxed at the sides and eyes closed, breathing naturally.",
+            "exercises": [
+              {
+                "name": "Child's Pose with Side Reach",
                 "hold": "30 seconds per side",
                 "sets": 2,
-                "breathingCue": "Inhale to extend, exhale to rotate",
-                "notes": "Keep the chest open and gaze upwards."
+                "breathingCue": "Inhale to reach, exhale to sink deeper",
+                "notes": "Walk hands to one side to lengthen the opposite side of the torso."
               },
               {
-                "name": "Seated Twist",
+                "name": "Downward-Facing Dog",
+                "hold": "45 seconds",
+                "sets": 2,
+                "breathingCue": "Steady inhale and exhale through the nose",
+                "notes": "Bend knees generously to protect the lower back. Press the hands firmly into the floor."
+              },
+              {
+                "name": "Low Lunge with Reach",
                 "hold": "30 seconds per side",
                 "sets": 2,
-                "breathingCue": "Exhale as you twist deeper",
-                "notes": "Keep spine tall and straight."
+                "breathingCue": "Inhale to lift the chest, exhale to lower the hips",
+                "notes": "Keep the front knee over the ankle and use a pad under the back knee."
               },
               {
-                "name": "Legs-Up-the-Wall Pose",
-                "hold": "5 minutes",
-                "sets": 1,
-                "breathingCue": "Breathe naturally and relax",
-                "notes": "Use this time to relax and reset."
+                "name": "Reclined Twist",
+                "hold": "30 seconds per side",
+                "sets": 2,
+                "breathingCue": "Exhale to deepen the twist",
+                "notes": "Keep both shoulders grounded on the floor and let the knees fall gently."
+              },
+              {
+                "name": "Supine Hamstring Stretch with Strap",
+                "hold": "30 seconds per side",
+                "sets": 2,
+                "breathingCue": "Long, slow exhale as the leg gently straightens",
+                "notes": "Keep the opposite leg flat on the floor. Use a towel or strap if needed."
+              },
+              {
+                "name": "Bridge Pose",
+                "hold": "30 seconds",
+                "sets": 2,
+                "breathingCue": "Inhale to lift, exhale to lower slowly",
+                "notes": "Press through the feet and squeeze the glutes at the top. Keep the neck relaxed."
               }
             ],
             "warnings": []

@@ -6,7 +6,7 @@
 | Test cases (17) | [eval/cases.json](../eval/cases.json) |
 | Runner | [eval/run.js](../eval/run.js) · `cd server && npm run eval` |
 | Latest results (with full outputs) | [eval/results/latest.md](../eval/results/latest.md), `latest.json` |
-| Deterministic unit tests (8) | [server/test/](../server/test/) · `cd server && npm test` |
+| Deterministic unit tests (17) | [server/test/](../server/test/) · `cd server && npm test` |
 
 ## Test-case design
 | Suite | Cases | What they probe |
@@ -23,8 +23,10 @@ Bold cases are adversarial: the easy wrong answer is available to the model.
 | 1 — first full run | **14/17** | 3 meal-planner failures (below) |
 | 2 — after verifier and schema fixes | 17/17 | Then found the eval itself was too lenient on O5 |
 | 3 — after tightening O5 and fixing the prompt | **17/17** | O5 re-run 3× to check for flakiness: 3/3 |
+| 4 — after switching to Claude Haiku 5.5 (2026-10-16) | **16/17** | W2 trained chest the day after a push day (F4) |
+| 5 — after tightening the workout prompt | **17/17** | W2 re-run 3× first: 3/3 |
 
-Latency on the final run (gpt-4o): meal plans 5.4–10.5 s (p50 ≈ 8 s, 2 tool calls each), outside food < 1 s, workouts 4.6–6.2 s. A meal plan uses about 3–4.4k tokens.
+Latency on the final run (`claude-haiku-5-5`, low effort, 2026-10-16): meal plans p50 8.5 s (5.5–17.6 s, 1 tool call each), outside food p50 1.3 s (0.9–2.0 s), workouts p50 11.6 s (8.5–17.8 s). A meal plan uses about 4–7.7k tokens; the whole 17-case run used about 59.5k. Earlier runs 1–3 were on gpt-4o (meal plans p50 ≈ 8 s, about 3–4.4k tokens).
 
 ## Failure log (real outputs)
 
@@ -44,8 +46,13 @@ Output: `{"name":"Tonkotsu Ramen","calories":900, ...}`. The injection was resis
 *Fix:* the eval now also requires `isFood: false` for this case. The prompt's example uses placeholders (`<food name>`, `<kcal>`) instead of realistic values.
 *Lesson:* a passing eval can hide a wrong answer; read the outputs, not just the checkmarks.
 
+### F4 — Chest trained the day after a push day (W2) · *fixed in prompt*
+After the switch to Claude Haiku 5.5, one of three strength workouts for a user whose last session was "Push Day" was "Full Body Strength: Upper Focus" with muscle groups *Chest, Shoulders, Back, Arms, Core*. The other two (pull day, lower body) were fine, and the same case had passed on a teammate's run, so the rule was being followed only some of the time.
+*Root cause:* the prompt said "avoid training the same muscle groups as the most recent sessions", which the model read as applying to the session's main focus, not to full-body workouts, and it had to infer what "Push Day" trains.
+*Fix:* the rule now says no workout may train a muscle group the last session trained, including full-body ones, and spells out push, pull and leg days (`server/src/agents/workoutCoach.js`). W2 then passed 3 of 3 runs before the full suite was re-run.
+
 ### Caught at runtime by guardrails (working as intended)
-In the final run, the verifier **corrected** the model's calories in 3 of 15 meals: M1 dinner (model: 692 kcal → database: 484 kcal), M7 dinner (418 → 325) and M8 breakfast (211 → 165). In run 2 it corrected 4 of 15, including M1 lunch (753 → 576). Without the verifier, the user would have seen numbers that were 25–45% too high.
+In the final gpt-4o run, the verifier **corrected** the model's calories in 3 of 15 meals: M1 dinner (model: 692 kcal → database: 484 kcal), M7 dinner (418 → 325) and M8 breakfast (211 → 165). In run 2 it corrected 4 of 15, including M1 lunch (753 → 576). Without the verifier, the user would have seen numbers that were 25–45% too high. In the final Claude Haiku 5.5 run, every meal's calories were within the verifier's tolerance of the database, so no corrections were needed.
 
 ## Known limitations of this evaluation
 - 17 cases is a smoke-test-sized suite. The results show the pipeline works on representative and adversarial inputs, not statistical accuracy.

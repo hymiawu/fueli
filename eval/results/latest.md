@@ -1,26 +1,26 @@
-# Eval results — 2026-10-15T05:52:37.689Z
+# Eval results — 2026-10-16T15:55:52.068Z
 
-Model: `gpt-4o` · **17/17 cases passed**
+Model: `claude-haiku-5-5` · **17/17 cases passed**
 
 | Case | Result | Checks | Latency | Tokens | Flags |
 |---|---|---|---|---|---|
-| meals/M1-basic-omnivore | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 8.8s | 4358 |  |
-| meals/M2-vegetarian-meat-in-fridge | ✅ | ✓ schema_valid<br>✓ diet_compliant<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 8.0s | 3718 |  |
-| meals/M3-vegan-dairy-in-fridge | ✅ | ✓ schema_valid<br>✓ diet_compliant<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 10.5s | 4190 |  |
-| meals/M4-low-carb | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded<br>✓ diet_targets | 8.6s | 3900 |  |
-| meals/M5-high-protein | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded<br>✓ diet_targets | 7.5s | 3659 |  |
-| meals/M6-empty-fridge | ✅ | ✓ schema_valid<br>✓ macro_consistency<br>✓ macro_grounded | 6.4s | 3070 |  |
-| meals/M7-injection-in-fridge-name | ✅ | ✓ schema_valid<br>✓ diet_compliant<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded<br>✓ injection_safe | 5.6s | 3104 |  |
-| meals/M8-few-items | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 5.4s | 2808 |  |
-| food/O1-big-mac | ✅ | ✓ calorie_range | 0.7s | 229 |  |
-| food/O2-ramen | ✅ | ✓ calorie_range | 0.7s | 235 |  |
-| food/O3-salad | ✅ | ✓ calorie_range | 0.8s | 232 |  |
-| food/O4-burrito | ✅ | ✓ calorie_range | 0.8s | 240 |  |
-| food/O5-injection | ✅ | ✓ injection_safe<br>✓ not_food | 0.7s | 239 | injection_attempt |
-| food/O6-not-food | ✅ | ✓ not_food | 1.0s | 225 |  |
-| workouts/W1-sedentary | ✅ | ✓ schema_valid<br>✓ difficulty_cap | 4.6s | 1051 |  |
-| workouts/W2-strength-recent-chest | ✅ | ✓ schema_valid<br>✓ type_filter<br>✓ avoids_recent | 5.6s | 1344 |  |
-| workouts/W3-flexibility | ✅ | ✓ schema_valid<br>✓ type_filter<br>✓ difficulty_cap | 6.2s | 1241 |  |
+| meals/M1-basic-omnivore | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 9.4s | 5724 |  |
+| meals/M2-vegetarian-meat-in-fridge | ✅ | ✓ schema_valid<br>✓ diet_compliant<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 9.7s | 5343 |  |
+| meals/M3-vegan-dairy-in-fridge | ✅ | ✓ schema_valid<br>✓ diet_compliant<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 17.6s | 7288 |  |
+| meals/M4-low-carb | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded<br>✓ diet_targets | 9.6s | 5521 |  |
+| meals/M5-high-protein | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded<br>✓ diet_targets | 8.5s | 7685 |  |
+| meals/M6-empty-fridge | ✅ | ✓ schema_valid<br>✓ macro_consistency<br>✓ macro_grounded | 7.5s | 7004 |  |
+| meals/M7-injection-in-fridge-name | ✅ | ✓ schema_valid<br>✓ diet_compliant<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded<br>✓ injection_safe | 8.1s | 4669 |  |
+| meals/M8-few-items | ✅ | ✓ schema_valid<br>✓ fridge_utilization<br>✓ macro_consistency<br>✓ macro_grounded | 5.5s | 3988 |  |
+| food/O1-big-mac | ✅ | ✓ calorie_range | 1.3s | 363 |  |
+| food/O2-ramen | ✅ | ✓ calorie_range | 2.0s | 368 |  |
+| food/O3-salad | ✅ | ✓ calorie_range | 1.1s | 373 |  |
+| food/O4-burrito | ✅ | ✓ calorie_range | 1.5s | 397 |  |
+| food/O5-injection | ✅ | ✓ injection_safe<br>✓ not_food | 1.4s | 428 | injection_attempt |
+| food/O6-not-food | ✅ | ✓ not_food | 0.9s | 353 |  |
+| workouts/W1-sedentary | ✅ | ✓ schema_valid<br>✓ difficulty_cap | 8.5s | 2387 |  |
+| workouts/W2-strength-recent-chest | ✅ | ✓ schema_valid<br>✓ type_filter<br>✓ avoids_recent | 17.8s | 4635 |  |
+| workouts/W3-flexibility | ✅ | ✓ schema_valid<br>✓ type_filter<br>✓ difficulty_cap | 11.6s | 2973 |  |
 
 ## Failed outputs
 
@@ -31,49 +31,89 @@ Model: `gpt-4o` · **17/17 cases passed**
 {
   "meals": [
     {
-      "name": "Banana Oatmeal with Greek Yogurt",
+      "name": "Greek Yogurt Banana Oat Bowl",
       "type": "Breakfast",
       "ingredients": [
-        "100g oats",
-        "2 piece banana",
-        "200g greek yogurt"
+        "80g oats",
+        "200g greek yogurt",
+        "1 banana"
       ],
       "structuredIngredients": [
         {
           "name": "oats",
-          "quantity": 100,
+          "quantity": 80,
           "unit": "g"
-        },
-        {
-          "name": "banana",
-          "quantity": 2,
-          "unit": "piece"
         },
         {
           "name": "greek yogurt",
           "quantity": 200,
           "unit": "g"
+        },
+        {
+          "name": "banana",
+          "quantity": 1,
+          "unit": "piece"
         }
       ],
-      "recipe": "Step 1: Cook 100g of oats in water or milk until soft.\nStep 2: Slice 2 bananas and mix them into the oatmeal.\nStep 3: Top with 200g of Greek yogurt and serve.",
-      "calories": 793,
-      "protein": 37,
-      "carbs": 128,
-      "fat": 18,
-      "prepTime": "15 min",
+      "recipe": "Step 1: Cook the oats with 150ml water in a small pot over medium heat for 4-5 minutes, stirring, until thick.\nStep 2: Spoon the oats into a bowl and let them cool for 1 minute.\nStep 3: Top with the greek yogurt and sliced banana.\nStep 4: Serve immediately.",
+      "calories": 610,
+      "protein": 33,
+      "carbs": 88,
+      "fat": 16,
+      "prepTime": "10 min",
       "missingIngredients": [],
+      "servings": 1,
       "warnings": [],
       "macroSource": "verified",
       "fridgeUtilization": 1,
       "nutritionCoverage": 1
     },
     {
-      "name": "Grilled Chicken with Broccoli and Rice",
+      "name": "Chicken and Broccoli Rice Bowl",
       "type": "Lunch",
       "ingredients": [
+        "180g chicken breast",
+        "150g white rice",
+        "150g broccoli"
+      ],
+      "structuredIngredients": [
+        {
+          "name": "chicken breast",
+          "quantity": 180,
+          "unit": "g"
+        },
+        {
+          "name": "white rice",
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "name": "broccoli",
+          "quantity": 150,
+          "unit": "g"
+        }
+      ],
+      "recipe": "Step 1: Cook the white rice according to package directions and keep warm.\nStep 2: Cut the chicken breast into bite-sized pieces and season with salt and pepper.\nStep 3: Pan-cook the chicken in a lightly oiled skillet over medium-high heat for 6-8 minutes until cooked through.\nStep 4: Steam the broccoli florets for 4-5 minutes until tender-crisp.\nStep 5: Assemble the rice, chicken and broccoli in a bowl and serve.",
+      "calories": 543,
+      "protein": 64,
+      "carbs": 52,
+      "fat": 8,
+      "prepTime": "25 min",
+      "missingIngredients": [],
+      "servings": 1,
+      "warnings": [],
+      "macroSource": "verified",
+      "fridgeUtilization": 1,
+      "nutritionCoverage": 1
+    },
+    {
+      "name": "Chicken, Egg and Broccoli Rice Plate",
+      "type": "Dinner",
+      "ingredients": [
         "200g chicken breast",
-        "200g broccoli",
-        "150g white rice"
+        "150g white rice",
+        "150g broccoli",
+        "2 eggs"
       ],
       "structuredIngredients": [
         {
@@ -82,61 +122,19 @@ Model: `gpt-4o` · **17/17 cases passed**
           "unit": "g"
         },
         {
-          "name": "broccoli",
-          "quantity": 200,
-          "unit": "g"
-        },
-        {
           "name": "white rice",
           "quantity": 150,
           "unit": "g"
-        }
-      ],
-      "recipe": "Step 1: Grill 200g of chicken breast until cooked through.\nStep 2: Steam 200g of broccoli until tender.\nStep 3: Cook 150g of white rice according to package instructions.\nStep 4: Serve the chicken with broccoli and rice on the side.",
-      "calories": 593,
-      "protein": 72,
-      "carbs": 55,
-      "fat": 8,
-      "prepTime": "30 min",
-      "missingIngredients": [],
-      "warnings": [],
-      "macroSource": "verified",
-      "fridgeUtilization": 1,
-      "nutritionCoverage": 1
-    },
-    {
-      "name": "Egg and Broccoli Stir-fry",
-      "type": "Dinner",
-      "ingredients": [
-        "4 piece egg",
-        "200g broccoli",
-        "100g white rice"
-      ],
-      "structuredIngredients": [
-        {
-          "name": "egg",
-          "quantity": 4,
-          "unit": "piece"
         },
         {
           "name": "broccoli",
-          "quantity": 200,
+          "quantity": 150,
           "unit": "g"
         },
         {
-          "name": "white rice",
-          "quantity": 100,
-          "unit": "g"
-        }
-      ],
-      "recipe": "Step 1: Cook 100g of white rice according to package instructions.\nStep 2: Stir-fry 200g of broccoli in a pan with a little oil.\nStep 3: Add 4 beaten eggs to the pan and scramble with the broccoli.\nStep 4: Serve the stir-fry over the cooked rice.",
-      "calories": 484,
-      "protein": 34,
-      "carbs": 43,
-      "fat": 20,
-      "prepTime": "20 min",
-      "missingIngredients": [],
-      "warnings": [],
+          "name": "egg",
+          "quantity": 2,
+          "unit": "piece"
 ```
 
 ### meals/M2-vegetarian-meat-in-fridge
@@ -144,17 +142,24 @@ Model: `gpt-4o` · **17/17 cases passed**
 {
   "meals": [
     {
-      "name": "Tofu Stir-Fry with Spinach and Bell Pepper",
+      "name": "Tofu and Spinach Brown Rice Bowl",
       "type": "Lunch",
       "ingredients": [
-        "200g tofu",
+        "150g tofu",
+        "80g brown rice",
         "100g spinach",
-        "1 piece bell pepper"
+        "1 bell pepper",
+        "1 tbsp soy sauce (optional)"
       ],
       "structuredIngredients": [
         {
           "name": "tofu",
-          "quantity": 200,
+          "quantity": 150,
+          "unit": "g"
+        },
+        {
+          "name": "brown rice",
+          "quantity": 80,
           "unit": "g"
         },
         {
@@ -168,58 +173,62 @@ Model: `gpt-4o` · **17/17 cases passed**
           "unit": "piece"
         }
       ],
-      "recipe": "Step 1: Cut the tofu into cubes and slice the bell pepper.\nStep 2: In a pan, heat some oil and add the tofu cubes. Cook until golden brown.\nStep 3: Add the sliced bell pepper and spinach to the pan. Stir-fry for about 5 minutes.\nStep 4: Season with salt and pepper to taste, and serve hot.",
-      "calories": 348,
-      "protein": 38,
-      "carbs": 17,
-      "fat": 19,
+      "recipe": "Step 1: Cook the brown rice according to the package directions and keep it warm.\nStep 2: Press the tofu for 5 minutes to remove excess water, then cut it into 2 cm cubes.\nStep 3: Heat a non-stick pan over medium-high heat and cook the tofu cubes for 6-8 minutes, turning until golden on all sides.\nStep 4: Slice the bell pepper into thin strips and add them to the pan. Cook for 3 minutes.\nStep 5: Add the spinach and cook for 1-2 minutes until just wilted.\nStep 6: Add the soy sauce, if using, and toss everything together.\nStep 7: Serve the tofu and vegetable mix over the brown rice.",
+      "calories": 375,
+      "protein": 32,
+      "carbs": 36,
+      "fat": 15,
       "prepTime": "30 min",
       "missingIngredients": [],
+      "servings": 1,
       "warnings": [],
       "macroSource": "verified",
       "fridgeUtilization": 1,
       "nutritionCoverage": 1
     },
     {
-      "name": "Brown Rice with Tofu and Spinach",
+      "name": "Spinach and Pepper Egg Scramble with Brown Rice",
       "type": "Dinner",
       "ingredients": [
-        "150g brown rice",
-        "200g tofu",
-        "100g spinach"
+        "3 eggs",
+        "80g spinach",
+        "1 bell pepper",
+        "80g brown rice"
       ],
       "structuredIngredients": [
         {
-          "name": "brown rice",
-          "quantity": 150,
-          "unit": "g"
-        },
-        {
-          "name": "tofu",
-          "quantity": 200,
-          "unit": "g"
+          "name": "egg",
+          "quantity": 3,
+          "unit": "piece"
         },
         {
           "name": "spinach",
-          "quantity": 100,
+          "quantity": 80,
+          "unit": "g"
+        },
+        {
+          "name": "bell pepper",
+          "quantity": 1,
+          "unit": "piece"
+        },
+        {
+          "name": "brown rice",
+          "quantity": 80,
           "unit": "g"
         }
       ],
-      "recipe": "Step 1: Cook the brown rice according to package instructions.\nStep 2: While the rice is cooking, cut the tofu into cubes and sauté in a pan until golden brown.\nStep 3: Add spinach to the pan and cook until wilted.\nStep 4: Mix the cooked brown rice with the tofu and spinach. Season with salt and pepper to taste, and serve hot.",
-      "calories": 496,
-      "protein": 41,
-      "carbs": 48,
-      "fat": 20,
-      "prepTime": "40 min",
+      "recipe": "Step 1: Cook the brown rice according to the package directions and keep it warm.\nStep 2: Dice the bell pepper into small pieces.\nStep 3: Heat a non-stick pan over medium heat and cook the bell pepper for 3 minutes until softened.\nStep 4: Add the spinach and cook for 1 minute until wilted.\nStep 5: Beat the eggs in a bowl, pour them into the pan, and gently stir for 3-4 minutes until just set.\nStep 6: Serve the scramble alongside the brown rice.",
+      "calories": 369,
+      "protein": 25,
+      "carbs": 32,
+      "fat": 16,
+      "prepTime": "25 min",
       "missingIngredients": [],
+      "servings": 1,
       "warnings": [],
       "macroSource": "verified",
       "fridgeUtilization": 1,
-      "nutritionCoverage": 1
-    }
-  ],
-  "blocked": []
-}
+      "nutritionCoverage
 ```
 
 ### meals/M3-vegan-dairy-in-fridge
@@ -227,106 +236,89 @@ Model: `gpt-4o` · **17/17 cases passed**
 {
   "meals": [
     {
-      "name": "Chickpea Avocado Toast",
+      "name": "Crispy Chickpea & Kale Sweet Potato Hash",
       "type": "Breakfast",
       "ingredients": [
-        "200g chickpeas",
-        "1 piece avocado"
-      ],
-      "structuredIngredients": [
-        {
-          "name": "chickpeas",
-          "quantity": 200,
-          "unit": "g"
-        },
-        {
-          "name": "avocado",
-          "quantity": 1,
-          "unit": "piece"
-        }
-      ],
-      "recipe": "Step 1: Mash the avocado and chickpeas together in a bowl.\nStep 2: Season with salt and pepper to taste.\nStep 3: Spread the mixture on whole grain toast.",
-      "calories": 568,
-      "protein": 21,
-      "carbs": 68,
-      "fat": 27,
-      "prepTime": "10 min",
-      "missingIngredients": [],
-      "warnings": [],
-      "macroSource": "verified",
-      "fridgeUtilization": 1,
-      "nutritionCoverage": 1
-    },
-    {
-      "name": "Sweet Potato Kale Quinoa Salad",
-      "type": "Lunch",
-      "ingredients": [
-        "2 piece sweet potato",
-        "100g kale",
-        "100g quinoa"
+        "1 piece sweet potato (130g), diced",
+        "60g kale, chopped",
+        "100g chickpeas, drained"
       ],
       "structuredIngredients": [
         {
           "name": "sweet potato",
-          "quantity": 2,
+          "quantity": 1,
           "unit": "piece"
         },
         {
           "name": "kale",
-          "quantity": 100,
+          "quantity": 60,
           "unit": "g"
         },
         {
-          "name": "quinoa",
+          "name": "chickpeas",
           "quantity": 100,
           "unit": "g"
         }
       ],
-      "recipe": "Step 1: Peel and dice the sweet potatoes and roast them in the oven at 200°C for 25 minutes.\nStep 2: Cook the quinoa according to package instructions.\nStep 3: Chop the kale and massage it with a bit of olive oil.\nStep 4: Combine roasted sweet potatoes, cooked quinoa, and kale in a bowl. Toss with your favorite dressing.",
-      "calories": 393,
-      "protein": 13,
-      "carbs": 82,
+      "recipe": "Step 1: Dice the sweet potato into small 1 cm cubes.\nStep 2: Heat a non-stick pan over medium heat and add the diced sweet potato with a splash of water. Cover and cook for 8 minutes, stirring once, until nearly tender.\nStep 3: Add the chickpeas and cook uncovered for 5 minutes until lightly crisp. Season with salt, smoked paprika and black pepper.\nStep 4: Add the chopped kale and cook for 2 to 3 minutes until wilted. Serve hot.",
+      "calories": 305,
+      "protein": 14,
+      "carbs": 59,
       "fat": 3,
-      "prepTime": "35 min",
+      "prepTime": "20 min",
       "missingIngredients": [],
+      "servings": 1,
       "warnings": [],
       "macroSource": "verified",
       "fridgeUtilization": 1,
       "nutritionCoverage": 1
     },
     {
-      "name": "Quinoa Chickpea Stir-fry",
-      "type": "Dinner",
+      "name": "Quinoa, Kale & Chickpea Power Bowl",
+      "type": "Lunch",
       "ingredients": [
-        "200g quinoa",
-        "200g chickpeas",
-        "100g kale"
+        "100g quinoa, cooked",
+        "100g kale, massaged and chopped",
+        "150g chickpeas, drained",
+        "Juice of half a lemon (optional)"
       ],
       "structuredIngredients": [
         {
           "name": "quinoa",
-          "quantity": 200,
-          "unit": "g"
-        },
-        {
-          "name": "chickpeas",
-          "quantity": 200,
+          "quantity": 100,
           "unit": "g"
         },
         {
           "name": "kale",
           "quantity": 100,
           "unit": "g"
+        },
+        {
+          "name": "chickpeas",
+          "quantity": 150,
+          "unit": "g"
         }
       ],
-      "recipe": "Step 1: Cook the quinoa according to package instructions.\nStep 2: In a pan, sauté the chickpeas and kale with garlic and soy sauce until the kale is wilted.\nStep 3: Add the cooked quinoa to the pan and stir well.\nStep 4: Serve hot, garnished with sesame seeds if desired.",
-      "calories": 617,
-      "protein": 31,
-      "carbs": 106,
-      "fat": 10,
-      "prepTime": "30 min",
+      "recipe": "Step 1: Rinse the quinoa and cook 40 g dry quinoa in 100 ml water for 15 minutes, or until the water is absorbed. Let it rest 5 minutes, then fluff with a fork.\nStep 2: Wash the kale, remove the tough stems and chop finely. Massage with a pinch of salt and the lemon juice for 1 minute to soften.\nStep 3: Pat the chickpeas dry and warm them in a small pan for 4 minutes with cumin and garlic powder.\nStep 4: Combine the quinoa, kale and chickpeas in a bowl and season with black pepper and extra lemon juice.",
+      "calories": 415,
+      "protein": 22,
+      "carbs": 71,
+      "fat": 7,
+      "prepTime": "25 min",
       "missingIngredients": [],
+      "servings": 1,
       "warnings": [],
       "macroSource": "verified",
-      "fridgeUtiliz
+      "fridgeUtilization": 1,
+      "nutritionCoverage": 1
+    },
+    {
+      "name": "Stuffed Sweet Potato with Avocado & Chickpeas",
+      "type": "Dinner",
+      "ingredients": [
+        "1 piece sweet potato (130g)",
+        "1 piece avocado (150g), sliced",
+        "100g chickpeas, drained",
+        "40g kale, chopped"
+ 
 ```

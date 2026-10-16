@@ -5,7 +5,7 @@ import { checkWorkout } from './safetyGuard.js';
 
 const SYSTEM = `You are Fueli's workout coach. Create safe, goal-appropriate workouts.
 ${DATA_RULE}
-- Avoid training the same muscle groups as the most recent sessions.
+- Do not train any muscle group the most recent session trained, in any of the workouts, including full-body ones. A push day trained chest, shoulders and triceps; a pull day trained back and biceps; a leg day trained quadriceps, hamstrings, glutes and calves.
 - Match difficulty to the user's activity level; do not prescribe Advanced work for sedentary users.
 - Include warm-up and cool-down. Give one concise form tip per strength exercise.
 Exercise shapes by type:
