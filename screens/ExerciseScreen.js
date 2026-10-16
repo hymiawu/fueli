@@ -4,7 +4,7 @@ import {
   StyleSheet, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserItem, setUserItem } from '../lib/userStorage';
 import { getWorkoutSuggestions } from '../lib/api';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -37,11 +37,11 @@ export default function ExerciseScreen() {
   useEffect(() => { loadWorkoutPlans(); }, []);
 
   const loadWorkoutPlans = async () => {
-    try { const s = await AsyncStorage.getItem('workoutPlans'); if (s) setWorkoutPlans(JSON.parse(s)); } catch(e) {}
+    try { const s = await getUserItem('workoutPlans'); if (s) setWorkoutPlans(JSON.parse(s)); } catch(e) {}
   };
   const saveWorkoutPlans = async (plans) => {
     setWorkoutPlans(plans);
-    try { await AsyncStorage.setItem('workoutPlans', JSON.stringify(plans)); } catch(e) {}
+    try { await setUserItem('workoutPlans', JSON.stringify(plans)); } catch(e) {}
   };
 
   const getAllRecentWorkouts = () => {

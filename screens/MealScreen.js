@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserItem, setUserItem } from '../lib/userStorage';
 import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '../lib/supabase';
 import { getMealSuggestions, analyzeOutsideFood, assetBase64 } from '../lib/api';
@@ -110,7 +110,7 @@ const deductFridgeIngredients = async (meal) => {
 
   const { data: refreshed } = await supabase
     .from('ingredients').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-  if (refreshed) await AsyncStorage.setItem('ingredients', JSON.stringify(refreshed));
+  if (refreshed) await setUserItem('ingredients', JSON.stringify(refreshed));
 
   return deducted;
 };
@@ -155,7 +155,7 @@ const restoreFridgeIngredients = async (deductedIngredients) => {
 
   const { data: refreshed } = await supabase
     .from('ingredients').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-  if (refreshed) await AsyncStorage.setItem('ingredients', JSON.stringify(refreshed));
+  if (refreshed) await setUserItem('ingredients', JSON.stringify(refreshed));
 };
 
 export default function MealScreen() {
@@ -176,16 +176,16 @@ export default function MealScreen() {
   useEffect(() => { loadMealPlans(); }, []);
 
   const loadMealPlans = async () => {
-    try { const s = await AsyncStorage.getItem('mealPlans'); if (s) setMealPlans(JSON.parse(s)); } catch(e) {}
-    try { const n = Number(await AsyncStorage.getItem('mealServings')); if (n >= 1 && n <= SERVING_OPTIONS.length) setServings(n); } catch(e) {}
+    try { const s = await getUserItem('mealPlans'); if (s) setMealPlans(JSON.parse(s)); } catch(e) {}
+    try { const n = Number(await getUserItem('mealServings')); if (n >= 1 && n <= SERVING_OPTIONS.length) setServings(n); } catch(e) {}
   };
   const chooseServings = async (n) => {
     setServings(n);
-    try { await AsyncStorage.setItem('mealServings', String(n)); } catch(e) {}
+    try { await setUserItem('mealServings', String(n)); } catch(e) {}
   };
   const saveMealPlans = async (plans) => {
     setMealPlans(plans);
-    try { await AsyncStorage.setItem('mealPlans', JSON.stringify(plans)); } catch(e) {}
+    try { await setUserItem('mealPlans', JSON.stringify(plans)); } catch(e) {}
   };
 
   const getSuggestions = async () => {
