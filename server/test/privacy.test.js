@@ -5,8 +5,8 @@ import { mealCalorieTarget } from '../src/agents/mealPlanner.js';
 import { summarizeFridge } from '../src/tools/fridge.js';
 
 test('personal identifiers are redacted from text sent to the model', () => {
-  const out = redactPII('Email me at misia0517@gmail.com or call +1 (310) 555-0123, see https://x.com/me @misia');
-  assert.ok(!out.includes('gmail') && !out.includes('555') && !out.includes('x.com') && !out.includes('@misia'));
+  const out = redactPII('Email me at jane@example.com or call +1 (310) 555-0123, see https://x.com/me @janedoe');
+  assert.ok(!out.includes('example.com') && !out.includes('555') && !out.includes('x.com') && !out.includes('@janedoe'));
   assert.match(out, /\[email\].*\[number\].*\[link\].*\[handle\]/);
 });
 
@@ -44,10 +44,10 @@ test('PNG text and EXIF chunks are removed', () => {
   };
   const png = Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk('IHDR', 'header'), chunk('tEXt', 'Author\0Misia'), chunk('eXIf', 'GPS'), chunk('IDAT', 'pixels'), chunk('IEND', ''),
+    chunk('IHDR', 'header'), chunk('tEXt', 'Author\0Jane'), chunk('eXIf', 'GPS'), chunk('IDAT', 'pixels'), chunk('IEND', ''),
   ]);
   const out = stripImageMetadata(png).toString('latin1');
-  assert.ok(!out.includes('Misia') && !out.includes('GPS'));
+  assert.ok(!out.includes('Jane') && !out.includes('GPS'));
   assert.ok(out.includes('IHDR') && out.includes('pixels') && out.includes('IEND'));
 });
 
