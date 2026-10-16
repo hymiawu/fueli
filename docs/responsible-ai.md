@@ -30,7 +30,7 @@ User-controlled text reaches prompts from: fridge item names (typed by the user)
 - Eval cases `M7-injection-in-fridge-name` and `O5-injection` test this on every run.
 
 ## Data leakage
-- **Keys:** the original app shipped an OpenAI key inside the client bundle. That key is removed from the client and now lives only as a Fly secret. **It should be rotated**, since anyone with an old build could extract it.
+- **Keys:** the original app shipped an OpenAI key inside the client bundle. That key was removed from the client and revoked on 2026-10-16, and the app no longer uses OpenAI at all; the model key (Claude) lives only as a Fly secret.
 - `EXPO_PUBLIC_*` variables hold only publishable values (API URL, Supabase URL and publishable key).
 - The system prompt contains no secrets, so a prompt leak exposes nothing sensitive.
 - CORS allow-list for browsers. Every route also requires a valid JWT.
