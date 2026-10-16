@@ -62,4 +62,4 @@ In the final gpt-4o run, the verifier **corrected** the model's calories in 3 of
 - Outside-food calorie ranges come from published chain nutrition and typical servings. Real portions vary widely.
 
 ## Human review
-Per the rubric, teammates score three meal plans per run on recipe plausibility and appetite (1–5). Record them in `eval/results/human-review.md`.
+Per the rubric, teammates score three meal plans per run on recipe plausibility and appetite (1–5). The sheet for the Claude Haiku 5.5 run is [eval/results/human-review.md](../eval/results/human-review.md).
