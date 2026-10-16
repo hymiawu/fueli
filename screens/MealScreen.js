@@ -6,10 +6,12 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
+import { useNavigation } from '@react-navigation/native';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '../lib/supabase';
 import { getMealSuggestions, analyzeOutsideFood, assetBase64 } from '../lib/api';
+import { handleSubscriptionLapse } from '../lib/route';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -159,6 +161,7 @@ const restoreFridgeIngredients = async (deductedIngredients) => {
 };
 
 export default function MealScreen() {
+  const navigation = useNavigation();
   const todayStr = getTodayStr();
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [mealPlans, setMealPlans] = useState({});
@@ -204,7 +207,7 @@ export default function MealScreen() {
         return cooked || newMeals.find(m => m.type === type);
       }).filter(Boolean);
       await saveMealPlans({ ...mealPlans, [selectedDate]: combined });
-    } catch(e) { Alert.alert('Error', e.message || 'Could not get suggestions. Please try again.'); }
+    } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get suggestions. Please try again.'); }
     setLoading(false);
   };
 
@@ -289,7 +292,7 @@ export default function MealScreen() {
       if (result.isFood === false) Alert.alert('Not food?', "We couldn't recognize a food. Try a clearer description or photo.");
       else setOutsideResult(result);
     }
-    catch(e) { Alert.alert('Error', e.message || 'Could not analyze food.'); }
+    catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not analyze food.'); }
     setOutsideLoading(false);
   };
 

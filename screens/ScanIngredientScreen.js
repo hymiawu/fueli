@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import * as ImagePicker from 'expo-image-picker';
 import { analyzeIngredientImage, assetBase64 } from '../lib/api';
+import { handleSubscriptionLapse } from '../lib/route';
 
 const UNITS = ['g', 'ml', 'piece', 'cup', 'tbsp'];
 const CATEGORIES = ['Produce', 'Protein', 'Dairy', 'Grains', 'Beverages', 'Condiments', 'Other'];
@@ -65,7 +66,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
       });
     } catch (e) {
       // The API's message says what went wrong (subscription, image too large, rate limit, ...).
-      Alert.alert('Analysis failed', e.message || 'Could not identify the ingredient. Please try again.');
+      if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Analysis failed', e.message || 'Could not identify the ingredient. Please try again.');
     }
     setAnalyzing(false);
   };

@@ -4,6 +4,8 @@ import {
   StyleSheet, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
+import { useNavigation } from '@react-navigation/native';
+import { handleSubscriptionLapse } from '../lib/route';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import { getWorkoutSuggestions } from '../lib/api';
 
@@ -26,6 +28,7 @@ const buildDays = () => {
 };
 
 export default function ExerciseScreen() {
+  const navigation = useNavigation();
   const todayStr = getTodayStr();
   const [selectedDate, setSelectedDate] = useState(todayStr);
   const [workoutPlans, setWorkoutPlans] = useState({});
@@ -60,7 +63,7 @@ export default function ExerciseScreen() {
       const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType);
       const withIds = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, completed:false }));
       await saveWorkoutPlans({ ...workoutPlans, [selectedDate]: withIds });
-    } catch(e) { Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
+    } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
     setLoading(false);
   };
 
