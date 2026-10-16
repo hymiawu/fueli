@@ -75,11 +75,11 @@ Acceptance = the eval suite (`eval/`) passes ≥ 90% overall and 100% on diet-co
 ## 6. Milestones
 | # | Deliverable | Owner |
 |---|---|---|
-| M1 | API on Fly with auth, meal/scan/food/workout endpoints | |
-| M2 | Verifier, guard, nutrition DB + unit tests | |
-| M3 | Expo web on Vercel, client switched to API | |
-| M4 | Eval suite + failure log + human review | |
-| M5 | Slides, demo video, reflection | |
+| M1 | API on Fly with auth, meal/scan/food/workout endpoints | [Name] |
+| M2 | Verifier, guard, nutrition DB + unit tests | [Name] |
+| M3 | Expo web on Vercel, client switched to API | [Name] |
+| M4 | Eval suite + failure log + human review | [Name] |
+| M5 | Slides, demo video, reflection | [Name] |
 
 ## 7. Open questions / future work
 - Move meal and workout history from device storage (AsyncStorage) to Supabase so plans sync across devices and the planner can use eating history.

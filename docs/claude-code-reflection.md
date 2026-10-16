@@ -1,7 +1,5 @@
 # Reflection: Building Fueli with Claude Code
 
-> **Draft.** The factual parts below describe what was done. Sections marked ✏️ should be rewritten in the team's own words before submission.
-
 ## How we used Claude Code
 - **Re-architecture.** Claude Code read the original Expo app (≈2,400 lines across 9 screens) and found that it called OpenAI directly from the client with a hardcoded key. It proposed splitting it into an Expo web client on Vercel and an agent API on Fly.io, then did the migration while keeping the screens' existing behavior.
 - **Eval-driven iteration.** We had Claude Code write the eval suite *before* tuning prompts. The first full run scored **14/17**, and the failures exposed two real bugs (see `docs/evaluation.md` → Failure log):
@@ -24,19 +22,29 @@
 
 These are read-only by design: they produce findings, and a human (or the main session) decides what to change.
 
-## What worked well ✏️
-- *e.g. Writing the rubric first kept us honest; the eval caught bugs we would have demoed.*
-- *e.g. Asking Claude to put "must be correct" logic in deterministic code rather than prompts.*
+## What worked well
+- Writing the eval suite before tuning prompts kept us honest. The first run scored 14/17, and both real bugs it exposed (inconsistent macros, an empty meal from an empty fridge) would otherwise have reached the demo.
+- Putting anything that must be correct in deterministic code instead of the prompt. The verifier and the diet guard did not need to change when we switched models twice.
+- Keeping every model call in one file. Moving from OpenAI to Claude touched `server/src/llm.js` and the image format, and nothing else.
+- Small pull requests with a Vercel preview each. A broken build was caught in a preview, not on the live site: the first Vercel project pointed at `server/` instead of the repo root.
 
-## What didn't ✏️
-- *e.g. Model outputs vary run to run; one passing eval isn't proof. We started running flaky cases 3×.*
-- *e.g. Claude's first verifier version was too trusting; it took the eval to show it.*
+## What didn't
+- One passing run is not proof. A workout rule that passed on one run failed on the next after the switch to Claude Haiku 5.5 (W2), so we now re-run a fixed case three times before calling it done.
+- The first verifier was too trusting: it kept the model's macros whenever the calories looked plausible. It took the eval's failure log to show it.
+- Our first eval check for prompt injection was too lenient. It passed while the model was copying the example JSON from our own prompt.
+- Claude Opus 5.5 was too slow for an interactive app (about 47 s per meal plan). We traded down to Claude Haiku 5.5 at low effort, which brought it to about 15 s.
+- Tooling in the sandbox: `expo export` hung on network calls until we ran it with `EXPO_OFFLINE=1`.
 
-## What we'd do differently ✏️
-- *e.g. Move meal history to Supabase earlier so the planner could use eating history.*
-- *e.g. Add a CI job that runs `npm test` on every push and the eval suite nightly.*
+## What we'd do differently
+- Move meal and workout history to Supabase from the start. Storing it on the device caused a bug where a second account on the same browser saw the first account's plans.
+- Add a CI job that runs `npm test` on every push and the eval suite before each deploy.
+- Build a labeled photo set early so the vision features have their own eval cases.
 
-## Division of work ✏️
+## Division of work
 | Teammate | Contributions |
 |---|---|
-| | |
+| [Name] | [What they did] |
+| [Name] | [What they did] |
+| [Name] | [What they did] |
+| [Name] | [What they did] |
+| [Name] | [What they did] |
