@@ -80,3 +80,6 @@ Then make sure the Vercel domain is listed in `ALLOWED_ORIGINS` in `server/fly.t
 4. `fly secrets set STRIPE_SECRET_KEY=sk_test_... STRIPE_WEBHOOK_SECRET=whsec_... SUPABASE_SERVICE_ROLE_KEY=...` and `fly deploy`.
 
 Test card: `4242 4242 4242 4242`, any future expiry, any CVC.
+
+## License
+MIT. See [LICENSE](LICENSE).
