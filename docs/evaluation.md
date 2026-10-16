@@ -6,7 +6,7 @@
 | Test cases (17) | [eval/cases.json](../eval/cases.json) |
 | Runner | [eval/run.js](../eval/run.js) · `cd server && npm run eval` |
 | Latest results (with full outputs) | [eval/results/latest.md](../eval/results/latest.md), `latest.json` |
-| Deterministic unit tests (17) | [server/test/](../server/test/) · `cd server && npm test` |
+| Deterministic unit tests (19) | [server/test/](../server/test/) · `cd server && npm test` |
 
 ## Test-case design
 | Suite | Cases | What they probe |
@@ -58,7 +58,7 @@ In the final gpt-4o run, the verifier **corrected** the model's calories in 3 of
 - 17 cases is a smoke-test-sized suite. The results show the pipeline works on representative and adversarial inputs, not statistical accuracy.
 - Vision (ingredient scan, food photos) has no automated cases yet, because it needs a labeled image set. *Next step:* 20 photos with ground-truth labels.
 - Diet compliance is checked by keyword lists. A dish like "Caesar salad" (anchovies in the dressing) would slip past both the guard and the eval.
-- In the final runs the model never produced a diet violation, so the Safety Guard's **repair path** was exercised only by unit tests, not end to end. A forced-violation test with a mocked model would close this gap.
+- In the final runs the model never produced a diet violation, so the Safety Guard's **repair path** is covered by `server/test/repair.test.js` instead: with a mocked model, a vegetarian draft containing chicken is repaired once (the tofu fix is kept and `diet_repair` is flagged), and a repair that still contains chicken is held back in `blocked`.
 - Outside-food calorie ranges come from published chain nutrition and typical servings. Real portions vary widely.
 
 ## Human review
