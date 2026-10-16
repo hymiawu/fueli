@@ -8,9 +8,8 @@ import { Alert } from '../lib/alert';
 import * as ImagePicker from 'expo-image-picker';
 import { analyzeIngredientImage, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
+import { CATEGORIES, UNITS } from '../lib/constants';
 
-const UNITS = ['g', 'ml', 'piece', 'cup', 'tbsp'];
-const CATEGORIES = ['Produce', 'Protein', 'Dairy', 'Grains', 'Beverages', 'Condiments', 'Other'];
 
 export default function ScanIngredientScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
