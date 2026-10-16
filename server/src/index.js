@@ -128,6 +128,13 @@ app.post(
   }),
 );
 
+// Errors thrown before a route handler (for example malformed JSON or an oversized body) also return JSON.
+app.use((err, _req, res, _next) => {
+  const status = err.status || err.statusCode || 500;
+  const message = err.type === 'entity.parse.failed' ? 'Invalid JSON' : err.type === 'entity.too.large' ? 'Request too large' : 'Request failed';
+  res.status(status).json({ error: message });
+});
+
 app.use((_req, res) => res.status(404).json({ error: 'Not found' }));
 
 const port = Number(process.env.PORT || 8080);
