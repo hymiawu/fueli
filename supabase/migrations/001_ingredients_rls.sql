@@ -1,5 +1,6 @@
 -- Row Level Security for the fridge inventory. The Fly API queries Supabase *as the signed-in user*
--- (using their JWT, not a service-role key), so these policies are what keeps users' data separate.
+-- (using their JWT, not a service-role key; the only service-role use is the billing module writing `subscriptions`),
+-- so these policies are what keeps users' data separate.
 -- Run in the Supabase SQL editor. Safe to re-run.
 
 alter table public.ingredients enable row level security;

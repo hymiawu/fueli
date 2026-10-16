@@ -5,9 +5,10 @@
 
 | Risk | Mitigation | Where |
 |---|---|---|
-| One user reading another's data | Row Level Security on `ingredients`. The API queries Supabase **with the user's own JWT**, so RLS applies to the server too. No service-role key exists in the API. | `supabase/migrations/001_ingredients_rls.sql`, `server/src/auth.js` |
+| One user reading another's data | Row Level Security on `ingredients`. The API queries Supabase **with the user's own JWT**, so RLS applies to the server too. The service-role key exists only in `server/src/billing.js` and is used only to upsert the `subscriptions` row from Stripe-verified data. Every other query runs as the user. | `supabase/migrations/001_ingredients_rls.sql`, `server/src/auth.js` |
 | Health data in logs | Logs contain only route name, latency, token counts, tool-call count and flags. No prompts, outputs, emails or images. | `server/src/index.js` |
 | Data sent to the model provider | Only what the task needs: goal, diet, activity, an approximate calories-per-meal target computed on the server (height and weight are never sent), the fridge list, and free-text goals or food descriptions. No name, email, user ID or body measurements. All user text passes through `redactPII` (emails, phone and other long numbers, links and @handles become placeholders), and image metadata (EXIF/GPS, XMP, IPTC, comments, PNG text) is stripped before upload. Images are not stored. Anthropic does not train on Claude API data by default. | `guard.js`, `agents/` |
+| Payment data | Card details never touch our servers; Stripe Checkout collects them. We send Stripe the user's email and user ID (as metadata) to link the customer. Test mode only; no real charges. | `server/src/billing.js` |
 | Data retention | Images are never persisted. Users can delete fridge items at any time. *Todo:* account deletion endpoint. | |
 
 ## Hallucination
@@ -33,6 +34,7 @@ User-controlled text reaches prompts from: fridge item names (typed by the user)
 - `EXPO_PUBLIC_*` variables hold only publishable values (API URL, Supabase URL and publishable key).
 - The system prompt contains no secrets, so a prompt leak exposes nothing sensitive.
 - CORS allow-list for browsers. Every route also requires a valid JWT.
+- Stripe webhook payloads are signature-checked before use (`server/src/billing.js`).
 
 ## Human oversight
 - **Human in the loop for every state change:** scanned items are confirmed before saving, and fridge quantities change only when the user marks a meal as cooked (reversible by unchecking).

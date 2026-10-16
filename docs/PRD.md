@@ -8,6 +8,7 @@
 - G2. Show calorie/macro numbers grounded in a nutrition database whenever possible, and label estimates as estimates.
 - G3. Suggest workouts appropriate to goal, activity level and recent training.
 - G4. Keep all model keys and AI logic server-side; keep user data isolated per user.
+- G5. Gate the AI features behind a Stripe subscription (test mode) so the product is ready to charge.
 
 **Non-goals**
 - Medical nutrition therapy, allergy guarantees, or clinical calorie targets.
@@ -24,6 +25,7 @@
 | U5 | cook | mark a meal as cooked and have the fridge update | my inventory stays accurate |
 | U6 | person who ate out | log a restaurant meal by text or photo | my day's intake is complete |
 | U7 | beginner | get workouts I can actually do | I don't get hurt or discouraged |
+| U8 | new user | subscribe in under a minute | I can start using the app right away |
 
 ## 3. Functional requirements
 
@@ -49,14 +51,22 @@
 ### 3.4 Workouts — `POST /v1/workouts/suggest`
 - Input `{ recentWorkouts (≤ 14), filterType? }`. Output 1–3 workouts. The guard caps difficulty (sedentary → Beginner, lightly active → Intermediate) and adds warnings.
 
+### 3.5 Billing — Stripe Checkout (test mode)
+- New accounts subscribe to a **$4.99/month** plan before using the app. Accounts that existed before payments were added are `grandfathered` (free).
+- Routes (all require a signed-in user): `GET /v1/billing/status`, `GET /v1/billing/membership` (status plus renewal date from Stripe), `POST /v1/billing/checkout` (returns the Checkout URL), `POST /v1/billing/confirm` (called on return from Checkout; checks the session belongs to the user), `POST /v1/billing/cancel`, `POST /v1/billing/resume`, and the signed webhook `POST /v1/billing/webhook`.
+- Status is stored in the `subscriptions` table. Users can read their own row (RLS) but not write it; only the API's billing module writes it, from Stripe-verified data.
+- Every AI route returns **402** unless the status is `active`, `trialing` or `grandfathered`.
+- Cancel: paid accounts cancel at the end of the paid period (and can undo it until then); grandfathered accounts lose free access immediately.
+
 ## 4. Non-functional requirements
 | Area | Requirement |
 |---|---|
 | Security | No secrets in the client bundle. Every API route requires a valid Supabase JWT. CORS allow-list. |
 | Privacy | Server reads data as the user (RLS). Logs hold metadata only (latency, tokens, flags). No training on user data. |
+| Payments | Stripe test mode. Webhook signature verified. Only the billing module holds the Supabase service-role key, used only to upsert `subscriptions`. |
 | Abuse | 30 AI requests / 10 min / user. 8 MB body limit, 6 MB image limit. |
 | Latency | Meal plan p50 < 20 s; scan < 8 s. |
-| Cost | ~1 planner run ≈ 4–6 model calls. Vision uses `detail: low`. |
+| Cost | ~1 planner run ≈ 2–3 model calls on Claude Haiku 5.5 at low effort. |
 | Availability | Fly machine auto-starts on request, with a health check at `/health`. |
 
 ## 5. Evaluation and acceptance
