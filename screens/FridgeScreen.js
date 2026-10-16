@@ -6,7 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { useFocusEffect } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserItem, setUserItem } from '../lib/userStorage';
 import { supabase } from '../lib/supabase';
 
 const CATEGORY_COLORS = {
@@ -26,7 +26,7 @@ export default function FridgeScreen({ navigation }) {
   );
 
   const syncToCache = async (data) => {
-    await AsyncStorage.setItem('ingredients', JSON.stringify(data));
+    try { await setUserItem('ingredients', JSON.stringify(data)); } catch (e) {}
   };
 
   const loadIngredients = async () => {
