@@ -1,15 +1,18 @@
 // Runs the eval suite against the real agents (in-process, no Supabase needed).
 // Usage: cd server && npm run eval        (needs ANTHROPIC_API_KEY in server/.env)
-//        npm run eval -- --only meals     (meals | food | workouts)
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+//        npm run eval -- --only meals     (meals | food | workouts | scan)
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { planMeals } from '../server/src/agents/mealPlanner.js';
-import { analyzeOutsideFood } from '../server/src/agents/vision.js';
+import { analyzeOutsideFood, scanIngredient } from '../server/src/agents/vision.js';
+import { cleanImage } from '../server/src/guard.js';
 import { suggestWorkouts } from '../server/src/agents/workoutCoach.js';
 import { newTrace, modelName } from '../server/src/llm.js';
 import { atwaterCalories } from '../server/src/agents/nutritionVerifier.js';
 
 const here = (p) => new URL(p, import.meta.url);
 const cases = JSON.parse(readFileSync(here('./cases.json'), 'utf8'));
+// Labeled photos for the scan suite (eval/images/README.md). Empty until the team adds photos.
+const scanCases = existsSync(here('./images/cases.json')) ? JSON.parse(readFileSync(here('./images/cases.json'), 'utf8')) : [];
 const only = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null;
 
 // Independent of the server's safety guard on purpose, so the eval doesn't grade itself.
@@ -69,15 +72,29 @@ function gradeWorkouts(c, out) {
   return checks;
 }
 
+function gradeScan(c, out) {
+  const checks = { food_detected: out.isFood === c.isFood };
+  if (c.isFood) {
+    checks.name_match = c.names.some((n) => String(out.name).toLowerCase().includes(n.toLowerCase()));
+    if (c.inDatabase) checks.database_values = out.nutritionSource === 'database';
+  }
+  return checks;
+}
+
 const suites = {
   meals: [cases.meals, (c, trace) => planMeals({ fridge: toFridge(c.fridge), profile: c.profile, neededTypes: c.neededTypes, trace }), gradeMeals],
   food: [cases.outsideFood, (c, trace) => analyzeOutsideFood({ text: c.text, trace }), gradeFood],
   workouts: [cases.workouts, (c, trace) => suggestWorkouts({ profile: c.profile, recentWorkouts: c.recent, filterType: c.filterType, trace }), gradeWorkouts],
+  scan: [scanCases, (c, trace) => scanIngredient({ image: cleanImage(readFileSync(here(`./images/${c.file}`)).toString('base64')), trace }), gradeScan],
 };
 
 const results = [];
 for (const [suite, [list, run, grade]] of Object.entries(suites)) {
   if (only && only !== suite) continue;
+  if (!list.length) {
+    if (only === suite) console.log(`No ${suite} cases yet (see eval/images/README.md).`);
+    continue;
+  }
   // Run a suite's cases in parallel; they are independent.
   const rows = await Promise.all(
     list.map(async (c) => {
@@ -89,6 +106,11 @@ for (const [suite, [list, run, grade]] of Object.entries(suites)) {
     }),
   );
   results.push(...rows);
+}
+
+if (!results.length) {
+  console.log('Nothing ran; results files left unchanged.');
+  process.exit(0);
 }
 
 const passed = results.filter((r) => r.pass).length;

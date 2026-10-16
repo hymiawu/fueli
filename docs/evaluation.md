@@ -56,7 +56,7 @@ In the final gpt-4o run, the verifier **corrected** the model's calories in 3 of
 
 ## Known limitations of this evaluation
 - 17 cases is a smoke-test-sized suite. The results show the pipeline works on representative and adversarial inputs, not statistical accuracy.
-- Vision (ingredient scan, food photos) has no automated cases yet, because it needs a labeled image set. *Next step:* 20 photos with ground-truth labels.
+- Vision (ingredient scan) has no labeled photos yet. The `scan` suite is ready in `eval/run.js` (it checks food detection, name match and database grounding) and runs as soon as photos are listed in `eval/images/cases.json`; see [eval/images/README.md](../eval/images/README.md). A probe with a plain gray image confirmed the path end to end (`isFood: false`).
 - Diet compliance is checked by keyword lists. A dish like "Caesar salad" (anchovies in the dressing) would slip past both the guard and the eval.
 - In the final runs the model never produced a diet violation, so the Safety Guard's **repair path** is covered by `server/test/repair.test.js` instead: with a mocked model, a vegetarian draft containing chicken is repaired once (the tofu fix is kept and `diet_repair` is flagged), and a repair that still contains chicken is held back in `blocked`.
 - Outside-food calorie ranges come from published chain nutrition and typical servings. Real portions vary widely.
