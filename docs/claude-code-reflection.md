@@ -43,8 +43,8 @@ These are read-only by design: they produce findings, and a human (or the main s
 ## Division of work
 | Teammate | Contributions |
 |---|---|
-| [Name] | [What they did] |
-| [Name] | [What they did] |
-| [Name] | [What they did] |
-| [Name] | [What they did] |
-| [Name] | [What they did] |
+| Rou Sun | [What they did] |
+| Hsinyen Wu | [What they did] |
+| Yiuhon (Jeremy) Lee | [What they did] |
+| Thanapol (Neil) Doungsaeng | [What they did] |
+| Emmet Andrews | [What they did] |

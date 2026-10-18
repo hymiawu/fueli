@@ -1,6 +1,6 @@
 # Fueli: an AI meal and workout planner that cooks from your fridge
 
-**Team:** [Team member names] · **Live app:** https://fueli.vercel.app · **Repository:** https://github.com/hymiawu/fueli
+**Team:** Rou Sun, Hsinyen Wu, Yiuhon (Jeremy) Lee, Thanapol (Neil) Doungsaeng, Emmet Andrews · **Live app:** https://fueli.vercel.app · **Repository:** https://github.com/hymiawu/fueli
 
 ## 1. Problem and target user
 
@@ -105,6 +105,6 @@ The app is live at https://fueli.vercel.app, and the API reports its health at h
 
 ## 8. Team and use of AI tools
 
-[Who did what: one sentence per teammate.]
+Team: Rou Sun, Hsinyen Wu, Yiuhon (Jeremy) Lee, Thanapol (Neil) Doungsaeng, Emmet Andrews. [Who did what: one sentence per teammate.]
 
 We built Fueli with Claude Code. It re-architected the original app, which called OpenAI directly from the client with a hardcoded key, into the Vercel and Fly.io split; wrote the evaluation suite before we tuned prompts; and drafted documentation. Two shared Claude Code skills (`run-evals`, `deploy-fueli`) and two read-only review agents (`nutrition-auditor`, `safety-reviewer`) live in the repo. The product decisions and reviews were ours, and every change went through a pull request.
