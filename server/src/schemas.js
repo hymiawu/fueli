@@ -73,6 +73,10 @@ export const WorkoutPlan = z.object({ workouts: z.array(Workout).min(1).max(3) }
 export const MealRequest = z.object({
   neededTypes: z.array(z.enum(['Breakfast', 'Lunch', 'Dinner'])).min(1).max(3).default(['Breakfast', 'Lunch', 'Dinner']),
   servings: z.number().int().min(1).max(8).default(1),
+  // Meal mode (handoff 6.2): the client's selected card. Defaults to Feeling hungry.
+  mode: z.enum(['hungry', 'healthy', 'cleanOut']).default('hungry'),
+  // The user's local date, so "expires within 3 days" matches their calendar.
+  today: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
 });
 export const WorkoutRequest = z.object({
   filterType: z.enum(['Strength', 'Cardio', 'HIIT', 'Flexibility']).nullable().optional(),

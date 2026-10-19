@@ -84,7 +84,7 @@ app.post(
   '/v1/meals/suggest',
   ...ai('meals', MealRequest, async (req, body, trace) => {
     const fridge = await loadFridge(req);
-    return planMeals({ fridge, profile: req.user.user_metadata || {}, neededTypes: body.neededTypes, servings: body.servings, trace });
+    return planMeals({ fridge, profile: req.user.user_metadata || {}, neededTypes: body.neededTypes, servings: body.servings, mode: body.mode, today: body.today, trace });
   }),
 );
 
