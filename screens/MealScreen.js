@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, TouchableOpacity, ScrollView, Modal,
   StyleSheet, ActivityIndicator, TextInput,
@@ -12,6 +12,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '../lib/supabase';
 import { getMealSuggestions, analyzeOutsideFood, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
+import { planCooked, deductionRecord, summaryText } from '../lib/cooking';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -30,7 +31,14 @@ const buildDays = () => {
   return days;
 };
 
-const norm = (s) => s.toLowerCase().trim().replace(/ies$/, 'y').replace(/es$/, '').replace(/s$/, '');
+// Meal modes (handoff 6.2.2, D-40). Keys match the API; strings are Sara's.
+const MODES = [
+  { key: 'hungry', title: 'Feeling hungry', helper: 'From my fridge to the table in 20 minutes.' },
+  { key: 'healthy', title: 'Feeling healthy', helper: 'Build a plate around my fitness goals.' },
+  { key: 'cleanOut', title: 'Clean out my fridge', helper: 'Save my food before it expires.' },
+];
+const MODE_TITLES = Object.fromEntries(MODES.map(m => [m.key, m.title]));
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 const parseIngredientStr = (str) => {
   const m1 = str.match(/^(.+?)\s*\((\d+(?:\.\d+)?)\s*(g|ml|kg|l|piece|pieces|cup|cups|tbsp|tsp)\s*\)$/i);
@@ -42,17 +50,6 @@ const parseIngredientStr = (str) => {
   return null;
 };
 
-const findFridgeMatch = (fridgeItems, ingName) => {
-  const normIng = norm(ingName);
-  const words = normIng.split(/\s+/).filter(w => w.length > 2);
-  return fridgeItems.find(item => {
-    const normF = norm(item.name);
-    if (normF === normIng) return true;
-    if (normF.includes(normIng) || normIng.includes(normF)) return true;
-    return words.some(w => normF.includes(w) || norm(item.name).includes(w));
-  });
-};
-
 const getIngredientList = (meal) => {
   if (meal.structuredIngredients && meal.structuredIngredients.length > 0) {
     return meal.structuredIngredients.filter(i => i.quantity > 0);
@@ -60,104 +57,63 @@ const getIngredientList = (meal) => {
   return (meal.ingredients || []).map(parseIngredientStr).filter(Boolean);
 };
 
-const deductFridgeIngredients = async (meal) => {
-  const ingList = getIngredientList(meal);
-  if (ingList.length === 0) return [];
-
+const loadFridgeRows = async () => {
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return [];
-
-  const { data: fridgeItems, error } = await supabase
-    .from('ingredients').select('*').eq('user_id', user.id);
-  if (error || !fridgeItems) return [];
-
-  const deducted = [];
-  const toDelete = [];
-  const toUpdate = [];
-
-  for (const ing of ingList) {
-    const match = findFridgeMatch(fridgeItems, ing.name);
-    if (!match) continue;
-
-    const fridgeQty = parseFloat(match.quantity) || 0;
-    const ingQty = parseFloat(ing.quantity) || 0;
-    if (ingQty <= 0 || fridgeQty <= 0) continue;
-
-    const newQty = Math.round((fridgeQty - ingQty) * 10) / 10;
-    deducted.push({
-      fridgeId: match.id,
-      fridgeName: match.name,
-      name: match.name,
-      used: ingQty,
-      unit: ing.unit || match.unit || '',
-      remaining: Math.max(0, newQty),
-      wasDeleted: newQty <= 0,
-      originalQty: fridgeQty,
-      originalItem: { ...match },
-    });
-
-    if (newQty <= 0) {
-      toDelete.push(match.id);
-    } else {
-      toUpdate.push({ id: match.id, quantity: String(newQty) });
-    }
-  }
-
-  for (const id of toDelete) {
-    await supabase.from('ingredients').delete().eq('id', id);
-  }
-  for (const item of toUpdate) {
-    await supabase.from('ingredients').update({ quantity: item.quantity }).eq('id', item.id);
-  }
-
-  const { data: refreshed } = await supabase
-    .from('ingredients').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-  if (refreshed) await setUserItem('ingredients', JSON.stringify(refreshed));
-
-  return deducted;
+  if (!user) throw new Error('Please sign in again.');
+  const { data, error } = await supabase.from('ingredients').select('*').eq('user_id', user.id);
+  if (error) throw error;
+  return data || [];
 };
 
-// Restore ingredients when unchecking a cooked meal
-const restoreFridgeIngredients = async (deductedIngredients) => {
-  if (!deductedIngredients || deductedIngredients.length === 0) return;
+const refreshFridgeCache = async () => {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase.from('ingredients').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+    if (data) await setUserItem('ingredients', JSON.stringify(data));
+  } catch (e) {}
+};
 
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
-
-  const { data: fridgeItems } = await supabase
-    .from('ingredients').select('*').eq('user_id', user.id);
-  if (!fridgeItems) return;
-
-  for (const d of deductedIngredients) {
-    if (d.wasDeleted) {
-      // Item was fully consumed — re-insert it with original quantity
-      const orig = d.originalItem;
-      await supabase.from('ingredients').insert({
-        id: `restored-${Date.now()}-${Math.random().toString(36).slice(2)}`,
-        user_id: user.id,
-        name: orig.name,
-        quantity: String(d.originalQty),
-        unit: orig.unit || d.unit || '',
-        category: orig.category || 'Other',
-        expiry: orig.expiry || null,
-        calories: orig.calories || null,
-        protein: orig.protein || null,
-        carbs: orig.carbs || null,
-        fat: orig.fat || null,
-      });
-    } else {
-      // Item still exists — add back the used amount
-      const current = fridgeItems.find(f => f.id === d.fridgeId);
-      if (current) {
-        const restoredQty = Math.round((parseFloat(current.quantity) + d.used) * 10) / 10;
-        await supabase.from('ingredients').update({ quantity: String(restoredQty) }).eq('id', d.fridgeId);
-      }
+// Runs writes in order. The browser's Supabase client has no transactions, so on the first failed write the
+// writes already made are undone in reverse and the error is rethrown (D-42).
+const runWrites = async (writes) => {
+  const done = [];
+  try {
+    for (const w of writes) {
+      const { error } = await w.run();
+      if (error) throw error;
+      done.push(w);
     }
+  } catch (e) {
+    for (const w of done.reverse()) { try { await w.revert(); } catch (_) {} }
+    throw e;
   }
+};
 
-  const { data: refreshed } = await supabase
-    .from('ingredients').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-  if (refreshed) await setUserItem('ingredients', JSON.stringify(refreshed));
+// Cooked: subtract the recipe from the fridge, only within a unit family; a row that reaches zero is deleted.
+const cookMeal = async (meal) => {
+  const { ops, summary } = planCooked(getIngredientList(meal), await loadFridgeRows());
+  await runWrites(ops.map(op => op.type === 'delete'
+    ? { run: () => supabase.from('ingredients').delete().eq('id', op.row.id), revert: () => supabase.from('ingredients').insert(op.row) }
+    : { run: () => supabase.from('ingredients').update({ quantity: String(op.quantity) }).eq('id', op.row.id),
+        revert: () => supabase.from('ingredients').update({ quantity: op.row.quantity }).eq('id', op.row.id) }));
+  return { records: ops.map(deductionRecord), summary };
+};
+
+// Undo Cooked: put back exactly what was taken. A deleted row comes back with its original id, created_at and
+// every column (serving size, allergens, ...), so it keeps its place under Newest and the date filters.
+const uncookMeal = async (records) => {
+  const rows = await loadFridgeRows();
+  await runWrites(records.map(d => {
+    const current = rows.find(r => r.id === d.fridgeId);
+    if (d.wasDeleted || !current) {
+      const row = { ...d.originalItem, quantity: String(d.wasDeleted ? d.originalQty : d.used) };
+      return { run: () => supabase.from('ingredients').insert(row), revert: () => supabase.from('ingredients').delete().eq('id', row.id) };
+    }
+    const restored = Math.round((parseFloat(current.quantity) + d.used) * 10) / 10;
+    return { run: () => supabase.from('ingredients').update({ quantity: String(restored) }).eq('id', d.fridgeId),
+             revert: () => supabase.from('ingredients').update({ quantity: current.quantity }).eq('id', d.fridgeId) };
+  }));
 };
 
 export default function MealScreen() {
@@ -174,6 +130,9 @@ export default function MealScreen() {
   const [outsideImageBase64, setOutsideImageBase64] = useState(null);
   const [outsideLoading, setOutsideLoading] = useState(false);
   const [outsideResult, setOutsideResult] = useState(null);
+  // selectedMode drives the next request only; each meal keeps the mode it was generated with (6.2.2).
+  const [selectedMode, setSelectedMode] = useState('hungry');
+  const busyMeal = useRef(null); // ignores a second tap while Cooked or undo is running
   const days = buildDays();
 
   useEffect(() => { loadMealPlans(); }, []);
@@ -181,6 +140,11 @@ export default function MealScreen() {
   const loadMealPlans = async () => {
     try { const s = await getUserItem('mealPlans'); if (s) setMealPlans(JSON.parse(s)); } catch(e) {}
     try { const n = Number(await getUserItem('mealServings')); if (n >= 1 && n <= SERVING_OPTIONS.length) setServings(n); } catch(e) {}
+    try { const m = await getUserItem('mealMode'); if (MODE_TITLES[m]) setSelectedMode(m); } catch(e) {}
+  };
+  const chooseMode = async (m) => {
+    setSelectedMode(m);
+    try { await setUserItem('mealMode', m); } catch(e) {}
   };
   const chooseServings = async (n) => {
     setServings(n);
@@ -191,7 +155,8 @@ export default function MealScreen() {
     try { await setUserItem('mealPlans', JSON.stringify(plans)); } catch(e) {}
   };
 
-  const getSuggestions = async () => {
+  const getSuggestions = async (mode = selectedMode) => {
+    if (loading) return;
     const current = mealPlans[selectedDate] || [];
     const cookedMeals = current.filter(m => m.cooked);
     const cookedTypes = cookedMeals.map(m => m.type);
@@ -199,69 +164,61 @@ export default function MealScreen() {
     if (neededTypes.length === 0) { Alert.alert('All done! 🎉','You cooked all meals today.'); return; }
     setLoading(true); setExpandedMeal(null);
     try {
-      const { meals: suggestions, blocked } = await getMealSuggestions(neededTypes, servings);
+      const res = await getMealSuggestions(neededTypes, servings, mode);
+      const { meals: suggestions, blocked } = res;
       if (blocked?.length) Alert.alert('Some meals were held back', blocked.map(b => `• ${b.type}: ${b.reason}`).join('\n'));
-      const newMeals = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, cooked:false, planned:false, deductedIngredients:[] }));
+      const generatedMode = res.mode || mode;
+      const newMeals = suggestions.map(s => ({ ...s, generatedMode, modeNote: res.modeNote || null, id:`${Date.now()}-${Math.random()}`, cooked:false, planned:false, deductedIngredients:[] }));
       const combined = ALL_MEAL_TYPES.map(type => {
         const cooked = cookedMeals.find(m => m.type === type);
         return cooked || newMeals.find(m => m.type === type);
       }).filter(Boolean);
       await saveMealPlans({ ...mealPlans, [selectedDate]: combined });
-    } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get suggestions. Please try again.'); }
+    } catch(e) {
+      if (handleSubscriptionLapse(e, navigation)) { /* sent back to the paywall */ }
+      // The daily cap says when it resets; retrying now would not help.
+      else if (e.status === 429) Alert.alert('Try again later', e.message);
+      else Alert.alert('Could not refresh', 'We could not refresh your meals. Your current plan is still available.', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Try again', onPress: () => getSuggestions(mode) },
+      ]);
+    }
     setLoading(false);
   };
 
   const toggleCooked = async (mealId) => {
+    if (busyMeal.current) return;
     const dayMeals = mealPlans[selectedDate] || [];
     const meal = dayMeals.find(m => m.id === mealId);
     if (!meal) return;
-    const wasCooked = meal.cooked;
 
-    if (!wasCooked && meal.type !== 'Outside') {
-      // Marking as COOKED → deduct ingredients
-      try {
-        const deducted = await deductFridgeIngredients(meal);
-        const updated = dayMeals.map(m =>
-          m.id === mealId ? { ...m, cooked: true, deductedIngredients: deducted } : m
-        );
-        await saveMealPlans({ ...mealPlans, [selectedDate]: updated });
-
-        if (deducted.length > 0) {
-          const summary = deducted.map(d =>
-            d.remaining > 0
-              ? `• ${d.name}: used ${d.used}${d.unit} → ${d.remaining}${d.unit} left`
-              : `• ${d.name}: fully used up 🗑️`
-          ).join('\n');
-          Alert.alert('🧊 Fridge Updated', summary);
-        } else {
-          Alert.alert('🧊 Fridge', 'No matching fridge ingredients found to deduct.');
-        }
-      } catch(e) {
-        Alert.alert('Error', 'Could not update fridge: ' + e.message);
-      }
-
-    } else if (wasCooked && meal.type !== 'Outside') {
-      // Marking as UNCOOKED → restore ingredients
-      try {
-        const deducted = meal.deductedIngredients || [];
-        await restoreFridgeIngredients(deducted);
-        const updated = dayMeals.map(m =>
-          m.id === mealId ? { ...m, cooked: false, deductedIngredients: [] } : m
-        );
-        await saveMealPlans({ ...mealPlans, [selectedDate]: updated });
-
-        if (deducted.length > 0) {
-          const summary = deducted.map(d => `• ${d.name}: +${d.used}${d.unit} restored`).join('\n');
-          Alert.alert('🧊 Fridge Restored', summary);
-        }
-      } catch(e) {
-        Alert.alert('Error', 'Could not restore fridge: ' + e.message);
-      }
-
-    } else {
+    if (meal.type === 'Outside') {
       // Outside food — just toggle
       const updated = dayMeals.map(m => m.id === mealId ? { ...m, cooked: !m.cooked } : m);
       await saveMealPlans({ ...mealPlans, [selectedDate]: updated });
+      return;
+    }
+
+    busyMeal.current = mealId;
+    try {
+      if (!meal.cooked) {
+        // The meal is marked Cooked only after every fridge write succeeded.
+        const { records, summary } = await cookMeal(meal);
+        const updated = dayMeals.map(m => m.id === mealId ? { ...m, cooked: true, deductedIngredients: records } : m);
+        await saveMealPlans({ ...mealPlans, [selectedDate]: updated });
+        Alert.alert('🧊 Fridge Updated', summaryText(summary));
+      } else {
+        const records = meal.deductedIngredients || [];
+        await uncookMeal(records);
+        const updated = dayMeals.map(m => m.id === mealId ? { ...m, cooked: false, deductedIngredients: [] } : m);
+        await saveMealPlans({ ...mealPlans, [selectedDate]: updated });
+        if (records.length > 0) Alert.alert('🧊 Fridge Restored', records.map(d => `• ${d.name}: +${d.used} ${d.unit}`.trimEnd()).join('\n'));
+      }
+    } catch (e) {
+      Alert.alert('Error', `Could not ${meal.cooked ? 'restore' : 'update'} the fridge, so nothing was changed. ${e.message || ''}`.trim());
+    } finally {
+      await refreshFridgeCache();
+      busyMeal.current = null;
     }
   };
 
@@ -317,6 +274,7 @@ export default function MealScreen() {
   const cookedCount = selectedMeals.filter(m => m.cooked).length;
   const homeMeals = selectedMeals.filter(m => m.type !== 'Outside');
   const outsideMeals = selectedMeals.filter(m => m.type === 'Outside');
+  const canPlan = ALL_MEAL_TYPES.some(t => !homeMeals.some(m => m.type === t && m.cooked));
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -363,14 +321,37 @@ export default function MealScreen() {
             </TouchableOpacity>
           ))}
         </View>
+        {canPlan && (
+          <View style={styles.modeSection} accessibilityRole="radiogroup">
+            <Text style={styles.modeHeading}>Choose how to plan</Text>
+            {MODES.map(m => {
+              const selected = selectedMode === m.key;
+              return (
+                <TouchableOpacity key={m.key}
+                  style={[styles.modeCard, selected && styles.modeCardSelected, loading && styles.modeCardDisabled]}
+                  onPress={() => chooseMode(m.key)} disabled={loading}
+                  accessibilityRole="radio" accessibilityState={{ selected, disabled: loading }}
+                  accessibilityLabel={`${m.title}. ${m.helper}`}>
+                  <View style={[styles.radio, selected && styles.radioSelected]}>{selected && <View style={styles.radioDot} />}</View>
+                  <View style={{ flex:1 }}>
+                    <Text style={[styles.modeTitle, selected && styles.modeTitleSelected]}>{m.title}</Text>
+                    <Text style={styles.modeHelper}>{m.helper}</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+            <TouchableOpacity style={[styles.suggestBtn, { alignSelf:'center', marginTop:6 }, loading && {opacity:0.7}]} onPress={() => getSuggestions()} disabled={loading}>
+              <Text style={styles.suggestBtnText}>
+                {loading ? 'Planning your meals…' : selectedMeals.length === 0 ? '✨  Get AI Suggestions' : '↻  Refresh My Meals'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
         {selectedMeals.length === 0 ? (
           <View style={styles.empty}>
             <Text style={styles.emptyIcon}>🍽️</Text>
             <Text style={styles.emptyTitle}>No meals planned</Text>
             <Text style={styles.emptySubtitle}>Get AI suggestions based on your fridge ingredients and fitness goal.</Text>
-            <TouchableOpacity style={[styles.suggestBtn, loading && {opacity:0.7}]} onPress={getSuggestions} disabled={loading}>
-              {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.suggestBtnText}>✨  Get AI Suggestions</Text>}
-            </TouchableOpacity>
           </View>
         ) : (
           <>
@@ -401,12 +382,6 @@ export default function MealScreen() {
                   />
                 ))}
               </>
-            )}
-            {homeMeals.some(m => !m.cooked) && (
-              <TouchableOpacity style={[styles.refreshBtn, loading && {opacity:0.7}]} onPress={getSuggestions} disabled={loading}>
-                {loading ? <ActivityIndicator color="#0D9E8A" /> :
-                  <Text style={styles.refreshBtnText}>↻  Refresh My Meals</Text>}
-              </TouchableOpacity>
             )}
           </>
         )}
@@ -466,6 +441,13 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
   const isOutside = meal.type === 'Outside';
   // Meals saved before the API stopped sending this note still carry it; don't show it.
   const visibleWarnings = (meal.warnings || []).filter(w => !w.startsWith('Not in nutrition database'));
+  const toBuy = meal.modeEvidence?.toBuy ?? ((meal.missingIngredients?.length || 0) + (meal.shortIngredients?.length || 0));
+  const soonUsed = meal.modeEvidence?.soonUsed || [];
+  // The mode line comes from the checker's evidence on the response, never from another model call (6.2.2).
+  const modeLine = !meal.generatedMode || isOutside ? null
+    : meal.generatedMode === 'hungry' ? `Feeling hungry · ${meal.prepTime || '—'} · ${toBuy === 0 ? 'All ingredients in fridge' : `${plural(toBuy, 'item')} to buy`}`
+    : meal.generatedMode === 'healthy' ? `Feeling healthy · ${meal.calories} kcal · ${meal.protein} g protein · ${plural(toBuy, 'item')} to buy`
+    : `Clean out my fridge · Uses ${plural(soonUsed.length, 'soon-to-expire item')}`;
   return (
     <View style={[styles.card, meal.cooked && styles.cardCooked]}>
       <View style={styles.cardTop}>
@@ -478,11 +460,20 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
               <Text style={[styles.planBtnText, meal.planned && styles.planBtnTextActive]}>{meal.planned ? '🔖 Planned' : '+ Plan'}</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={[styles.checkBox, meal.cooked && styles.checkBoxDone]} onPress={onToggleCooked}>
-            {meal.cooked && <Text style={styles.checkMark}>✓</Text>}
+          <TouchableOpacity style={styles.cookedBtn} onPress={onToggleCooked}
+            accessibilityRole="checkbox" accessibilityState={{ checked: !!meal.cooked }}>
+            <View style={[styles.checkBox, meal.cooked && styles.checkBoxDone]}>
+              {meal.cooked && <Text style={styles.checkMark}>✓</Text>}
+            </View>
+            {!isOutside && <Text style={[styles.cookedLabel, meal.cooked && styles.cookedLabelDone]}>Cooked</Text>}
           </TouchableOpacity>
         </View>
       </View>
+      {modeLine && <Text style={styles.modeLine}>{modeLine}</Text>}
+      {meal.generatedMode === 'hungry' && toBuy > 0 && toBuy <= 2 && (
+        <Text style={styles.modeNote}>No complete meal under 20 minutes was available. This option needs {toBuy} additional ingredient{toBuy === 1 ? '' : 's'}.</Text>
+      )}
+      {meal.generatedMode === 'cleanOut' && meal.modeNote && <Text style={styles.modeNote}>{meal.modeNote}</Text>}
       <Text style={styles.mealName}>{meal.name}</Text>
       <Text style={styles.mealMeta}>⏱ {meal.prepTime || '—'}  ·  🔥 {meal.calories} kcal{meal.servings > 1 ? ` per person  ·  👥 Serves ${meal.servings}` : ''}</Text>
       {meal.macroSource && meal.macroSource !== 'estimated' && (
@@ -498,19 +489,23 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
           {visibleWarnings.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
         </View>
       )}
-      {meal.missingIngredients?.length > 0 && (
+      {(meal.missingIngredients?.length > 0 || meal.shortIngredients?.length > 0) && (
         <View style={styles.shoppingBox}>
           <Text style={styles.shoppingTitle}>🛒 Need to buy:</Text>
-          {meal.missingIngredients.map((item, i) => <Text key={i} style={styles.shoppingItem}>• {item}</Text>)}
+          {(meal.missingIngredients || []).map((item, i) => <Text key={i} style={styles.shoppingItem}>• {item}</Text>)}
+          {(meal.shortIngredients || []).map((item, i) => <Text key={`s${i}`} style={styles.shoppingItem}>• More {item}</Text>)}
         </View>
       )}
-      {meal.planned && (!meal.missingIngredients || meal.missingIngredients.length === 0) && (
+      {meal.planned && !meal.missingIngredients?.length && !meal.shortIngredients?.length && (
         <View style={[styles.shoppingBox, { backgroundColor:'#F0FAF8', borderColor:'#0D9E8A30' }]}>
           <Text style={[styles.shoppingTitle, { color:'#0D9E8A' }]}>✅ All ingredients in your fridge!</Text>
         </View>
       )}
       {expanded && !isOutside && (
         <View style={styles.recipeBox}>
+          {meal.generatedMode === 'cleanOut' && soonUsed.length > 0 && (
+            <Text style={styles.soonUsed}>Soon-to-expire items used: {soonUsed.join(', ')}</Text>
+          )}
           <Text style={styles.recipeSection}>📋 Ingredients</Text>
           {(meal.ingredients||[]).map((ing,i) => <Text key={i} style={styles.recipeItem}>• {ing}</Text>)}
           <Text style={[styles.recipeSection,{marginTop:14}]}>👨‍🍳 Instructions</Text>
@@ -587,6 +582,23 @@ const styles = StyleSheet.create({
   planBtnActive: { borderColor:'#0D9E8A', backgroundColor:'#F0FAF8' },
   planBtnText: { fontSize:12, color:'#999', fontWeight:'600' },
   planBtnTextActive: { color:'#0D9E8A' },
+  cookedBtn: { flexDirection:'row', alignItems:'center', gap:6, minHeight:44, paddingLeft:4 },
+  cookedLabel: { fontSize:12, color:'#999', fontWeight:'600' },
+  cookedLabelDone: { color:'#4CAF50' },
+  modeSection: { marginBottom:16 },
+  modeHeading: { fontSize:15, fontWeight:'700', color:'#1a1a1a', marginBottom:8 },
+  modeCard: { flexDirection:'row', alignItems:'center', gap:12, minHeight:44, borderWidth:1.5, borderColor:'#E0E0E0', backgroundColor:'#fff', borderRadius:14, paddingHorizontal:14, paddingVertical:10, marginBottom:8 },
+  modeCardSelected: { borderColor:'#0D9E8A', backgroundColor:'#F0FAF8' },
+  modeCardDisabled: { opacity:0.6 },
+  radio: { width:20, height:20, borderRadius:10, borderWidth:2, borderColor:'#BBB', alignItems:'center', justifyContent:'center' },
+  radioSelected: { borderColor:'#0D9E8A' },
+  radioDot: { width:10, height:10, borderRadius:5, backgroundColor:'#0D9E8A' },
+  modeTitle: { fontSize:15, fontWeight:'700', color:'#1a1a1a' },
+  modeTitleSelected: { color:'#0D9E8A' },
+  modeHelper: { fontSize:13, color:'#777', marginTop:2 },
+  modeLine: { fontSize:12, fontWeight:'700', color:'#0D9E8A', marginBottom:6 },
+  modeNote: { fontSize:12, color:'#8A6D00', backgroundColor:'#FFFBEA', borderRadius:8, padding:8, marginBottom:8 },
+  soonUsed: { fontSize:13, color:'#0D9E8A', fontWeight:'600', marginBottom:10 },
   checkBox: { width:28, height:28, borderRadius:14, borderWidth:2, borderColor:'#ddd', alignItems:'center', justifyContent:'center' },
   checkBoxDone: { backgroundColor:'#4CAF50', borderColor:'#4CAF50' },
   checkMark: { color:'#fff', fontSize:14, fontWeight:'800' },

@@ -7,8 +7,10 @@ import { MealPlan } from '../schemas.js';
 import { lookupNutritionTool } from '../tools/nutrition.js';
 import { summarizeFridge } from '../tools/fridge.js';
 import { asData, DATA_RULE, cleanText } from '../guard.js';
+import { ALLERGENS } from '../schemas.js';
 import { verifyMeal } from './nutritionVerifier.js';
 import { checkMeal } from './safetyGuard.js';
+import { checkModes, modeBlock, HELD_BACK } from './mealModes.js';
 
 const SYSTEM = `You are Fueli's meal planner. You plan home-cooked meals that use what is already in the user's fridge and fit their goal and diet.
 ${DATA_RULE}
@@ -16,6 +18,7 @@ Rules:
 - MAXIMIZE use of fridge ingredients; prefer items that expire soonest.
 - If the fridge is empty or too sparse, still plan complete meals from common groceries; list every ingredient with quantities.
 - Strictly respect the diet. Vegetarian: no meat or seafood. Vegan: no animal products at all.
+- Never use an ingredient that contains one of the profile's allergies, including fridge items whose allergens list it.
 - When the profile gives approxCaloriesPerMeal, aim each meal's per-serving calories near it.
 - Use the lookup_nutrition tool to get per-100g values for main ingredients, and base calories/macros on them.
 - structuredIngredients names must match fridge item names when the item comes from the fridge, using units g, ml, piece, cup or tbsp.
@@ -57,28 +60,41 @@ const profileView = (p) => ({
   goal: cleanText(p.goal || 'Eat Healthier', 40),
   diet: cleanText(p.diet || 'No Restriction', 40),
   activity: cleanText(p.activity || '', 40),
+  allergies: (Array.isArray(p.allergies) ? p.allergies : []).filter((a) => ALLERGENS.includes(a)),
   approxCaloriesPerMeal: mealCalorieTarget(p),
 });
 
+// Verifier, then the guard's diet and allergy rules (`ruleViolations`).
 function finalize(meals, fridge, profile, servings) {
   return meals.map((m) => {
     const verified = verifyMeal(m, fridge, servings);
-    const { violations, warnings } = checkMeal(verified, profile);
-    return { ...verified, violations, warnings: [...verified.warnings, ...warnings] };
+    const { violations, warnings } = checkMeal(verified, profile, fridge);
+    return { ...verified, ruleViolations: violations, warnings: [...verified.warnings, ...warnings] };
   });
 }
 
+// Mode checks run over the whole set of meals (Clean out counts across the day), then join the rule violations.
+function evaluate(meals, ctx) {
+  const { meals: checked, note } = checkModes(meals, ctx);
+  return { note, meals: checked.map((m) => ({ ...m, violations: [...m.ruleViolations, ...m.modeViolations] })) };
+}
+
+const utcToday = () => new Date().toISOString().slice(0, 10);
+
 // `deps` lets tests replace the model calls; production always uses the real ones.
-export async function planMeals({ fridge, profile, neededTypes, servings = 1, trace }, deps = { runAgent, jsonCompletion }) {
+// `mode` is one of MODES; without it (older callers, the original eval cases) no mode rules apply.
+export async function planMeals({ fridge, profile, neededTypes, servings = 1, mode = null, today = utcToday(), trace }, deps = { runAgent, jsonCompletion }) {
   const serves = `Each meal serves ${servings} ${servings === 1 ? 'person' : 'people'}.`;
   const p = profileView(profile);
+  const block = modeBlock(mode, fridge, today);
+  const ctx = { mode, profile: p, fridge, today, fullDay: neededTypes.length === 3 };
   const draft = await deps.runAgent({
     system: SYSTEM,
     messages: [
       {
         role: 'user',
         content: `Plan exactly ${neededTypes.length} meal(s), one for each of: ${neededTypes.join(', ')}. ${serves}
-${asData('profile', p)}
+${block ? `${block}\n` : ''}${asData('profile', p)}
 ${asData('fridge', summarizeFridge(fridge))}
 Call lookup_nutrition for the main ingredients, then return the final JSON.`,
       },
@@ -88,16 +104,16 @@ Call lookup_nutrition for the main ingredients, then return the final JSON.`,
     trace,
   });
 
-  let meals = finalize(draft.meals.filter((m) => neededTypes.includes(m.type)), fridge, p, servings);
+  let { meals, note } = evaluate(finalize(draft.meals.filter((m) => neededTypes.includes(m.type)), fridge, p, servings), ctx);
 
-  // One repair round for hard violations.
+  // One shared repair round for diet, allergy and mode problems (D-41).
   const bad = meals.filter((m) => m.violations.length);
   if (bad.length) {
-    trace?.flags.push('diet_repair');
+    trace?.flags.push(bad.some((m) => m.ruleViolations.length) ? 'diet_repair' : 'mode_repair');
     const repaired = await deps.jsonCompletion({
       system: SYSTEM,
       messages: [
-        { role: 'user', content: `${asData('profile', p)}\n${asData('fridge', summarizeFridge(fridge))}` },
+        { role: 'user', content: `${block ? `${block}\n` : ''}${asData('profile', p)}\n${asData('fridge', summarizeFridge(fridge))}` },
         {
           role: 'user',
           content: `These meals broke the rules and must be replaced with compliant meals of the same type:\n${bad
@@ -109,13 +125,18 @@ Call lookup_nutrition for the main ingredients, then return the final JSON.`,
       trace,
     });
     const fixed = finalize(repaired.meals, fridge, p, servings);
-    meals = meals.map((m) => (m.violations.length ? fixed.find((f) => f.type === m.type) ?? m : m));
+    const merged = meals.map((m) => (m.violations.length ? fixed.find((f) => f.type === m.type) ?? m : m));
+    ({ meals, note } = evaluate(merged, ctx));
   }
 
   const blocked = meals.filter((m) => m.violations.length);
   if (blocked.length) trace?.flags.push('blocked');
+  // Held back with the diet or allergy reason, or Sara's message for a mode rule (6.2.2).
+  const reason = (m) => [...m.ruleViolations, ...(m.modeViolations.length ? [HELD_BACK[mode]] : [])].join('; ');
   return {
-    meals: meals.filter((m) => !m.violations.length).map(({ violations, ...m }) => m),
-    blocked: blocked.map((m) => ({ type: m.type, reason: m.violations.join('; ') })),
+    mode,
+    modeNote: note,
+    meals: meals.filter((m) => !m.violations.length).map(({ violations, ruleViolations, modeViolations, ...m }) => m),
+    blocked: blocked.map((m) => ({ type: m.type, reason: reason(m) })),
   };
 }

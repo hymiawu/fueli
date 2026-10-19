@@ -6,6 +6,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
+import { toMetric } from '../lib/units';
+import { ALLERGENS } from '../lib/constants';
 
 const STEPS = ['Stats', 'Activity', 'Goal', 'Diet', 'Account'];
 
@@ -23,15 +25,23 @@ export default function OnboardingScreen({ navigation }) {
   const [step, setStep] = useState(0);
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
+  const [units, setUnits] = useState('metric');
+  const [feet, setFeet] = useState('');
+  const [inches, setInches] = useState('');
+  const [pounds, setPounds] = useState('');
   const [activity, setActivity] = useState('');
   const [goal, setGoal] = useState('');
   const [diet, setDiet] = useState('');
+  const [allergies, setAllergies] = useState([]);
+  const toggleAllergy = (a) => setAllergies(allergies.includes(a) ? allergies.filter((x) => x !== a) : [...allergies, a]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const canProceed = () => {
-    if (step === 0) return height.length > 0 && weight.length > 0;
+    if (step === 0) {
+      return units === 'imperial' ? feet.length > 0 && pounds.length > 0 : height.length > 0 && weight.length > 0;
+    }
     if (step === 1) return activity.length > 0;
     if (step === 2) return goal.length > 0;
     if (step === 3) return diet.length > 0;
@@ -40,6 +50,16 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   const handleNext = async () => {
+    if (step === 0) {
+      // Convert and validate here, so the stored values are always metric (handoff 6.4).
+      const m = toMetric({ units, heightCm: height, weightKg: weight, feet, inches, pounds });
+      if (m.error) {
+        Alert.alert('Check your stats', m.error);
+        return;
+      }
+      setHeight(m.height);
+      setWeight(m.weight);
+    }
     if (step < 4) {
       setStep(step + 1);
       return;
@@ -49,7 +69,7 @@ export default function OnboardingScreen({ navigation }) {
       email,
       password,
       options: {
-        data: { height, weight, activity, goal, diet },
+        data: { height, weight, units, activity, goal, diet, allergies },
       },
     });
     setLoading(false);
@@ -73,22 +93,68 @@ export default function OnboardingScreen({ navigation }) {
         return (
           <View>
             <Text style={styles.question}>What are your stats?</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Height (cm)"
-              placeholderTextColor="#aaa"
-              value={height}
-              onChangeText={setHeight}
-              keyboardType="numeric"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Weight (kg)"
-              placeholderTextColor="#aaa"
-              value={weight}
-              onChangeText={setWeight}
-              keyboardType="numeric"
-            />
+            <View style={styles.unitToggle}>
+              {[['metric', 'Metric'], ['imperial', 'Imperial']].map(([key, label]) => (
+                <TouchableOpacity
+                  key={key}
+                  style={[styles.unitBtn, units === key && styles.unitBtnSelected]}
+                  onPress={() => setUnits(key)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: units === key }}
+                >
+                  <Text style={[styles.unitText, units === key && styles.unitTextSelected]}>{label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            {units === 'metric' ? (
+              <>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Height (cm)"
+                  placeholderTextColor="#aaa"
+                  value={height}
+                  onChangeText={setHeight}
+                  keyboardType="numeric"
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Weight (kg)"
+                  placeholderTextColor="#aaa"
+                  value={weight}
+                  onChangeText={setWeight}
+                  keyboardType="numeric"
+                />
+              </>
+            ) : (
+              <>
+                <View style={styles.inputRow}>
+                  <TextInput
+                    style={[styles.input, styles.inputHalf]}
+                    placeholder="Height (ft)"
+                    placeholderTextColor="#aaa"
+                    value={feet}
+                    onChangeText={setFeet}
+                    keyboardType="numeric"
+                  />
+                  <TextInput
+                    style={[styles.input, styles.inputHalf]}
+                    placeholder="(in)"
+                    placeholderTextColor="#aaa"
+                    value={inches}
+                    onChangeText={setInches}
+                    keyboardType="numeric"
+                  />
+                </View>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Weight (lb)"
+                  placeholderTextColor="#aaa"
+                  value={pounds}
+                  onChangeText={setPounds}
+                  keyboardType="numeric"
+                />
+              </>
+            )}
           </View>
         );
       case 1:
@@ -143,6 +209,28 @@ export default function OnboardingScreen({ navigation }) {
                 </Text>
               </TouchableOpacity>
             ))}
+            <Text style={styles.subQuestion}>Any allergies?</Text>
+            <View style={styles.chipGroup}>
+              <TouchableOpacity
+                style={[styles.chip, allergies.length === 0 && styles.chipSelected]}
+                onPress={() => setAllergies([])}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: allergies.length === 0 }}
+              >
+                <Text style={[styles.chipText, allergies.length === 0 && styles.chipTextSelected]}>None</Text>
+              </TouchableOpacity>
+              {ALLERGENS.map((a) => (
+                <TouchableOpacity
+                  key={a}
+                  style={[styles.chip, allergies.includes(a) && styles.chipSelected]}
+                  onPress={() => toggleAllergy(a)}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: allergies.includes(a) }}
+                >
+                  <Text style={[styles.chipText, allergies.includes(a) && styles.chipTextSelected]}>{a}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         );
       case 4:
@@ -269,6 +357,26 @@ const styles = StyleSheet.create({
     color: '#1a1a1a',
     marginBottom: 16,
   },
+  inputRow: { flexDirection: 'row', gap: 12 },
+  inputHalf: { flex: 1 },
+  unitToggle: {
+    flexDirection: 'row',
+    borderWidth: 1.5,
+    borderColor: '#E0E0E0',
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 16,
+  },
+  unitBtn: { flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 9 },
+  unitBtnSelected: { backgroundColor: '#0D9E8A' },
+  unitText: { fontSize: 15, fontWeight: '600', color: '#555' },
+  unitTextSelected: { color: '#fff' },
+  subQuestion: { fontSize: 18, fontWeight: '700', color: '#1a1a1a', marginTop: 16, marginBottom: 12 },
+  chipGroup: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  chip: { borderWidth: 1.5, borderColor: '#E0E0E0', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8 },
+  chipSelected: { borderColor: '#0D9E8A', backgroundColor: '#F0FAF8' },
+  chipText: { fontSize: 14, color: '#555', fontWeight: '500' },
+  chipTextSelected: { color: '#0D9E8A', fontWeight: '700' },
   option: {
     borderWidth: 1.5,
     borderColor: '#E0E0E0',

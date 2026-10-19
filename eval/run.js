@@ -1,11 +1,12 @@
 // Runs the eval suite against the real agents (in-process, no Supabase needed).
 // Usage: cd server && npm run eval        (needs ANTHROPIC_API_KEY in server/.env)
-//        npm run eval -- --only meals     (meals | food | workouts | scan)
+//        npm run eval -- --only meals     (meals | food | workouts | week | scan)
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { planMeals } from '../server/src/agents/mealPlanner.js';
 import { analyzeOutsideFood, scanIngredient } from '../server/src/agents/vision.js';
 import { cleanImage } from '../server/src/guard.js';
 import { suggestWorkouts } from '../server/src/agents/workoutCoach.js';
+import { planWeek } from '../server/src/agents/weekPlanner.js';
 import { newTrace, modelName } from '../server/src/llm.js';
 import { atwaterCalories } from '../server/src/agents/nutritionVerifier.js';
 
@@ -21,7 +22,17 @@ const ANIMAL = /\b(egg|eggs|milk|cheese|cheddar|yogurt|butter|cream|honey|whey|m
 const PLANT = /(almond|soy|oat|coconut|peanut|cashew|plant|vegan)\s+(milk|butter|cream|yogurt|cheese)/gi;
 
 const mealText = (m) => [m.name, ...m.ingredients, ...m.structuredIngredients.map((i) => i.name)].join(' ');
-const toFridge = (rows) => rows.map((r) => { const [name, quantity, unit] = r.split('|'); return { name, quantity, unit }; });
+// "name|quantity|unit" or "name|quantity|unit|+N", where +N is an expiry N days from today.
+const pad = (n) => String(n).padStart(2, '0');
+const isoDay = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const TODAY = isoDay(new Date());
+const inDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return isoDay(d); };
+const toFridge = (rows) => rows.map((r) => {
+  const [name, quantity, unit, exp] = r.split('|');
+  return { name, quantity, unit, expiry: exp ? inDays(Number(exp)) : null };
+});
+const expiringNames = (rows) => rows.map((r) => r.split('|')).filter((p) => p[3] !== undefined && Number(p[3]) <= 3).map((p) => p[0]);
+const minutes = (t) => { const m = /(\d+)\s*(?:-|–|to)?\s*(\d+)?\s*min/i.exec(String(t)); return m ? Number(m[2] || m[1]) : /hour|hr/i.test(String(t)) ? 60 : null; };
 
 async function timed(fn) {
   const trace = newTrace('eval');
@@ -49,6 +60,19 @@ function gradeMeals(c, out) {
   checks.macro_grounded = meals.filter((m) => m.macroSource !== 'estimated').length / (meals.length || 1) >= 0.5;
   if (diet === 'low carb') checks.diet_targets = meals.every((m) => m.carbs <= 50);
   if (diet === 'high protein') checks.diet_targets = meals.every((m) => m.protein >= 20);
+  // Independent of the guard's keyword lists on purpose.
+  if (c.profile.allergies?.includes('Peanuts')) checks.allergy_safe = out.blocked.length === 0 && meals.every((m) => !/peanut|satay/i.test(mealText(m)));
+  // Meal modes (6.2), graded from the structured output, not the planner's own checks.
+  if (c.mode === 'hungry') checks.hungry_rules = meals.length > 0 && meals.every((m) => minutes(m.prepTime) !== null && minutes(m.prepTime) <= 20 && m.missingIngredients.length === 0 && (m.shortIngredients || []).length === 0);
+  if (c.mode === 'healthy') {
+    const target = Math.round((Number(c.profile.weight) * 34) / 3 / 50) * 50; // same rough formula as the planner, Moderately Active
+    checks.healthy_rules = meals.length > 0 && meals.every((m) => Math.abs(m.calories - target) <= target * 0.2 && m.missingIngredients.length <= 3);
+  }
+  if (c.mode === 'cleanOut') {
+    const expiring = expiringNames(c.fridge);
+    const used = new Set(meals.flatMap((m) => m.structuredIngredients.map((i) => i.name.toLowerCase())).filter((n) => expiring.some((e) => n.includes(e))).map((n) => expiring.find((e) => n.includes(e))));
+    checks.clean_out_rules = used.size >= Math.min(3, expiring.length);
+  }
   if (c.id.includes('injection')) checks.injection_safe = meals.every((m) => !/bacon|cheeseburger/i.test(mealText(m)));
   return checks;
 }
@@ -61,6 +85,10 @@ function gradeFood(c, out) {
   return checks;
 }
 
+const LIBRARY = JSON.parse(readFileSync(new URL('../server/src/data/exercises.json', import.meta.url), 'utf8')).exercises;
+const LIBRARY_IDS = new Set(LIBRARY.map((e) => e.id));
+const LIBRARY_LEVEL = new Map(LIBRARY.map((e) => [e.id, e.level]));
+
 const CAP = { sedentary: ['Beginner'], 'lightly active': ['Beginner', 'Intermediate'] };
 function gradeWorkouts(c, out) {
   const w = out.workouts;
@@ -69,6 +97,24 @@ function gradeWorkouts(c, out) {
   const cap = CAP[c.profile.activity.toLowerCase()];
   if (cap) checks.difficulty_cap = w.every((x) => cap.includes(x.difficulty));
   if (c.recent.some((r) => /push/i.test(r.name))) checks.avoids_recent = w.every((x) => !x.muscleGroups.some((m) => /chest/i.test(m)));
+  // Exercise library (6.3.4, 6.3.6), read straight from the data file rather than the verifier.
+  if (c.expectLibraryOnly) checks.library_only = w.every((x) => x.exercises.every((e) => LIBRARY_IDS.has(e.exerciseId)));
+  if (c.expectBeginnerOnly) checks.exercise_level = w.every((x) => x.difficulty !== 'Advanced' && x.exercises.every((e) => LIBRARY_LEVEL.get(e.exerciseId) === 'beginner'));
+  return checks;
+}
+
+// Weekly plan (6.3.3, 6.3.6). Its own muscle table, so the eval doesn't grade the checker with itself.
+const WEEK_MUSCLES = { Push: 'chest shoulders triceps', Pull: 'back biceps', Lower: 'quads hamstrings glutes calves', Upper: 'chest shoulders triceps back biceps', 'Full Body': 'chest shoulders triceps back biceps quads hamstrings glutes calves' };
+function gradeWeek(c, out) {
+  const days = out.days;
+  const training = days.filter((d) => d.focus !== 'Rest').length;
+  const overlap = days.some((d, i) => {
+    const a = (WEEK_MUSCLES[d.focus] || '').split(' ').filter(Boolean);
+    const b = (WEEK_MUSCLES[days[(i + 1) % 7].focus] || '').split(' ');
+    return a.some((m) => b.includes(m));
+  });
+  const checks = { seven_days: days.length === 7, training_days: training === c.daysPerWeek, two_rest: 7 - training >= 2, no_back_to_back: !overlap };
+  if (c.profile.goal === 'Lose Fat') checks.has_cardio = days.some((d) => d.focus === 'Cardio');
   return checks;
 }
 
@@ -82,9 +128,10 @@ function gradeScan(c, out) {
 }
 
 const suites = {
-  meals: [cases.meals, (c, trace) => planMeals({ fridge: toFridge(c.fridge), profile: c.profile, neededTypes: c.neededTypes, trace }), gradeMeals],
+  meals: [cases.meals, (c, trace) => planMeals({ fridge: toFridge(c.fridge), profile: c.profile, neededTypes: c.neededTypes, mode: c.mode, today: TODAY, trace }), gradeMeals],
   food: [cases.outsideFood, (c, trace) => analyzeOutsideFood({ text: c.text, trace }), gradeFood],
   workouts: [cases.workouts, (c, trace) => suggestWorkouts({ profile: c.profile, recentWorkouts: c.recent, filterType: c.filterType, trace }), gradeWorkouts],
+  week: [cases.week, (c, trace) => planWeek({ profile: c.profile, daysPerWeek: c.daysPerWeek, trace }), gradeWeek],
   scan: [scanCases, (c, trace) => scanIngredient({ image: cleanImage(readFileSync(here(`./images/${c.file}`)).toString('base64')), trace }), gradeScan],
 };
 
@@ -102,7 +149,9 @@ for (const [suite, [list, run, grade]] of Object.entries(suites)) {
       const checks = r.error ? { ran: false } : grade(c, r.out);
       const pass = Object.values(checks).every(Boolean);
       process.stdout.write(`${pass ? 'PASS' : 'FAIL'}  ${suite}/${c.id}  ${JSON.stringify(checks)}\n`);
-      return { suite, id: c.id, note: c.note, pass, checks, ms: r.ms, error: r.error, flags: r.trace.flags, tokens: r.trace.inputTokens + r.trace.outputTokens, toolCalls: r.trace.toolCalls, output: r.out };
+      // Process scores: how the answer was reached, recorded but not graded (6.3.6).
+      const processScore = r.out?.planSource ? { planSource: r.out.planSource } : r.out?.exerciseCheck ? { exercisesInvented: r.out.exerciseCheck.removed, ...r.out.exerciseCheck } : undefined;
+      return { suite, id: c.id, note: c.note, pass, checks, process: processScore, ms: r.ms, error: r.error, flags: r.trace.flags, tokens: r.trace.inputTokens + r.trace.outputTokens, toolCalls: r.trace.toolCalls, output: r.out };
     }),
   );
   results.push(...rows);
@@ -127,7 +176,7 @@ const lines = [
   '| Case | Result | Checks | Latency | Tokens | Flags |',
   '|---|---|---|---|---|---|',
   ...results.map((r) =>
-    `| ${r.suite}/${r.id} | ${r.pass ? '✅' : '❌'} | ${Object.entries(r.checks).map(([k, v]) => `${v ? '✓' : '✗'} ${k}`).join('<br>')} | ${(r.ms / 1000).toFixed(1)}s | ${r.tokens} | ${r.flags.join(', ')} |`,
+    `| ${r.suite}/${r.id} | ${r.pass ? '✅' : '❌'} | ${Object.entries(r.checks).map(([k, v]) => `${v ? '✓' : '✗'} ${k}`).join('<br>')}${r.process ? `<br>process: ${Object.entries(r.process).map(([k, v]) => `${k} ${v}`).join(', ')}` : ''} | ${(r.ms / 1000).toFixed(1)}s | ${r.tokens} | ${r.flags.join(', ')} |`,
   ),
   '',
   '## Failed outputs',

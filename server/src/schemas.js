@@ -3,6 +3,14 @@ import { z } from 'zod';
 const num = z.coerce.number().finite();
 const nonNeg = num.min(0);
 
+// The six allergens in the profile, on the scan form and in the Safety Guard (D-48).
+export const ALLERGENS = ['Peanuts', 'Tree nuts', 'Shellfish', 'Dairy', 'Eggs', 'Gluten'];
+// Keeps only known allergen names, matched case-insensitively; anything else is dropped, never an error.
+export const allergenList = z
+  .preprocess((v) => (typeof v === 'string' ? v.split(',') : v), z.array(z.any()))
+  .transform((arr) => [...new Set(arr.map((a) => ALLERGENS.find((k) => k.toLowerCase() === String(a).trim().toLowerCase())).filter(Boolean))])
+  .catch([]);
+
 export const IngredientScan = z.object({
   name: z.string().min(1).max(60),
   quantity: nonNeg.default(1),
@@ -13,6 +21,10 @@ export const IngredientScan = z.object({
   carbs: nonNeg.max(100),
   fat: nonNeg.max(100),
   isFood: z.boolean().default(true),
+  // From the package label when one is visible (handoff 6.1.1). A bad value is dropped, never fails the scan.
+  servingSize: z.coerce.number().finite().min(1).max(2000).optional().catch(undefined),
+  servingsPerContainer: z.coerce.number().finite().min(0.1).max(100).optional().catch(undefined),
+  allergens: allergenList.default([]),
 });
 
 export const OutsideFood = z.object({
@@ -57,18 +69,38 @@ export const Workout = z.object({
 });
 export const WorkoutPlan = z.object({ workouts: z.array(Workout).min(1).max(3) });
 
+// Weekly plan (handoff 6.3.3). Long text is cut rather than failing the plan.
+const FOCUS = ['Full Body', 'Upper', 'Push', 'Pull', 'Lower', 'Cardio', 'Flexibility', 'Rest'];
+export const WeekPlan = z.object({
+  summary: z.string().transform((s) => s.slice(0, 200)).catch(''),
+  days: z
+    .array(z.object({
+      day: z.enum(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
+      focus: z.enum(FOCUS),
+      note: z.string().transform((s) => s.slice(0, 120)).catch(''),
+    }))
+    .length(7),
+});
+
 // Request bodies
 export const MealRequest = z.object({
   neededTypes: z.array(z.enum(['Breakfast', 'Lunch', 'Dinner'])).min(1).max(3).default(['Breakfast', 'Lunch', 'Dinner']),
   servings: z.number().int().min(1).max(8).default(1),
+  // Meal mode (handoff 6.2): the client's selected card. Defaults to Feeling hungry.
+  mode: z.enum(['hungry', 'healthy', 'cleanOut']).default('hungry'),
+  // The user's local date, so "expires within 3 days" matches their calendar.
+  today: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
 });
 export const WorkoutRequest = z.object({
   filterType: z.enum(['Strength', 'Cardio', 'HIIT', 'Flexibility']).nullable().optional(),
+  // Today's focus from the weekly plan, if the user has one (6.3.3).
+  todayFocus: z.enum(FOCUS).optional(),
   recentWorkouts: z
     .array(z.object({ date: z.string().max(10), name: z.string().max(100), type: z.string().max(20) }))
     .max(14)
     .default([]),
 });
+export const WeekPlanRequest = z.object({ daysPerWeek: z.number().int().min(2).max(5).default(3) });
 export const ScanRequest = z.object({ image: z.string().min(100) });
 export const OutsideRequest = z.object({ text: z.string().max(300).optional(), image: z.string().optional() });
 export const CheckoutConfirm = z.object({ sessionId: z.string().regex(/^cs_(test|live)_[A-Za-z0-9]+$/) });

@@ -8,13 +8,55 @@ import { Alert } from '../lib/alert';
 import * as ImagePicker from 'expo-image-picker';
 import { analyzeIngredientImage, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
-import { CATEGORIES, UNITS } from '../lib/constants';
+import { CATEGORIES, UNITS, ALLERGENS, parseAllergens } from '../lib/constants';
+import { NUTRIENTS, VIEWS, toView, fromView, viewFactor } from '../lib/nutrition';
+import { EXPIRY_CHIPS, addDays, isValidExpiry } from '../lib/expiry';
 
+// A saved fridge row -> the form's state, for edit mode (handoff 6.1.4).
+const fromRow = (row) => ({
+  name: row.name || '',
+  quantity: String(row.quantity ?? ''),
+  unit: row.unit || 'piece',
+  category: row.category || 'Other',
+  expiry: row.expiry || '',
+  allergens: parseAllergens(row.allergens),
+  base: Object.fromEntries(NUTRIENTS.map((k) => [k, row[k] ?? ''])),
+  servingSize: row.serving_size || '',
+  servingsPerContainer: row.servings_per_container || '',
+});
 
 export default function ScanIngredientScreen({ navigation, route }) {
+  // With route.params.item the same form edits a saved row: photo area hidden, "Save changes" (D-37).
+  const editing = route.params?.item || null;
   const [image, setImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(() => (editing ? fromRow(editing) : null));
+  // Nutrition: `result.base` holds per-100 g values, unrounded. `fields` are the strings shown for `view`.
+  const initialView = editing && viewFactor('serving', editing.serving_size) !== null ? 'serving' : 'per100';
+  const [view, setView] = useState(initialView);
+  const [fields, setFields] = useState(() =>
+    (editing ? toView(fromRow(editing).base, initialView, editing.serving_size, editing.servings_per_container) : {}));
+
+  const showView = (next, r = result) => {
+    setView(next);
+    setFields(toView(r.base, next, r.servingSize, r.servingsPerContainer));
+  };
+
+  // Typing in any view writes back to the per-100 g base, so the other views follow (D-14).
+  const editNutrient = (key, value) => {
+    setFields({ ...fields, [key]: value });
+    const base = fromView(value, view, result.servingSize, result.servingsPerContainer);
+    setResult({ ...result, base: { ...result.base, [key]: value.trim() === '' ? '' : base === null ? result.base[key] : String(base) } });
+  };
+
+  // Serving size or count changed: the base stays, the shown numbers follow. A view that can no longer
+  // be computed falls back to per 100 g.
+  const editServing = (key, value) => {
+    const next = { ...result, [key]: value };
+    setResult(next);
+    const v = viewFactor(view, next.servingSize, next.servingsPerContainer) === null ? 'per100' : view;
+    showView(v, next);
+  };
 
   const pickImage = async (useCamera) => {
     const permFn = useCamera
@@ -53,16 +95,20 @@ export default function ScanIngredientScreen({ navigation, route }) {
         setAnalyzing(false);
         return;
       }
-      setResult({
+      const next = {
         name: data.name || '',
         quantity: String(data.quantity || '1'),
         unit: data.unit || 'piece',
         category: data.category || 'Other',
-        calories: String(data.calories || ''),
-        protein: String(data.protein || ''),
-        carbs: String(data.carbs || ''),
-        fat: String(data.fat || ''),
-      });
+        expiry: '',
+        allergens: parseAllergens(data.allergens),
+        base: Object.fromEntries(NUTRIENTS.map((k) => [k, data[k] === undefined || data[k] === null ? '' : String(data[k])])),
+        servingSize: data.servingSize ? String(data.servingSize) : '',
+        servingsPerContainer: data.servingsPerContainer ? String(data.servingsPerContainer) : (data.servingSize ? '1' : ''),
+      };
+      setResult(next);
+      // D-34: open on "Per serving" when the label gave a serving size.
+      showView(next.servingSize ? 'serving' : 'per100', next);
     } catch (e) {
       // The API's message says what went wrong (subscription, image too large, rate limit, ...).
       if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Analysis failed', e.message || 'Could not identify the ingredient. Please try again.');
@@ -70,25 +116,41 @@ export default function ScanIngredientScreen({ navigation, route }) {
     setAnalyzing(false);
   };
 
-  const handleSave = () => {
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    if (saving) return;
     if (!result?.name) {
       Alert.alert('Missing name', 'Please enter an ingredient name.');
       return;
     }
+    if (!isValidExpiry(result.expiry)) {
+      Alert.alert('Check the expiry date', 'Use the format YYYY-MM-DD, for example 2026-10-24, or leave it empty.');
+      return;
+    }
     const newIngredient = {
-      id: Date.now().toString(),
+      id: editing ? editing.id : Date.now().toString(),
       name: result.name,
       quantity: result.quantity,
       unit: result.unit,
       category: result.category,
-      expiry: '',
-      calories: result.calories,
-      protein: result.protein,
-      carbs: result.carbs,
-      fat: result.fat,
+      expiry: result.expiry.trim(),
+      // Stored per 100 g, unrounded, so a per-serving value the user typed comes back exactly.
+      calories: result.base.calories,
+      protein: result.base.protein,
+      carbs: result.base.carbs,
+      fat: result.base.fat,
+      serving_size: result.servingSize.trim() || null,
+      servings_per_container: result.servingsPerContainer.trim() || null,
+      allergens: result.allergens.length ? result.allergens.join(', ') : null,
     };
-    route.params?.onSave?.(newIngredient);
-    navigation.goBack();
+    // Wait for the write, so the fridge list already has the item when we go back (bug 9.2).
+    setSaving(true);
+    const ok = editing
+      ? await route.params?.onUpdate?.(newIngredient)
+      : await route.params?.onSave?.(newIngredient);
+    setSaving(false);
+    if (ok !== false) navigation.goBack();
   };
 
   return (
@@ -97,13 +159,13 @@ export default function ScanIngredientScreen({ navigation, route }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.back}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Scan Ingredient</Text>
+        <Text style={styles.headerTitle}>{editing ? 'Edit Ingredient' : 'Scan Ingredient'}</Text>
         <View style={{ width: 60 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        {/* Image preview */}
-        {image ? (
+        {/* Image preview and camera buttons (not in edit mode) */}
+        {editing ? null : image ? (
           <Image source={{ uri: image }} style={styles.preview} />
         ) : (
           <View style={styles.placeholder}>
@@ -112,7 +174,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
           </View>
         )}
 
-        {/* Camera buttons */}
+        {!editing && (
         <View style={styles.btnRow}>
           <TouchableOpacity style={styles.photoBtn} onPress={() => pickImage(true)}>
             <Text style={styles.photoBtnText}>📷  Camera</Text>
@@ -121,6 +183,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
             <Text style={styles.photoBtnText}>🖼️  Library</Text>
           </TouchableOpacity>
         </View>
+        )}
 
         {/* Analyzing indicator */}
         {analyzing && (
@@ -133,7 +196,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
         {/* Results */}
         {result && !analyzing && (
           <View style={styles.resultBox}>
-            <Text style={styles.sectionTitle}>✅ Ingredient Detected</Text>
+            {!editing && <Text style={styles.sectionTitle}>✅ Ingredient Detected</Text>}
 
             <Text style={styles.label}>Name</Text>
             <TextInput
@@ -185,7 +248,83 @@ export default function ScanIngredientScreen({ navigation, route }) {
               ))}
             </View>
 
-            <Text style={styles.sectionTitle}>Nutrition Facts (per 100g)</Text>
+            <Text style={styles.label}>Allergens on the label</Text>
+            <View style={styles.chipGroup}>
+              {ALLERGENS.map((a) => {
+                const on = result.allergens.includes(a);
+                return (
+                  <TouchableOpacity
+                    key={a}
+                    style={[styles.chip, on && styles.chipWarn]}
+                    onPress={() => setResult({ ...result, allergens: on ? result.allergens.filter((x) => x !== a) : [...result.allergens, a] })}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: on }}
+                  >
+                    <Text style={[styles.chipText, on && styles.chipWarnText]}>{a}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            <Text style={styles.label}>Expiry (optional)</Text>
+            <TextInput
+              style={styles.input}
+              value={result.expiry}
+              onChangeText={(v) => setResult({ ...result, expiry: v })}
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor="#aaa"
+              autoCapitalize="none"
+            />
+            <View style={[styles.chipGroup, { marginTop: -6 }]}>
+              {EXPIRY_CHIPS.map(({ label, days }) => (
+                <TouchableOpacity key={label} style={styles.chip} onPress={() => setResult({ ...result, expiry: addDays(days) })}>
+                  <Text style={styles.chipText}>{label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <Text style={styles.sectionTitle}>Nutrition Facts</Text>
+            <View style={styles.chipGroup}>
+              {VIEWS.map(({ key, label }) => {
+                const disabled = viewFactor(key, result.servingSize, result.servingsPerContainer) === null;
+                return (
+                  <TouchableOpacity
+                    key={key}
+                    style={[styles.chip, view === key && styles.chipSelected, disabled && styles.chipDisabled]}
+                    onPress={() => showView(key)}
+                    disabled={disabled}
+                    accessibilityState={{ selected: view === key, disabled }}
+                  >
+                    <Text style={[styles.chipText, view === key && styles.chipTextSelected]}>{label}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            <View style={styles.row}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Serving size (g or ml)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={result.servingSize}
+                  onChangeText={(v) => editServing('servingSize', v)}
+                  keyboardType="numeric"
+                  placeholder="e.g. 30"
+                  placeholderTextColor="#aaa"
+                />
+              </View>
+              <View style={{ flex: 1, marginLeft: 12 }}>
+                <Text style={styles.label}>Servings per package</Text>
+                <TextInput
+                  style={styles.input}
+                  value={result.servingsPerContainer}
+                  onChangeText={(v) => editServing('servingsPerContainer', v)}
+                  keyboardType="numeric"
+                  placeholder="e.g. 1"
+                  placeholderTextColor="#aaa"
+                />
+              </View>
+            </View>
+            {!result.servingSize.trim() ? <Text style={styles.hint}>Enter a serving size</Text> : null}
             <View style={styles.nutritionGrid}>
               {[
                 { key: 'calories', label: 'Calories (kcal)' },
@@ -197,16 +336,16 @@ export default function ScanIngredientScreen({ navigation, route }) {
                   <Text style={styles.label}>{label}</Text>
                   <TextInput
                     style={styles.input}
-                    value={result[key]}
-                    onChangeText={(v) => setResult({ ...result, [key]: v })}
+                    value={fields[key] ?? ''}
+                    onChangeText={(v) => editNutrient(key, v)}
                     keyboardType="numeric"
                   />
                 </View>
               ))}
             </View>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
-              <Text style={styles.saveBtnText}>Add to Fridge</Text>
+            <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.7 }]} onPress={handleSave} disabled={saving}>
+              {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>{editing ? 'Save changes' : 'Add to Fridge'}</Text>}
             </TouchableOpacity>
           </View>
         )}
@@ -278,6 +417,10 @@ const styles = StyleSheet.create({
   chipSelected: { borderColor: '#0D9E8A', backgroundColor: '#F0FAF8' },
   chipText: { fontSize: 13, color: '#555', fontWeight: '500' },
   chipTextSelected: { color: '#0D9E8A', fontWeight: '700' },
+  chipDisabled: { opacity: 0.4 },
+  chipWarn: { borderColor: '#E65100', backgroundColor: '#FFF3E0' },
+  chipWarnText: { color: '#E65100', fontWeight: '700' },
+  hint: { fontSize: 12, color: '#999', marginTop: -6, marginBottom: 12 },
   nutritionGrid: {
     flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 8,
   },

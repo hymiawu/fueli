@@ -3,6 +3,7 @@
 // but only this module writes it, using data fetched from Stripe or a signed Stripe webhook.
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { dailyUsage } from './rateLimit.js';
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -63,7 +64,7 @@ export async function getStatus(req) {
 // Status plus live renewal details from Stripe, for the Membership screen.
 export async function getMembership(req) {
   const row = await readStatus(req);
-  const out = { ...(await getStatus(req)), cancelAtPeriodEnd: false, periodEnd: null };
+  const out = { ...(await getStatus(req)), cancelAtPeriodEnd: false, periodEnd: null, dailyUsage: dailyUsage(req.user.id) };
   if (stripe && row?.stripe_subscription_id && out.status !== 'canceled') {
     const sub = await stripe.subscriptions.retrieve(row.stripe_subscription_id);
     out.cancelAtPeriodEnd = Boolean(sub.cancel_at_period_end || sub.cancel_at);

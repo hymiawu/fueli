@@ -34,6 +34,9 @@ export function verifyMeal(meal, fridge, servings = 1) {
   }
 
   out.missingIngredients = coverage.missing;
+  // Fridge items with less than the recipe needs, and ones whose units can't be compared (handoff 6.2).
+  out.shortIngredients = coverage.short;
+  out.unverifiedIngredients = coverage.unverified;
   out.fridgeUtilization = Math.round(coverage.utilization * 100) / 100;
   out.nutritionCoverage = Math.round(computed.coverage * 100) / 100;
   return out;
