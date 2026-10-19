@@ -53,6 +53,16 @@
     { "id": "W1-sedentary", "profile": { "goal": "Lose Fat", "activity": "Sedentary" }, "filterType": null, "recent": [] },
     { "id": "W2-strength-recent-chest", "profile": { "goal": "Build Muscle", "activity": "Very Active" }, "filterType": "Strength",
       "recent": [{ "date": "2026-10-13", "name": "Push Day", "type": "Strength" }] },
-    { "id": "W3-flexibility", "profile": { "goal": "Eat Healthier", "activity": "Lightly Active" }, "filterType": "Flexibility", "recent": [] }
+    { "id": "W3-flexibility", "profile": { "goal": "Eat Healthier", "activity": "Lightly Active" }, "filterType": "Flexibility", "recent": [] },
+    { "id": "W7-library-only", "note": "After the verifier every exercise is from the library; the number the model invented is the process score (handoff 6.3.6).",
+      "profile": { "goal": "Build Muscle", "activity": "Moderately Active" }, "filterType": null, "recent": [], "expectLibraryOnly": true },
+    { "id": "W8-sedentary-level", "note": "Sedentary is capped at Beginner: no intermediate or expert exercise, no Advanced workout (handoff 6.3.6).",
+      "profile": { "goal": "Lose Fat", "activity": "Sedentary" }, "filterType": null, "recent": [], "expectBeginnerOnly": true }
+  ],
+  "week": [
+    { "id": "W5-lose-fat-3", "note": "Exactly 3 training days, a Cardio day, no back-to-back muscles. planSource is the process score (handoff 6.3.6).",
+      "profile": { "goal": "Lose Fat", "activity": "Moderately Active" }, "daysPerWeek": 3 },
+    { "id": "W6-very-active-5", "note": "5 training days, 2 Rest, no back-to-back muscles (handoff 6.3.6).",
+      "profile": { "goal": "Build Muscle", "activity": "Very Active" }, "daysPerWeek": 5 }
   ]
 }

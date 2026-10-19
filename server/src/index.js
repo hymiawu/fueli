@@ -4,9 +4,10 @@ import { requireUser, loadFridge } from './auth.js';
 import { rateLimit, takeDaily, refundDaily } from './rateLimit.js';
 import { newTrace, modelName } from './llm.js';
 import { cleanImage } from './guard.js';
-import { MealRequest, WorkoutRequest, ScanRequest, OutsideRequest, CheckoutConfirm } from './schemas.js';
+import { MealRequest, WorkoutRequest, WeekPlanRequest, ScanRequest, OutsideRequest, CheckoutConfirm } from './schemas.js';
 import { planMeals } from './agents/mealPlanner.js';
 import { suggestWorkouts } from './agents/workoutCoach.js';
+import { planWeek } from './agents/weekPlanner.js';
 import { scanIngredient, analyzeOutsideFood } from './agents/vision.js';
 import { getStatus, getMembership, cancelMembership, setCancelAtPeriodEnd, requirePaid, createCheckout, confirmCheckout, handleWebhook } from './billing.js';
 
@@ -91,8 +92,14 @@ app.post(
 app.post(
   '/v1/workouts/suggest',
   ...ai('workouts', WorkoutRequest, (req, body, trace) =>
-    suggestWorkouts({ profile: req.user.user_metadata || {}, recentWorkouts: body.recentWorkouts, filterType: body.filterType ?? null, trace }),
+    suggestWorkouts({ profile: req.user.user_metadata || {}, recentWorkouts: body.recentWorkouts, filterType: body.filterType ?? null, todayFocus: body.todayFocus, trace }),
   ),
+);
+
+// Weekly plan (6.3.3). Counts in the workouts daily cap.
+app.post(
+  '/v1/workouts/plan',
+  ...ai('workout_plan', WeekPlanRequest, (req, body, trace) => planWeek({ profile: req.user.user_metadata || {}, daysPerWeek: body.daysPerWeek, trace }), 'workouts'),
 );
 
 app.post(

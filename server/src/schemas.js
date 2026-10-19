@@ -69,6 +69,19 @@ export const Workout = z.object({
 });
 export const WorkoutPlan = z.object({ workouts: z.array(Workout).min(1).max(3) });
 
+// Weekly plan (handoff 6.3.3). Long text is cut rather than failing the plan.
+const FOCUS = ['Full Body', 'Upper', 'Push', 'Pull', 'Lower', 'Cardio', 'Flexibility', 'Rest'];
+export const WeekPlan = z.object({
+  summary: z.string().transform((s) => s.slice(0, 200)).catch(''),
+  days: z
+    .array(z.object({
+      day: z.enum(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
+      focus: z.enum(FOCUS),
+      note: z.string().transform((s) => s.slice(0, 120)).catch(''),
+    }))
+    .length(7),
+});
+
 // Request bodies
 export const MealRequest = z.object({
   neededTypes: z.array(z.enum(['Breakfast', 'Lunch', 'Dinner'])).min(1).max(3).default(['Breakfast', 'Lunch', 'Dinner']),
@@ -80,11 +93,14 @@ export const MealRequest = z.object({
 });
 export const WorkoutRequest = z.object({
   filterType: z.enum(['Strength', 'Cardio', 'HIIT', 'Flexibility']).nullable().optional(),
+  // Today's focus from the weekly plan, if the user has one (6.3.3).
+  todayFocus: z.enum(FOCUS).optional(),
   recentWorkouts: z
     .array(z.object({ date: z.string().max(10), name: z.string().max(100), type: z.string().max(20) }))
     .max(14)
     .default([]),
 });
+export const WeekPlanRequest = z.object({ daysPerWeek: z.number().int().min(2).max(5).default(3) });
 export const ScanRequest = z.object({ image: z.string().min(100) });
 export const OutsideRequest = z.object({ text: z.string().max(300).optional(), image: z.string().optional() });
 export const CheckoutConfirm = z.object({ sessionId: z.string().regex(/^cs_(test|live)_[A-Za-z0-9]+$/) });

@@ -75,7 +75,7 @@ export function checkMeal(meal, profile = {}, fridge = []) {
   return { violations, warnings };
 }
 
-const MAX_DIFFICULTY = { sedentary: 'Beginner', 'lightly active': 'Intermediate' };
+export const MAX_DIFFICULTY = { sedentary: 'Beginner', 'lightly active': 'Intermediate' };
 const LEVEL = { Beginner: 0, Intermediate: 1, Advanced: 2 };
 
 export function checkWorkout(workout, profile = {}) {

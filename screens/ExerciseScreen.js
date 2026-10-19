@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView,
+  View, Text, TouchableOpacity, ScrollView, Modal, Image, TextInput,
   StyleSheet, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { useNavigation } from '@react-navigation/native';
 import { handleSubscriptionLapse } from '../lib/route';
 import { getUserItem, setUserItem } from '../lib/userStorage';
-import { getWorkoutSuggestions } from '../lib/api';
+import { getWorkoutSuggestions, planMyWeek } from '../lib/api';
+import { supabase } from '../lib/supabase';
+import { addSession, lastTimeText, firstNumber, KG_PER_LB } from '../lib/exerciseLog';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -20,6 +22,11 @@ const toDateStr = (d) => {
   return `${y}-${m}-${day}`;
 };
 const getTodayStr = () => toDateStr(new Date());
+// Monday of the week a date belongs to, as YYYY-MM-DD (weekly plan, 6.3.3).
+const mondayOf = (d) => { const m = new Date(d); m.setDate(m.getDate() - ((m.getDay() + 6) % 7)); return toDateStr(m); };
+const WEEK_DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const weekdayIndex = (d) => (d.getDay() + 6) % 7;
+
 const buildDays = () => {
   const days = [], base = new Date();
   base.setDate(base.getDate() - 3);
@@ -35,12 +42,50 @@ export default function ExerciseScreen() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState('All');
   const [expandedWorkout, setExpandedWorkout] = useState(null);
+  // Weekly plan (6.3.3), exercise detail (6.3.4) and reps/weight log (6.3.5)
+  const [weekPlan, setWeekPlan] = useState(null);
+  const [daysPerWeek, setDaysPerWeek] = useState(3);
+  const [planning, setPlanning] = useState(false);
+  const [weekOpen, setWeekOpen] = useState(false);
+  const [detail, setDetail] = useState(null); // { exercise, workout }
+  const [logFor, setLogFor] = useState(null); // exercise being logged
+  const [exerciseLog, setExerciseLog] = useState({});
+  const [units, setUnits] = useState('metric');
   const days = buildDays();
 
   useEffect(() => { loadWorkoutPlans(); }, []);
 
   const loadWorkoutPlans = async () => {
     try { const s = await getUserItem('workoutPlans'); if (s) setWorkoutPlans(JSON.parse(s)); } catch(e) {}
+    try { const w = await getUserItem('weekPlan'); if (w) setWeekPlan(JSON.parse(w)); } catch(e) {}
+    try { const l = await getUserItem('exerciseLog'); if (l) setExerciseLog(JSON.parse(l)); } catch(e) {}
+    try { const { data: { user } } = await supabase.auth.getUser(); if (user?.user_metadata?.units === 'imperial') setUnits('imperial'); } catch(e) {}
+  };
+
+  // A plan belongs to one Monday-to-Sunday week; "Plan my week" comes back when a new week starts.
+  const thisMonday = mondayOf(new Date());
+  const currentPlan = weekPlan?.weekStart === thisMonday ? weekPlan : null;
+  const focusOn = (dateStr) => {
+    if (!currentPlan || mondayOf(new Date(dateStr + 'T12:00:00')) !== currentPlan.weekStart) return undefined;
+    return currentPlan.days[weekdayIndex(new Date(dateStr + 'T12:00:00'))]?.focus;
+  };
+
+  const makeWeekPlan = async () => {
+    setPlanning(true);
+    try {
+      const plan = await planMyWeek(daysPerWeek);
+      const saved = { ...plan, weekStart: thisMonday, daysPerWeek };
+      setWeekPlan(saved);
+      setWeekOpen(false);
+      try { await setUserItem('weekPlan', JSON.stringify(saved)); } catch(e) {}
+    } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Could not plan your week', e.message || 'Please try again.'); }
+    setPlanning(false);
+  };
+
+  const saveLog = async (exerciseId, sets) => {
+    const next = addSession(exerciseLog, exerciseId, { date: todayStr, sets });
+    setExerciseLog(next);
+    try { await setUserItem('exerciseLog', JSON.stringify(next)); } catch(e) {}
   };
   const saveWorkoutPlans = async (plans) => {
     setWorkoutPlans(plans);
@@ -60,7 +105,7 @@ export default function ExerciseScreen() {
     try {
       const recentWorkouts = getAllRecentWorkouts();
       const filterType = filter === 'All' ? null : filter;
-      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType);
+      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate));
       const withIds = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, completed:false }));
       await saveWorkoutPlans({ ...workoutPlans, [selectedDate]: withIds });
     } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
@@ -86,6 +131,9 @@ export default function ExerciseScreen() {
         <Text style={styles.title}>Exercise</Text>
         <Text style={styles.monthYear}>{MONTH_NAMES[selectedDateObj.getMonth()]} {selectedDateObj.getFullYear()}</Text>
       </View>
+
+      <WeekCard plan={currentPlan} open={weekOpen} onToggle={() => setWeekOpen(!weekOpen)}
+        daysPerWeek={daysPerWeek} onDaysPerWeek={setDaysPerWeek} planning={planning} onPlan={makeWeekPlan} />
 
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.calendarScroll} contentContainerStyle={styles.calendarStrip}>
         {days.map(date => {
@@ -153,6 +201,9 @@ export default function ExerciseScreen() {
                   expanded={expandedWorkout === workout.id}
                   onToggleExpand={() => setExpandedWorkout(expandedWorkout === workout.id ? null : workout.id)}
                   onToggleCompleted={() => toggleCompleted(workout.id)}
+                  onOpenExercise={(ex) => setDetail({ exercise: ex, workout })}
+                  onLog={(ex) => setLogFor(ex)}
+                  lastTime={(ex) => (ex.exerciseId ? lastTimeText(exerciseLog[ex.exerciseId], units) : null)}
                 />
               ))
             )}
@@ -163,13 +214,161 @@ export default function ExerciseScreen() {
           </>
         )}
       </ScrollView>
+
+      {detail && <ExerciseDetail exercise={detail.exercise} onClose={() => setDetail(null)} />}
+      {logFor && (
+        <LogSheet exercise={logFor} units={units} onClose={() => setLogFor(null)}
+          onSave={async (sets) => { await saveLog(logFor.exerciseId, sets); setLogFor(null); }} />
+      )}
     </SafeAreaView>
   );
 }
 
-function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted }) {
+function WeekCard({ plan, open, onToggle, daysPerWeek, onDaysPerWeek, planning, onPlan }) {
+  if (!plan) {
+    return (
+      <View style={styles.weekCard}>
+        <Text style={styles.weekTitle}>Plan my week</Text>
+        <View style={styles.weekChips}>
+          <Text style={styles.weekLabel}>Days per week:</Text>
+          {[2, 3, 4, 5].map(n => (
+            <TouchableOpacity key={n} style={[styles.weekChip, daysPerWeek === n && styles.weekChipOn]} onPress={() => onDaysPerWeek(n)}
+              accessibilityRole="radio" accessibilityState={{ selected: daysPerWeek === n }}>
+              <Text style={[styles.weekChipText, daysPerWeek === n && styles.weekChipTextOn]}>{n}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <TouchableOpacity style={[styles.weekBtn, planning && { opacity:0.7 }]} onPress={onPlan} disabled={planning}>
+          {planning ? <ActivityIndicator color="#fff" /> : <Text style={styles.weekBtnText}>Plan my week</Text>}
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  const i = weekdayIndex(new Date());
+  const today = plan.days[i]?.focus;
+  const tomorrow = i < 6 ? plan.days[i + 1]?.focus : null;
+  return (
+    <View style={styles.weekCard}>
+      <TouchableOpacity onPress={onToggle} accessibilityState={{ expanded: open }}>
+        <Text style={styles.weekLabel}>This week</Text>
+        <Text style={styles.weekTitle}>Today: {today}{tomorrow ? ` · Tomorrow: ${tomorrow}` : ''}</Text>
+        <Text style={styles.weekTag}>✓ Checked against training rules</Text>
+      </TouchableOpacity>
+      {open && (
+        <View style={{ marginTop:8 }}>
+          {plan.days.map((d, k) => (
+            <View key={d.day} style={[styles.weekRow, k === i && styles.weekRowToday]}>
+              <Text style={styles.weekDay}>{d.day}</Text>
+              <View style={{ flex:1 }}>
+                <Text style={styles.weekFocus}>{d.focus}</Text>
+                {d.note ? <Text style={styles.weekNote}>{d.note}</Text> : null}
+              </View>
+            </View>
+          ))}
+          <TouchableOpacity onPress={onPlan} disabled={planning} style={{ marginTop:6 }}>
+            <Text style={styles.weekReplan}>{planning ? 'Planning…' : 'Re-plan'}</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+  );
+}
+
+// Detail laid out like Neil's app (6.3.4): photos alternate every second; a photo that fails to load is hidden.
+function ExerciseDetail({ exercise, onClose }) {
+  const [photo, setPhoto] = useState(0);
+  const [photoFailed, setPhotoFailed] = useState(false);
+  const images = exercise.images || [];
+  useEffect(() => {
+    if (images.length < 2) return undefined;
+    const t = setInterval(() => setPhoto(p => (p + 1) % images.length), 1000);
+    return () => clearInterval(t);
+  }, [images.length]);
+  const muscles = [...(exercise.primaryMuscles || []), ...(exercise.secondaryMuscles || [])];
+  return (
+    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalSheet}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>{exercise.name}</Text>
+            <TouchableOpacity onPress={onClose} accessibilityLabel="Close"><Text style={styles.modalClose}>✕</Text></TouchableOpacity>
+          </View>
+          <ScrollView>
+            {images.length > 0 && !photoFailed && (
+              <Image source={{ uri: images[photo] }} style={styles.exercisePhoto} resizeMode="cover"
+                onError={() => setPhotoFailed(true)} accessibilityLabel={`${exercise.name}, ${photo === 0 ? 'start' : 'end'} position`} />
+            )}
+            <View style={styles.muscleRow}>
+              {muscles.map((m, k) => (
+                <View key={k} style={[styles.muscleTag, k < (exercise.primaryMuscles || []).length && styles.muscleTagMain]}>
+                  <Text style={styles.muscleTagText}>{m}</Text>
+                </View>
+              ))}
+            </View>
+            {exercise.equipment ? <Text style={styles.detailLine}>Equipment: {exercise.equipment}</Text> : null}
+            {(exercise.sets || exercise.reps || exercise.rest) ? (
+              <Text style={styles.detailLine}>Plan: {[exercise.sets && `${exercise.sets} sets`, exercise.reps && `${exercise.reps} reps`, exercise.rest && `rest ${exercise.rest}`].filter(Boolean).join(' · ')}</Text>
+            ) : null}
+            {(exercise.instructions || []).map((step, k) => (
+              <Text key={k} style={styles.stepText}>{k + 1}. {step}</Text>
+            ))}
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+// One line per planned set: reps prefilled from the plan, weight in the profile's units, stored in kg (6.3.5).
+function LogSheet({ exercise, units, onClose, onSave }) {
+  const setCount = Math.min(10, Math.max(1, firstNumber(exercise.sets, 3)));
+  const [rows, setRows] = useState(() => Array.from({ length: setCount }, () => ({ reps: String(firstNumber(exercise.reps, '')), weight: '' })));
+  const unit = units === 'imperial' ? 'lb' : 'kg';
+  const save = () => {
+    const sets = rows
+      .map(r => ({ reps: Number(r.reps), w: Number(String(r.weight).replace(',', '.')) }))
+      .filter(r => r.reps > 0 && Number.isFinite(r.w) && r.w >= 0)
+      .map(r => ({ reps: r.reps, weightKg: Math.round((units === 'imperial' ? r.w * KG_PER_LB : r.w) * 10) / 10 }));
+    if (!sets.length) { Alert.alert('Nothing to save', 'Enter reps and weight for at least one set.'); return; }
+    onSave(sets);
+  };
+  return (
+    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalSheet}>
+          <View style={styles.modalHeader}>
+            <Text style={styles.modalTitle}>Log {exercise.name}</Text>
+            <TouchableOpacity onPress={onClose} accessibilityLabel="Close"><Text style={styles.modalClose}>✕</Text></TouchableOpacity>
+          </View>
+          <ScrollView keyboardShouldPersistTaps="handled">
+            {rows.map((r, k) => (
+              <View key={k} style={styles.logRow}>
+                <Text style={styles.logSet}>Set {k + 1}</Text>
+                <TextInput style={styles.logInput} value={r.reps} keyboardType="numeric" placeholder="reps" placeholderTextColor="#aaa"
+                  onChangeText={v => setRows(rows.map((x, j) => j === k ? { ...x, reps: v } : x))} accessibilityLabel={`Set ${k + 1} reps`} />
+                <TextInput style={styles.logInput} value={r.weight} keyboardType="numeric" placeholder={unit} placeholderTextColor="#aaa"
+                  onChangeText={v => setRows(rows.map((x, j) => j === k ? { ...x, weight: v } : x))} accessibilityLabel={`Set ${k + 1} weight in ${unit}`} />
+                <Text style={styles.logUnit}>{unit}</Text>
+              </View>
+            ))}
+            <TouchableOpacity style={styles.weekBtn} onPress={save}><Text style={styles.weekBtnText}>Save</Text></TouchableOpacity>
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
+function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted, onOpenExercise, onLog, lastTime }) {
   const color = WORKOUT_COLORS[workout.type] || '#607D8B';
   const diffColor = DIFFICULTY_COLOR[workout.difficulty] || '#888';
+
+  // Exercises from the library open their detail (steps, muscles, photos).
+  const nameEl = (ex, style) => ex.instructions?.length
+    ? <TouchableOpacity style={style} onPress={() => onOpenExercise(ex)} accessibilityHint="Shows steps and photos">
+        <Text style={[styles.exerciseName, styles.exerciseLink]}>{ex.name}</Text>
+      </TouchableOpacity>
+    : <Text style={[styles.exerciseName, style]}>{ex.name}</Text>;
 
   const renderExercises = () => {
     if (!workout.exercises || workout.exercises.length === 0) return null;
@@ -186,11 +385,21 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted }) {
             {workout.exercises.map((ex, i) => (
               <View key={i}>
                 <View style={[styles.tableRow, i % 2 === 0 && styles.tableRowAlt]}>
-                  <Text style={[styles.exerciseName, {flex:3}]}>{ex.name}</Text>
+                  {nameEl(ex, {flex:3})}
                   <Text style={[styles.exerciseVal, {flex:1}]}>{ex.sets}</Text>
                   <Text style={[styles.exerciseVal, {flex:2}]}>{ex.reps}</Text>
                   <Text style={[styles.exerciseVal, {flex:2}]}>{ex.rest}</Text>
                 </View>
+                {(lastTime(ex) || ex.exerciseId) && (
+                  <View style={styles.logLine}>
+                    <Text style={styles.lastTime}>{lastTime(ex) || ''}</Text>
+                    {ex.exerciseId && (
+                      <TouchableOpacity style={styles.logBtn} onPress={() => onLog(ex)} accessibilityLabel={`Log ${ex.name}`}>
+                        <Text style={styles.logBtnText}>Log</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                )}
                 {ex.weight && <Text style={styles.exerciseDetail}>🏋️ Weight: {ex.weight}{ex.tempo ? `  ·  Tempo: ${ex.tempo}` : ''}</Text>}
                 {ex.formTip && <Text style={styles.exerciseDetail}>💡 {ex.formTip}</Text>}
                 {ex.notes && <Text style={styles.exerciseNote}>📝 {ex.notes}</Text>}
@@ -204,7 +413,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted }) {
             {workout.exercises.map((ex, i) => (
               <View key={i} style={[styles.hiitRow, i % 2 === 0 && styles.tableRowAlt]}>
                 <View style={{flex:1}}>
-                  <Text style={styles.exerciseName}>{ex.name}</Text>
+                  {nameEl(ex)}
                   {ex.notes && <Text style={styles.exerciseNote}>💡 {ex.notes}</Text>}
                 </View>
                 <View style={styles.hiitMeta}>
@@ -221,7 +430,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted }) {
           <View>
             {workout.exercises.map((ex, i) => (
               <View key={i} style={[styles.cardioRow, i % 2 === 0 && styles.tableRowAlt]}>
-                <Text style={styles.exerciseName}>{ex.name}</Text>
+                {nameEl(ex)}
                 <View style={styles.cardioStats}>
                   {ex.duration && <StatTag label="⏱" value={ex.duration} />}
                   {ex.intensity && <StatTag label="🔥" value={ex.intensity} color={getIntensityColor(ex.intensity)} />}
@@ -239,7 +448,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted }) {
             {workout.exercises.map((ex, i) => (
               <View key={i} style={[styles.flexRow, i % 2 === 0 && styles.tableRowAlt]}>
                 <View style={{flex:1}}>
-                  <Text style={styles.exerciseName}>{ex.name}</Text>
+                  {nameEl(ex)}
                   {ex.breathingCue && <Text style={styles.exerciseDetail}>🌬️ {ex.breathingCue}</Text>}
                   {ex.notes && <Text style={styles.exerciseNote}>💡 {ex.notes}</Text>}
                 </View>
@@ -287,6 +496,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted }) {
         <StatPill icon="📋" value={`${workout.exercises?.length || 0} exercises`} />
       </View>
 
+      {workout.exerciseSource === 'verified' && <Text style={styles.verifiedTag}>✓ Exercises checked against the exercise library</Text>}
       {workout.description && <Text style={styles.description}>{workout.description}</Text>}
       {workout.warnings?.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
 
@@ -420,5 +630,41 @@ const styles = StyleSheet.create({
   expandBtnText: { fontSize:13, color:'#0D9E8A', fontWeight:'600' },
   refreshBtn: { borderWidth:1.5, borderColor:'#0D9E8A', borderRadius:12, padding:14, alignItems:'center', marginTop:4 },
   refreshBtnText: { color:'#0D9E8A', fontSize:15, fontWeight:'700' },
+  weekCard: { marginHorizontal:16, marginBottom:10, backgroundColor:'#F0FAF8', borderRadius:14, padding:14, borderWidth:1.5, borderColor:'#0D9E8A30' },
+  weekLabel: { fontSize:12, color:'#0D9E8A', fontWeight:'700', marginRight:6 },
+  weekTitle: { fontSize:16, fontWeight:'800', color:'#1a1a1a', marginTop:2 },
+  weekTag: { fontSize:12, color:'#0D9E8A', fontWeight:'600', marginTop:4 },
+  weekChips: { flexDirection:'row', alignItems:'center', gap:6, marginVertical:10 },
+  weekChip: { minWidth:34, minHeight:34, borderWidth:1.5, borderColor:'#D0D0D0', borderRadius:17, alignItems:'center', justifyContent:'center', backgroundColor:'#fff' },
+  weekChipOn: { borderColor:'#0D9E8A', backgroundColor:'#0D9E8A' },
+  weekChipText: { fontSize:14, fontWeight:'700', color:'#555' },
+  weekChipTextOn: { color:'#fff' },
+  weekBtn: { backgroundColor:'#0D9E8A', borderRadius:12, paddingVertical:12, alignItems:'center', marginTop:4 },
+  weekBtnText: { color:'#fff', fontSize:15, fontWeight:'700' },
+  weekRow: { flexDirection:'row', gap:10, paddingVertical:6, paddingHorizontal:6, borderRadius:8 },
+  weekRowToday: { backgroundColor:'#fff' },
+  weekDay: { width:34, fontSize:13, fontWeight:'700', color:'#555' },
+  weekFocus: { fontSize:14, fontWeight:'700', color:'#1a1a1a' },
+  weekNote: { fontSize:12, color:'#777', marginTop:1 },
+  weekReplan: { fontSize:13, color:'#0D9E8A', fontWeight:'700' },
+  verifiedTag: { fontSize:12, color:'#0D9E8A', fontWeight:'600', marginBottom:8 },
+  exerciseLink: { color:'#0D9E8A', textDecorationLine:'underline' },
+  logLine: { flexDirection:'row', alignItems:'center', justifyContent:'space-between', paddingLeft:4, paddingBottom:4 },
+  lastTime: { fontSize:12, color:'#555', fontWeight:'600' },
+  logBtn: { borderWidth:1.5, borderColor:'#0D9E8A', borderRadius:12, paddingHorizontal:12, paddingVertical:3 },
+  logBtnText: { fontSize:12, color:'#0D9E8A', fontWeight:'700' },
+  modalOverlay: { flex:1, backgroundColor:'rgba(0,0,0,0.4)', justifyContent:'flex-end' },
+  modalSheet: { backgroundColor:'#fff', borderTopLeftRadius:24, borderTopRightRadius:24, padding:24, maxHeight:'85%' },
+  modalHeader: { flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:16 },
+  modalTitle: { fontSize:20, fontWeight:'800', color:'#1a1a1a', flex:1, marginRight:12 },
+  modalClose: { fontSize:20, color:'#aaa', fontWeight:'600' },
+  exercisePhoto: { width:'100%', height:220, borderRadius:14, marginBottom:12, backgroundColor:'#f5f5f5' },
+  muscleTagMain: { backgroundColor:'#D7F2EC' },
+  detailLine: { fontSize:13, color:'#555', marginBottom:8 },
+  stepText: { fontSize:14, color:'#333', lineHeight:21, marginBottom:8 },
+  logRow: { flexDirection:'row', alignItems:'center', gap:8, marginBottom:10 },
+  logSet: { width:48, fontSize:13, fontWeight:'700', color:'#555' },
+  logInput: { flex:1, borderWidth:1.5, borderColor:'#E0E0E0', borderRadius:10, padding:10, fontSize:15, color:'#1a1a1a' },
+  logUnit: { width:22, fontSize:13, color:'#888' },
   warnText: { fontSize:12, color:'#8A6D00', backgroundColor:'#FFFBEA', borderRadius:8, padding:8, marginBottom:8 },
 });
