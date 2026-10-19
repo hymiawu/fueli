@@ -10,6 +10,7 @@ import { analyzeIngredientImage, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
 import { CATEGORIES, UNITS } from '../lib/constants';
 import { NUTRIENTS, VIEWS, toView, fromView, viewFactor } from '../lib/nutrition';
+import { EXPIRY_CHIPS, addDays, isValidExpiry } from '../lib/expiry';
 
 
 export default function ScanIngredientScreen({ navigation, route }) {
@@ -83,6 +84,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
         quantity: String(data.quantity || '1'),
         unit: data.unit || 'piece',
         category: data.category || 'Other',
+        expiry: '',
         base: Object.fromEntries(NUTRIENTS.map((k) => [k, data[k] === undefined || data[k] === null ? '' : String(data[k])])),
         servingSize: data.servingSize ? String(data.servingSize) : '',
         servingsPerContainer: data.servingsPerContainer ? String(data.servingsPerContainer) : (data.servingSize ? '1' : ''),
@@ -102,13 +104,17 @@ export default function ScanIngredientScreen({ navigation, route }) {
       Alert.alert('Missing name', 'Please enter an ingredient name.');
       return;
     }
+    if (!isValidExpiry(result.expiry)) {
+      Alert.alert('Check the expiry date', 'Use the format YYYY-MM-DD, for example 2026-10-24, or leave it empty.');
+      return;
+    }
     const newIngredient = {
       id: Date.now().toString(),
       name: result.name,
       quantity: result.quantity,
       unit: result.unit,
       category: result.category,
-      expiry: '',
+      expiry: result.expiry.trim(),
       // Stored per 100 g, unrounded, so a per-serving value the user typed comes back exactly.
       calories: result.base.calories,
       protein: result.base.protein,
@@ -211,6 +217,23 @@ export default function ScanIngredientScreen({ navigation, route }) {
                   <Text style={[styles.chipText, result.category === c && styles.chipTextSelected]}>
                     {c}
                   </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <Text style={styles.label}>Expiry (optional)</Text>
+            <TextInput
+              style={styles.input}
+              value={result.expiry}
+              onChangeText={(v) => setResult({ ...result, expiry: v })}
+              placeholder="YYYY-MM-DD"
+              placeholderTextColor="#aaa"
+              autoCapitalize="none"
+            />
+            <View style={[styles.chipGroup, { marginTop: -6 }]}>
+              {EXPIRY_CHIPS.map(({ label, days }) => (
+                <TouchableOpacity key={label} style={styles.chip} onPress={() => setResult({ ...result, expiry: addDays(days) })}>
+                  <Text style={styles.chipText}>{label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
