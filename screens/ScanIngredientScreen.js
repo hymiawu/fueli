@@ -9,12 +9,37 @@ import * as ImagePicker from 'expo-image-picker';
 import { analyzeIngredientImage, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
 import { CATEGORIES, UNITS } from '../lib/constants';
+import { NUTRIENTS, VIEWS, toView, fromView, viewFactor } from '../lib/nutrition';
 
 
 export default function ScanIngredientScreen({ navigation, route }) {
   const [image, setImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState(null);
+  // Nutrition: `result.base` holds per-100 g values, unrounded. `fields` are the strings shown for `view`.
+  const [view, setView] = useState('per100');
+  const [fields, setFields] = useState({});
+
+  const showView = (next, r = result) => {
+    setView(next);
+    setFields(toView(r.base, next, r.servingSize, r.servingsPerContainer));
+  };
+
+  // Typing in any view writes back to the per-100 g base, so the other views follow (D-14).
+  const editNutrient = (key, value) => {
+    setFields({ ...fields, [key]: value });
+    const base = fromView(value, view, result.servingSize, result.servingsPerContainer);
+    setResult({ ...result, base: { ...result.base, [key]: value.trim() === '' ? '' : base === null ? result.base[key] : String(base) } });
+  };
+
+  // Serving size or count changed: the base stays, the shown numbers follow. A view that can no longer
+  // be computed falls back to per 100 g.
+  const editServing = (key, value) => {
+    const next = { ...result, [key]: value };
+    setResult(next);
+    const v = viewFactor(view, next.servingSize, next.servingsPerContainer) === null ? 'per100' : view;
+    showView(v, next);
+  };
 
   const pickImage = async (useCamera) => {
     const permFn = useCamera
@@ -53,16 +78,18 @@ export default function ScanIngredientScreen({ navigation, route }) {
         setAnalyzing(false);
         return;
       }
-      setResult({
+      const next = {
         name: data.name || '',
         quantity: String(data.quantity || '1'),
         unit: data.unit || 'piece',
         category: data.category || 'Other',
-        calories: String(data.calories || ''),
-        protein: String(data.protein || ''),
-        carbs: String(data.carbs || ''),
-        fat: String(data.fat || ''),
-      });
+        base: Object.fromEntries(NUTRIENTS.map((k) => [k, data[k] === undefined || data[k] === null ? '' : String(data[k])])),
+        servingSize: data.servingSize ? String(data.servingSize) : '',
+        servingsPerContainer: data.servingsPerContainer ? String(data.servingsPerContainer) : (data.servingSize ? '1' : ''),
+      };
+      setResult(next);
+      // D-34: open on "Per serving" when the label gave a serving size.
+      showView(next.servingSize ? 'serving' : 'per100', next);
     } catch (e) {
       // The API's message says what went wrong (subscription, image too large, rate limit, ...).
       if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Analysis failed', e.message || 'Could not identify the ingredient. Please try again.');
@@ -82,10 +109,13 @@ export default function ScanIngredientScreen({ navigation, route }) {
       unit: result.unit,
       category: result.category,
       expiry: '',
-      calories: result.calories,
-      protein: result.protein,
-      carbs: result.carbs,
-      fat: result.fat,
+      // Stored per 100 g, unrounded, so a per-serving value the user typed comes back exactly.
+      calories: result.base.calories,
+      protein: result.base.protein,
+      carbs: result.base.carbs,
+      fat: result.base.fat,
+      serving_size: result.servingSize.trim() || null,
+      servings_per_container: result.servingsPerContainer.trim() || null,
     };
     route.params?.onSave?.(newIngredient);
     navigation.goBack();
@@ -185,7 +215,48 @@ export default function ScanIngredientScreen({ navigation, route }) {
               ))}
             </View>
 
-            <Text style={styles.sectionTitle}>Nutrition Facts (per 100g)</Text>
+            <Text style={styles.sectionTitle}>Nutrition Facts</Text>
+            <View style={styles.chipGroup}>
+              {VIEWS.map(({ key, label }) => {
+                const disabled = viewFactor(key, result.servingSize, result.servingsPerContainer) === null;
+                return (
+                  <TouchableOpacity
+                    key={key}
+                    style={[styles.chip, view === key && styles.chipSelected, disabled && styles.chipDisabled]}
+                    onPress={() => showView(key)}
+                    disabled={disabled}
+                    accessibilityState={{ selected: view === key, disabled }}
+                  >
+                    <Text style={[styles.chipText, view === key && styles.chipTextSelected]}>{label}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+            <View style={styles.row}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Serving size (g or ml)</Text>
+                <TextInput
+                  style={styles.input}
+                  value={result.servingSize}
+                  onChangeText={(v) => editServing('servingSize', v)}
+                  keyboardType="numeric"
+                  placeholder="e.g. 30"
+                  placeholderTextColor="#aaa"
+                />
+              </View>
+              <View style={{ flex: 1, marginLeft: 12 }}>
+                <Text style={styles.label}>Servings per package</Text>
+                <TextInput
+                  style={styles.input}
+                  value={result.servingsPerContainer}
+                  onChangeText={(v) => editServing('servingsPerContainer', v)}
+                  keyboardType="numeric"
+                  placeholder="e.g. 1"
+                  placeholderTextColor="#aaa"
+                />
+              </View>
+            </View>
+            {!result.servingSize.trim() ? <Text style={styles.hint}>Enter a serving size</Text> : null}
             <View style={styles.nutritionGrid}>
               {[
                 { key: 'calories', label: 'Calories (kcal)' },
@@ -197,8 +268,8 @@ export default function ScanIngredientScreen({ navigation, route }) {
                   <Text style={styles.label}>{label}</Text>
                   <TextInput
                     style={styles.input}
-                    value={result[key]}
-                    onChangeText={(v) => setResult({ ...result, [key]: v })}
+                    value={fields[key] ?? ''}
+                    onChangeText={(v) => editNutrient(key, v)}
                     keyboardType="numeric"
                   />
                 </View>
@@ -278,6 +349,8 @@ const styles = StyleSheet.create({
   chipSelected: { borderColor: '#0D9E8A', backgroundColor: '#F0FAF8' },
   chipText: { fontSize: 13, color: '#555', fontWeight: '500' },
   chipTextSelected: { color: '#0D9E8A', fontWeight: '700' },
+  chipDisabled: { opacity: 0.4 },
+  hint: { fontSize: 12, color: '#999', marginTop: -6, marginBottom: 12 },
   nutritionGrid: {
     flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 8,
   },

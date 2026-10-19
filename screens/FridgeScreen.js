@@ -8,6 +8,7 @@ import { Alert } from '../lib/alert';
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import { supabase } from '../lib/supabase';
+import { caloriesPerServing, formatNutrient, toNum } from '../lib/nutrition';
 
 const CATEGORY_COLORS = {
   Produce: '#4CAF50', Protein: '#F44336', Dairy: '#2196F3',
@@ -81,20 +82,26 @@ export default function FridgeScreen({ navigation }) {
     ]);
   };
 
-  const renderItem = ({ item }) => (
+  // Stored values are per 100 g and unrounded; round only here (handoff 6.1.1).
+  const shown = (key, v) => formatNutrient(key, toNum(v));
+
+  const renderItem = ({ item }) => {
+    const perServing = caloriesPerServing(item);
+    return (
     <View style={styles.card}>
       <View style={[styles.categoryDot, { backgroundColor: CATEGORY_COLORS[item.category] || '#607D8B' }]} />
       <View style={styles.cardContent}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemSub}>
           {item.quantity} {item.unit} · {item.category}
-          {item.calories ? `  ·  ${item.calories} kcal/100g` : ''}
+          {item.calories ? `  ·  ${shown('calories', item.calories)} kcal/100g` : ''}
+          {item.calories && perServing !== null ? ` · ${perServing} kcal per serving` : ''}
         </Text>
         {(item.protein || item.carbs || item.fat) ? (
           <View style={styles.macroRow}>
-            {item.protein ? <Text style={styles.macro}>P: {item.protein}g</Text> : null}
-            {item.carbs ? <Text style={styles.macro}>C: {item.carbs}g</Text> : null}
-            {item.fat ? <Text style={styles.macro}>F: {item.fat}g</Text> : null}
+            {item.protein ? <Text style={styles.macro}>P: {shown('protein', item.protein)}g</Text> : null}
+            {item.carbs ? <Text style={styles.macro}>C: {shown('carbs', item.carbs)}g</Text> : null}
+            {item.fat ? <Text style={styles.macro}>F: {shown('fat', item.fat)}g</Text> : null}
           </View>
         ) : null}
         {item.expiry ? <Text style={styles.expiry}>Expires: {item.expiry}</Text> : null}
@@ -103,7 +110,8 @@ export default function FridgeScreen({ navigation }) {
         <Text style={styles.deleteText}>✕</Text>
       </TouchableOpacity>
     </View>
-  );
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safe}>

@@ -13,6 +13,9 @@ export const IngredientScan = z.object({
   carbs: nonNeg.max(100),
   fat: nonNeg.max(100),
   isFood: z.boolean().default(true),
+  // From the package label when one is visible (handoff 6.1.1). A bad value is dropped, never fails the scan.
+  servingSize: z.coerce.number().finite().min(1).max(2000).optional().catch(undefined),
+  servingsPerContainer: z.coerce.number().finite().min(0.1).max(100).optional().catch(undefined),
 });
 
 export const OutsideFood = z.object({
