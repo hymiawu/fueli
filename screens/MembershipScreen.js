@@ -97,6 +97,11 @@ export default function MembershipScreen({ navigation }) {
                   <Text style={styles.badgeText}>{info.cancelAtPeriodEnd ? 'Canceling' : membershipLabel(status).split(' · ')[0]}</Text>
                 </View>
                 {detail ? <Text style={styles.detail}>{detail}</Text> : null}
+                {info.dailyUsage?.meals ? (
+                  <Text style={styles.usage}>
+                    {Math.max(0, info.dailyUsage.meals.limit - info.dailyUsage.meals.used)} of {info.dailyUsage.meals.limit} meal plans left today
+                  </Text>
+                ) : null}
               </View>
             )}
 
@@ -144,6 +149,7 @@ const styles = StyleSheet.create({
   badgeOff: { backgroundColor: '#FFF1E6' },
   badgeText: { fontSize: 13, fontWeight: '700', color: '#1a1a1a' },
   detail: { fontSize: 14, color: '#555', lineHeight: 20 },
+  usage: { fontSize: 13, color: '#888', marginTop: 8 },
   error: { color: '#FF4444', fontSize: 14, textAlign: 'center', marginBottom: 12 },
   primaryBtn: { backgroundColor: '#0D9E8A', borderRadius: 12, padding: 16, alignItems: 'center', marginBottom: 12 },
   primaryText: { color: '#fff', fontSize: 16, fontWeight: '700' },

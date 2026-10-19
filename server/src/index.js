@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { requireUser, loadFridge } from './auth.js';
-import { rateLimit } from './rateLimit.js';
+import { rateLimit, takeDaily, refundDaily } from './rateLimit.js';
 import { newTrace, modelName } from './llm.js';
 import { cleanImage } from './guard.js';
 import { MealRequest, WorkoutRequest, ScanRequest, OutsideRequest, CheckoutConfirm } from './schemas.js';
@@ -51,14 +51,17 @@ app.use(express.json({ limit: '8mb' }));
 
 app.get('/health', (_req, res) => res.json({ ok: true, model: modelName }));
 
-// Wrap an AI handler: validate body, trace usage, log metadata only (never content or user data).
-const ai = (name, schema, handler) => [
+// Wrap an AI handler: validate body, apply the daily cap, trace usage, log metadata only (never content or user data).
+// `family` is the daily-cap bucket (6.5); a repair call or retry inside one request does not count again.
+const ai = (name, schema, handler, family = name) => [
   requireUser,
   requirePaid,
   rateLimit,
   async (req, res) => {
     const parsed = schema.safeParse(req.body ?? {});
     if (!parsed.success) return res.status(400).json({ error: 'Invalid request' });
+    const capped = takeDaily(req.user.id, family);
+    if (capped) return res.status(429).json({ error: capped });
     const trace = newTrace(name);
     const started = Date.now();
     try {
@@ -66,6 +69,8 @@ const ai = (name, schema, handler) => [
       res.json(result);
     } catch (e) {
       trace.flags.push('error');
+      // Our failure, not the user's: give the daily unit back. Client errors (4xx) still count.
+      if (!e.status || e.status >= 500) refundDaily(req.user.id, family);
       res.status(e.status || 500).json({ error: e.status && e.status < 500 ? e.message : 'AI request failed' });
       if (!e.status) console.error(`[${name}]`, e.message);
     } finally {
@@ -92,7 +97,7 @@ app.post(
 
 app.post(
   '/v1/ingredients/scan',
-  ...ai('scan', ScanRequest, (req, body, trace) => scanIngredient({ image: cleanImage(body.image), trace })),
+  ...ai('scan', ScanRequest, (req, body, trace) => scanIngredient({ image: cleanImage(body.image), trace }), 'scans'),
 );
 
 app.post(
@@ -100,7 +105,7 @@ app.post(
   ...ai('outside_food', OutsideRequest, (req, body, trace) => {
     if (!body.text && !body.image) throw Object.assign(new Error('Describe the food or add a photo'), { status: 400 });
     return analyzeOutsideFood({ text: body.text, image: cleanImage(body.image), trace });
-  }),
+  }, 'scans'),
 );
 
 // Billing routes need a signed-in user but not an active subscription.
