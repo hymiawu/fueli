@@ -91,6 +91,20 @@ export default function FridgeScreen({ navigation }) {
     }
   };
 
+  // Edit in place (6.1.4): the update RLS policy keeps it to the user's own rows.
+  const handleUpdate = async (item) => {
+    try {
+      const { id, ...fields } = item;
+      const { error } = await supabase.from('ingredients').update(fields).eq('id', id);
+      if (error) throw error;
+      await loadIngredients();
+      return true;
+    } catch (e) {
+      Alert.alert('Error', 'Could not save changes.');
+      return false;
+    }
+  };
+
   const handleDelete = (id) => {
     Alert.alert('Remove Item', 'Remove this ingredient from your fridge?', [
       { text: 'Cancel', style: 'cancel' },
@@ -114,7 +128,12 @@ export default function FridgeScreen({ navigation }) {
     // Warning chip when the label's allergens overlap the profile's (6.1.3).
     const clash = parseAllergens(item.allergens).filter((a) => allergies.includes(a));
     return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.7}
+      onPress={() => navigation.navigate('ScanIngredient', { item, onUpdate: handleUpdate })}
+      accessibilityHint="Opens this item to edit"
+    >
       <View style={[styles.categoryDot, { backgroundColor: CATEGORY_COLORS[item.category] || '#607D8B' }]} />
       <View style={styles.cardContent}>
         <Text style={styles.itemName}>{item.name}</Text>
@@ -138,10 +157,10 @@ export default function FridgeScreen({ navigation }) {
           return item.expiry ? <Text style={[styles.expiry, { color: '#888' }]}>Expires: {item.expiry}</Text> : null;
         })()}
       </View>
-      <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(item.id)}>
+      <TouchableOpacity style={styles.deleteBtn} onPress={() => handleDelete(item.id)} accessibilityLabel={`Remove ${item.name}`}>
         <Text style={styles.deleteText}>✕</Text>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
     );
   };
 

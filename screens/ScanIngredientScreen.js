@@ -12,14 +12,30 @@ import { CATEGORIES, UNITS, ALLERGENS, parseAllergens } from '../lib/constants';
 import { NUTRIENTS, VIEWS, toView, fromView, viewFactor } from '../lib/nutrition';
 import { EXPIRY_CHIPS, addDays, isValidExpiry } from '../lib/expiry';
 
+// A saved fridge row -> the form's state, for edit mode (handoff 6.1.4).
+const fromRow = (row) => ({
+  name: row.name || '',
+  quantity: String(row.quantity ?? ''),
+  unit: row.unit || 'piece',
+  category: row.category || 'Other',
+  expiry: row.expiry || '',
+  allergens: parseAllergens(row.allergens),
+  base: Object.fromEntries(NUTRIENTS.map((k) => [k, row[k] ?? ''])),
+  servingSize: row.serving_size || '',
+  servingsPerContainer: row.servings_per_container || '',
+});
 
 export default function ScanIngredientScreen({ navigation, route }) {
+  // With route.params.item the same form edits a saved row: photo area hidden, "Save changes" (D-37).
+  const editing = route.params?.item || null;
   const [image, setImage] = useState(null);
   const [analyzing, setAnalyzing] = useState(false);
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState(() => (editing ? fromRow(editing) : null));
   // Nutrition: `result.base` holds per-100 g values, unrounded. `fields` are the strings shown for `view`.
-  const [view, setView] = useState('per100');
-  const [fields, setFields] = useState({});
+  const initialView = editing && viewFactor('serving', editing.serving_size) !== null ? 'serving' : 'per100';
+  const [view, setView] = useState(initialView);
+  const [fields, setFields] = useState(() =>
+    (editing ? toView(fromRow(editing).base, initialView, editing.serving_size, editing.servings_per_container) : {}));
 
   const showView = (next, r = result) => {
     setView(next);
@@ -113,7 +129,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
       return;
     }
     const newIngredient = {
-      id: Date.now().toString(),
+      id: editing ? editing.id : Date.now().toString(),
       name: result.name,
       quantity: result.quantity,
       unit: result.unit,
@@ -128,9 +144,11 @@ export default function ScanIngredientScreen({ navigation, route }) {
       servings_per_container: result.servingsPerContainer.trim() || null,
       allergens: result.allergens.length ? result.allergens.join(', ') : null,
     };
-    // Wait for the insert, so the fridge list already has the item when we go back (bug 9.2).
+    // Wait for the write, so the fridge list already has the item when we go back (bug 9.2).
     setSaving(true);
-    const ok = await route.params?.onSave?.(newIngredient);
+    const ok = editing
+      ? await route.params?.onUpdate?.(newIngredient)
+      : await route.params?.onSave?.(newIngredient);
     setSaving(false);
     if (ok !== false) navigation.goBack();
   };
@@ -141,13 +159,13 @@ export default function ScanIngredientScreen({ navigation, route }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.back}>← Back</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Scan Ingredient</Text>
+        <Text style={styles.headerTitle}>{editing ? 'Edit Ingredient' : 'Scan Ingredient'}</Text>
         <View style={{ width: 60 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-        {/* Image preview */}
-        {image ? (
+        {/* Image preview and camera buttons (not in edit mode) */}
+        {editing ? null : image ? (
           <Image source={{ uri: image }} style={styles.preview} />
         ) : (
           <View style={styles.placeholder}>
@@ -156,7 +174,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
           </View>
         )}
 
-        {/* Camera buttons */}
+        {!editing && (
         <View style={styles.btnRow}>
           <TouchableOpacity style={styles.photoBtn} onPress={() => pickImage(true)}>
             <Text style={styles.photoBtnText}>📷  Camera</Text>
@@ -165,6 +183,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
             <Text style={styles.photoBtnText}>🖼️  Library</Text>
           </TouchableOpacity>
         </View>
+        )}
 
         {/* Analyzing indicator */}
         {analyzing && (
@@ -177,7 +196,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
         {/* Results */}
         {result && !analyzing && (
           <View style={styles.resultBox}>
-            <Text style={styles.sectionTitle}>✅ Ingredient Detected</Text>
+            {!editing && <Text style={styles.sectionTitle}>✅ Ingredient Detected</Text>}
 
             <Text style={styles.label}>Name</Text>
             <TextInput
@@ -326,7 +345,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
             </View>
 
             <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.7 }]} onPress={handleSave} disabled={saving}>
-              {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>Add to Fridge</Text>}
+              {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>{editing ? 'Save changes' : 'Add to Fridge'}</Text>}
             </TouchableOpacity>
           </View>
         )}
