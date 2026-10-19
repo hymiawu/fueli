@@ -99,7 +99,10 @@ export default function ScanIngredientScreen({ navigation, route }) {
     setAnalyzing(false);
   };
 
-  const handleSave = () => {
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    if (saving) return;
     if (!result?.name) {
       Alert.alert('Missing name', 'Please enter an ingredient name.');
       return;
@@ -123,8 +126,11 @@ export default function ScanIngredientScreen({ navigation, route }) {
       serving_size: result.servingSize.trim() || null,
       servings_per_container: result.servingsPerContainer.trim() || null,
     };
-    route.params?.onSave?.(newIngredient);
-    navigation.goBack();
+    // Wait for the insert, so the fridge list already has the item when we go back (bug 9.2).
+    setSaving(true);
+    const ok = await route.params?.onSave?.(newIngredient);
+    setSaving(false);
+    if (ok !== false) navigation.goBack();
   };
 
   return (
@@ -299,8 +305,8 @@ export default function ScanIngredientScreen({ navigation, route }) {
               ))}
             </View>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
-              <Text style={styles.saveBtnText}>Add to Fridge</Text>
+            <TouchableOpacity style={[styles.saveBtn, saving && { opacity: 0.7 }]} onPress={handleSave} disabled={saving}>
+              {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>Add to Fridge</Text>}
             </TouchableOpacity>
           </View>
         )}

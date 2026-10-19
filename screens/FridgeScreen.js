@@ -73,22 +73,19 @@ export default function FridgeScreen({ navigation }) {
     setLoading(false);
   };
 
+  // Returns true once the row is saved. The list is reloaded from Supabase after the insert, instead of
+  // prepending to a list that a focus reload may have replaced meanwhile (bug 9.2).
   const handleSave = async (item) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-      const { data, error } = await supabase
-        .from('ingredients')
-        .insert([{ ...item, user_id: user.id }])
-        .select()
-        .single();
-      if (!error && data) {
-        const newList = [data, ...ingredients];
-        setIngredients(newList);
-        await syncToCache(newList);
-      }
+      if (!user) return false;
+      const { error } = await supabase.from('ingredients').insert([{ ...item, user_id: user.id }]);
+      if (error) throw error;
+      await loadIngredients();
+      return true;
     } catch (e) {
       Alert.alert('Error', 'Could not save ingredient.');
+      return false;
     }
   };
 

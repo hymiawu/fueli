@@ -15,7 +15,7 @@ export default function AddIngredientScreen({ navigation, route }) {
   const [category, setCategory] = useState(null);
   const [expiry, setExpiry]     = useState('');
 
-  function handleSave() {
+  async function handleSave() {
     if (!name.trim()) {
       Alert.alert('Missing info', 'Please enter an ingredient name.');
       return;
@@ -28,8 +28,9 @@ export default function AddIngredientScreen({ navigation, route }) {
       category,
       expiry,
     };
-    route.params?.onSave?.(newIngredient);
-    navigation.goBack();
+    // Wait for the insert, so the fridge list already has the item when we go back (bug 9.2).
+    const ok = await route.params?.onSave?.(newIngredient);
+    if (ok !== false) navigation.goBack();
   }
 
   return (
