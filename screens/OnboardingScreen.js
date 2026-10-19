@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
 import { toMetric } from '../lib/units';
+import { ALLERGENS } from '../lib/constants';
 
 const STEPS = ['Stats', 'Activity', 'Goal', 'Diet', 'Account'];
 
@@ -31,6 +32,8 @@ export default function OnboardingScreen({ navigation }) {
   const [activity, setActivity] = useState('');
   const [goal, setGoal] = useState('');
   const [diet, setDiet] = useState('');
+  const [allergies, setAllergies] = useState([]);
+  const toggleAllergy = (a) => setAllergies(allergies.includes(a) ? allergies.filter((x) => x !== a) : [...allergies, a]);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -66,7 +69,7 @@ export default function OnboardingScreen({ navigation }) {
       email,
       password,
       options: {
-        data: { height, weight, units, activity, goal, diet },
+        data: { height, weight, units, activity, goal, diet, allergies },
       },
     });
     setLoading(false);
@@ -206,6 +209,28 @@ export default function OnboardingScreen({ navigation }) {
                 </Text>
               </TouchableOpacity>
             ))}
+            <Text style={styles.subQuestion}>Any allergies?</Text>
+            <View style={styles.chipGroup}>
+              <TouchableOpacity
+                style={[styles.chip, allergies.length === 0 && styles.chipSelected]}
+                onPress={() => setAllergies([])}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: allergies.length === 0 }}
+              >
+                <Text style={[styles.chipText, allergies.length === 0 && styles.chipTextSelected]}>None</Text>
+              </TouchableOpacity>
+              {ALLERGENS.map((a) => (
+                <TouchableOpacity
+                  key={a}
+                  style={[styles.chip, allergies.includes(a) && styles.chipSelected]}
+                  onPress={() => toggleAllergy(a)}
+                  accessibilityRole="checkbox"
+                  accessibilityState={{ checked: allergies.includes(a) }}
+                >
+                  <Text style={[styles.chipText, allergies.includes(a) && styles.chipTextSelected]}>{a}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         );
       case 4:
@@ -346,6 +371,12 @@ const styles = StyleSheet.create({
   unitBtnSelected: { backgroundColor: '#0D9E8A' },
   unitText: { fontSize: 15, fontWeight: '600', color: '#555' },
   unitTextSelected: { color: '#fff' },
+  subQuestion: { fontSize: 18, fontWeight: '700', color: '#1a1a1a', marginTop: 16, marginBottom: 12 },
+  chipGroup: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  chip: { borderWidth: 1.5, borderColor: '#E0E0E0', borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8 },
+  chipSelected: { borderColor: '#0D9E8A', backgroundColor: '#F0FAF8' },
+  chipText: { fontSize: 14, color: '#555', fontWeight: '500' },
+  chipTextSelected: { color: '#0D9E8A', fontWeight: '700' },
   option: {
     borderWidth: 1.5,
     borderColor: '#E0E0E0',

@@ -42,5 +42,7 @@ export function summarizeFridge(fridge) {
     unit: f.unit || '',
     category: f.category || 'Other',
     expiry: f.expiry || null,
+    // From the package label, so the planner can avoid the user's allergens (6.1.3).
+    ...(f.allergens && String(f.allergens).trim() ? { allergens: String(f.allergens).split(',').map((a) => a.trim()).filter(Boolean) } : {}),
   }));
 }

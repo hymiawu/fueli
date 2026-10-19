@@ -10,7 +10,7 @@ import { getUserItem, setUserItem } from '../lib/userStorage';
 import { supabase } from '../lib/supabase';
 import { caloriesPerServing, formatNutrient, toNum } from '../lib/nutrition';
 import { expiryLabel } from '../lib/expiry';
-import { CATEGORIES } from '../lib/constants';
+import { CATEGORIES, parseAllergens } from '../lib/constants';
 import { SORTS, ADDED, DEFAULT_VIEW, applyFridgeView, filterCount } from '../lib/fridgeView';
 
 const EXPIRY_COLORS = { expired: '#D32F2F', soon: '#FF9800', later: '#888' };
@@ -25,6 +25,7 @@ export default function FridgeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState(DEFAULT_VIEW);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [allergies, setAllergies] = useState([]);
 
   // The last sort and filter are remembered per account, so the demo opens as rehearsed (6.1.2).
   useEffect(() => {
@@ -60,6 +61,7 @@ export default function FridgeScreen({ navigation }) {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+      setAllergies(parseAllergens(user.user_metadata?.allergies));
       const { data, error } = await supabase
         .from('ingredients')
         .select('*')
@@ -109,11 +111,14 @@ export default function FridgeScreen({ navigation }) {
 
   const renderItem = ({ item }) => {
     const perServing = caloriesPerServing(item);
+    // Warning chip when the label's allergens overlap the profile's (6.1.3).
+    const clash = parseAllergens(item.allergens).filter((a) => allergies.includes(a));
     return (
     <View style={styles.card}>
       <View style={[styles.categoryDot, { backgroundColor: CATEGORY_COLORS[item.category] || '#607D8B' }]} />
       <View style={styles.cardContent}>
         <Text style={styles.itemName}>{item.name}</Text>
+        {clash.length ? <Text style={styles.allergyChip}>Contains {clash.join(', ').toLowerCase()}</Text> : null}
         <Text style={styles.itemSub}>
           {item.quantity} {item.unit} · {item.category}
           {item.calories ? `  ·  ${shown('calories', item.calories)} kcal/100g` : ''}
@@ -284,6 +289,10 @@ const styles = StyleSheet.create({
   filterPanel: { marginTop: 10, padding: 12, backgroundColor: '#FAFAFA', borderRadius: 12, borderWidth: 1, borderColor: '#F0F0F0' },
   filterLabel: { fontSize: 12, fontWeight: '700', color: '#666', marginBottom: 6 },
   chipWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 10 },
+  allergyChip: {
+    alignSelf: 'flex-start', fontSize: 12, fontWeight: '700', color: '#E65100',
+    backgroundColor: '#FFF3E0', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6, marginBottom: 4,
+  },
   noMatch: { textAlign: 'center', color: '#aaa', marginTop: 40, fontSize: 14 },
   countRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 },
   countText: { fontSize: 13, color: '#888' },

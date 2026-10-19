@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
 import { toMetric, toImperial } from '../lib/units';
+import { ALLERGENS, parseAllergens } from '../lib/constants';
 
 const ACTIVITY_OPTIONS = ['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active'];
 const GOAL_OPTIONS = ['Lose Fat', 'Build Muscle', 'Maintain Weight', 'Eat Healthier'];
@@ -24,6 +25,8 @@ export default function EditProfileScreen({ navigation }) {
   const [activity, setActivity] = useState('');
   const [goal, setGoal] = useState('');
   const [diet, setDiet] = useState('');
+  const [allergies, setAllergies] = useState([]);
+  const toggleAllergy = (a) => setAllergies(allergies.includes(a) ? allergies.filter((x) => x !== a) : [...allergies, a]);
   const [shortTermGoal, setShortTermGoal] = useState('');
   const [longTermGoal, setLongTermGoal] = useState('');
 
@@ -46,6 +49,7 @@ export default function EditProfileScreen({ navigation }) {
       setActivity(meta.activity || '');
       setGoal(meta.goal || '');
       setDiet(meta.diet || '');
+      setAllergies(parseAllergens(meta.allergies));
       setShortTermGoal(meta.shortTermGoal || '');
       setLongTermGoal(meta.longTermGoal || '');
     }
@@ -80,7 +84,7 @@ export default function EditProfileScreen({ navigation }) {
     setWeight(m.weight);
     setSaving(true);
     const { error } = await supabase.auth.updateUser({
-      data: { height: m.height, weight: m.weight, units, activity, goal, diet, shortTermGoal, longTermGoal },
+      data: { height: m.height, weight: m.weight, units, activity, goal, diet, allergies, shortTermGoal, longTermGoal },
     });
     setSaving(false);
     if (error) Alert.alert('Error', error.message);
@@ -170,6 +174,30 @@ export default function EditProfileScreen({ navigation }) {
           {DIET_OPTIONS.map(opt => (
             <TouchableOpacity key={opt} style={[styles.chip, diet === opt && styles.chipSelected]} onPress={() => setDiet(opt)}>
               <Text style={[styles.chipText, diet === opt && styles.chipTextSelected]}>{opt}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {/* Allergies (6.1.3): enforced by the meal planner and the Safety Guard */}
+        <Text style={styles.sectionTitle}>⚠️ Allergies</Text>
+        <View style={styles.chipGroup}>
+          <TouchableOpacity
+            style={[styles.chip, allergies.length === 0 && styles.chipSelected]}
+            onPress={() => setAllergies([])}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: allergies.length === 0 }}
+          >
+            <Text style={[styles.chipText, allergies.length === 0 && styles.chipTextSelected]}>None</Text>
+          </TouchableOpacity>
+          {ALLERGENS.map((a) => (
+            <TouchableOpacity
+              key={a}
+              style={[styles.chip, allergies.includes(a) && styles.chipSelected]}
+              onPress={() => toggleAllergy(a)}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: allergies.includes(a) }}
+            >
+              <Text style={[styles.chipText, allergies.includes(a) && styles.chipTextSelected]}>{a}</Text>
             </TouchableOpacity>
           ))}
         </View>

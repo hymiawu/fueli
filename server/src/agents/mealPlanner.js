@@ -7,6 +7,7 @@ import { MealPlan } from '../schemas.js';
 import { lookupNutritionTool } from '../tools/nutrition.js';
 import { summarizeFridge } from '../tools/fridge.js';
 import { asData, DATA_RULE, cleanText } from '../guard.js';
+import { ALLERGENS } from '../schemas.js';
 import { verifyMeal } from './nutritionVerifier.js';
 import { checkMeal } from './safetyGuard.js';
 
@@ -16,6 +17,7 @@ Rules:
 - MAXIMIZE use of fridge ingredients; prefer items that expire soonest.
 - If the fridge is empty or too sparse, still plan complete meals from common groceries; list every ingredient with quantities.
 - Strictly respect the diet. Vegetarian: no meat or seafood. Vegan: no animal products at all.
+- Never use an ingredient that contains one of the profile's allergies, including fridge items whose allergens list it.
 - When the profile gives approxCaloriesPerMeal, aim each meal's per-serving calories near it.
 - Use the lookup_nutrition tool to get per-100g values for main ingredients, and base calories/macros on them.
 - structuredIngredients names must match fridge item names when the item comes from the fridge, using units g, ml, piece, cup or tbsp.
@@ -57,13 +59,14 @@ const profileView = (p) => ({
   goal: cleanText(p.goal || 'Eat Healthier', 40),
   diet: cleanText(p.diet || 'No Restriction', 40),
   activity: cleanText(p.activity || '', 40),
+  allergies: (Array.isArray(p.allergies) ? p.allergies : []).filter((a) => ALLERGENS.includes(a)),
   approxCaloriesPerMeal: mealCalorieTarget(p),
 });
 
 function finalize(meals, fridge, profile, servings) {
   return meals.map((m) => {
     const verified = verifyMeal(m, fridge, servings);
-    const { violations, warnings } = checkMeal(verified, profile);
+    const { violations, warnings } = checkMeal(verified, profile, fridge);
     return { ...verified, violations, warnings: [...verified.warnings, ...warnings] };
   });
 }

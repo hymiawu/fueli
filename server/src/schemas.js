@@ -3,6 +3,14 @@ import { z } from 'zod';
 const num = z.coerce.number().finite();
 const nonNeg = num.min(0);
 
+// The six allergens in the profile, on the scan form and in the Safety Guard (D-48).
+export const ALLERGENS = ['Peanuts', 'Tree nuts', 'Shellfish', 'Dairy', 'Eggs', 'Gluten'];
+// Keeps only known allergen names, matched case-insensitively; anything else is dropped, never an error.
+export const allergenList = z
+  .preprocess((v) => (typeof v === 'string' ? v.split(',') : v), z.array(z.any()))
+  .transform((arr) => [...new Set(arr.map((a) => ALLERGENS.find((k) => k.toLowerCase() === String(a).trim().toLowerCase())).filter(Boolean))])
+  .catch([]);
+
 export const IngredientScan = z.object({
   name: z.string().min(1).max(60),
   quantity: nonNeg.default(1),
@@ -16,6 +24,7 @@ export const IngredientScan = z.object({
   // From the package label when one is visible (handoff 6.1.1). A bad value is dropped, never fails the scan.
   servingSize: z.coerce.number().finite().min(1).max(2000).optional().catch(undefined),
   servingsPerContainer: z.coerce.number().finite().min(0.1).max(100).optional().catch(undefined),
+  allergens: allergenList.default([]),
 });
 
 export const OutsideFood = z.object({

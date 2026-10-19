@@ -8,7 +8,7 @@ import { Alert } from '../lib/alert';
 import * as ImagePicker from 'expo-image-picker';
 import { analyzeIngredientImage, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
-import { CATEGORIES, UNITS } from '../lib/constants';
+import { CATEGORIES, UNITS, ALLERGENS, parseAllergens } from '../lib/constants';
 import { NUTRIENTS, VIEWS, toView, fromView, viewFactor } from '../lib/nutrition';
 import { EXPIRY_CHIPS, addDays, isValidExpiry } from '../lib/expiry';
 
@@ -85,6 +85,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
         unit: data.unit || 'piece',
         category: data.category || 'Other',
         expiry: '',
+        allergens: parseAllergens(data.allergens),
         base: Object.fromEntries(NUTRIENTS.map((k) => [k, data[k] === undefined || data[k] === null ? '' : String(data[k])])),
         servingSize: data.servingSize ? String(data.servingSize) : '',
         servingsPerContainer: data.servingsPerContainer ? String(data.servingsPerContainer) : (data.servingSize ? '1' : ''),
@@ -125,6 +126,7 @@ export default function ScanIngredientScreen({ navigation, route }) {
       fat: result.base.fat,
       serving_size: result.servingSize.trim() || null,
       servings_per_container: result.servingsPerContainer.trim() || null,
+      allergens: result.allergens.length ? result.allergens.join(', ') : null,
     };
     // Wait for the insert, so the fridge list already has the item when we go back (bug 9.2).
     setSaving(true);
@@ -225,6 +227,24 @@ export default function ScanIngredientScreen({ navigation, route }) {
                   </Text>
                 </TouchableOpacity>
               ))}
+            </View>
+
+            <Text style={styles.label}>Allergens on the label</Text>
+            <View style={styles.chipGroup}>
+              {ALLERGENS.map((a) => {
+                const on = result.allergens.includes(a);
+                return (
+                  <TouchableOpacity
+                    key={a}
+                    style={[styles.chip, on && styles.chipWarn]}
+                    onPress={() => setResult({ ...result, allergens: on ? result.allergens.filter((x) => x !== a) : [...result.allergens, a] })}
+                    accessibilityRole="checkbox"
+                    accessibilityState={{ checked: on }}
+                  >
+                    <Text style={[styles.chipText, on && styles.chipWarnText]}>{a}</Text>
+                  </TouchableOpacity>
+                );
+              })}
             </View>
 
             <Text style={styles.label}>Expiry (optional)</Text>
@@ -379,6 +399,8 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 13, color: '#555', fontWeight: '500' },
   chipTextSelected: { color: '#0D9E8A', fontWeight: '700' },
   chipDisabled: { opacity: 0.4 },
+  chipWarn: { borderColor: '#E65100', backgroundColor: '#FFF3E0' },
+  chipWarnText: { color: '#E65100', fontWeight: '700' },
   hint: { fontSize: 12, color: '#999', marginTop: -6, marginBottom: 12 },
   nutritionGrid: {
     flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 8,

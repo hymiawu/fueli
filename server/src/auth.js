@@ -19,13 +19,18 @@ export async function requireUser(req, res, next) {
   next();
 }
 
+const FRIDGE_COLUMNS = 'name, quantity, unit, category, expiry';
+
 export async function loadFridge(req) {
-  const { data, error } = await req.db
+  const query = (columns) => req.db
     .from('ingredients')
-    .select('name, quantity, unit, category, expiry')
+    .select(columns)
     .eq('user_id', req.user.id)
     .order('expiry', { ascending: true, nullsFirst: false })
     .limit(80);
+  let { data, error } = await query(`${FRIDGE_COLUMNS}, allergens`);
+  // 42703: the allergens column (migration 003) isn't there yet. Plan without it rather than failing.
+  if (error?.code === '42703') ({ data, error } = await query(FRIDGE_COLUMNS));
   if (error) throw Object.assign(new Error('Could not read fridge'), { status: 502 });
   return data || [];
 }
