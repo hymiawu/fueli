@@ -5,6 +5,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
+import { toMetric, toImperial } from '../lib/units';
 
 const ACTIVITY_OPTIONS = ['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active'];
 const GOAL_OPTIONS = ['Lose Fat', 'Build Muscle', 'Maintain Weight', 'Eat Healthier'];
@@ -16,6 +17,10 @@ export default function EditProfileScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
+  const [units, setUnits] = useState('metric');
+  const [feet, setFeet] = useState('');
+  const [inches, setInches] = useState('');
+  const [pounds, setPounds] = useState('');
   const [activity, setActivity] = useState('');
   const [goal, setGoal] = useState('');
   const [diet, setDiet] = useState('');
@@ -31,6 +36,13 @@ export default function EditProfileScreen({ navigation }) {
       const meta = user.user_metadata || {};
       setHeight(meta.height || '');
       setWeight(meta.weight || '');
+      if (meta.units === 'imperial') {
+        const imp = toImperial(meta.height, meta.weight);
+        setUnits('imperial');
+        setFeet(imp.feet);
+        setInches(imp.inches);
+        setPounds(imp.pounds);
+      }
       setActivity(meta.activity || '');
       setGoal(meta.goal || '');
       setDiet(meta.diet || '');
@@ -40,10 +52,35 @@ export default function EditProfileScreen({ navigation }) {
     setLoading(false);
   };
 
+  // Switching systems carries the current numbers across, so nothing has to be retyped.
+  const switchUnits = (next) => {
+    if (next === units) return;
+    if (next === 'imperial') {
+      const imp = toImperial(height, weight);
+      setFeet(imp.feet);
+      setInches(imp.inches);
+      setPounds(imp.pounds);
+    } else {
+      const m = toMetric({ units: 'imperial', feet, inches, pounds });
+      if (!m.error) {
+        setHeight(m.height);
+        setWeight(m.weight);
+      }
+    }
+    setUnits(next);
+  };
+
   const handleSave = async () => {
+    const m = toMetric({ units, heightCm: height, weightKg: weight, feet, inches, pounds });
+    if (m.error) {
+      Alert.alert('Check your stats', m.error);
+      return;
+    }
+    setHeight(m.height);
+    setWeight(m.weight);
     setSaving(true);
     const { error } = await supabase.auth.updateUser({
-      data: { height, weight, activity, goal, diet, shortTermGoal, longTermGoal },
+      data: { height: m.height, weight: m.weight, units, activity, goal, diet, shortTermGoal, longTermGoal },
     });
     setSaving(false);
     if (error) Alert.alert('Error', error.message);
@@ -67,16 +104,45 @@ export default function EditProfileScreen({ navigation }) {
 
         {/* Stats */}
         <Text style={styles.sectionTitle}>📏 My Stats</Text>
-        <View style={styles.row}>
-          <View style={styles.halfField}>
-            <Text style={styles.label}>Height (cm)</Text>
-            <TextInput style={styles.input} value={height} onChangeText={setHeight} keyboardType="numeric" placeholder="e.g. 165" placeholderTextColor="#aaa" />
-          </View>
-          <View style={styles.halfField}>
-            <Text style={styles.label}>Weight (kg)</Text>
-            <TextInput style={styles.input} value={weight} onChangeText={setWeight} keyboardType="numeric" placeholder="e.g. 60" placeholderTextColor="#aaa" />
-          </View>
+        <View style={styles.chipGroup}>
+          {[['metric', 'Metric'], ['imperial', 'Imperial']].map(([key, label]) => (
+            <TouchableOpacity
+              key={key}
+              style={[styles.chip, units === key && styles.chipSelected]}
+              onPress={() => switchUnits(key)}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: units === key }}
+            >
+              <Text style={[styles.chipText, units === key && styles.chipTextSelected]}>{label}</Text>
+            </TouchableOpacity>
+          ))}
         </View>
+        {units === 'metric' ? (
+          <View style={styles.row}>
+            <View style={styles.halfField}>
+              <Text style={styles.label}>Height (cm)</Text>
+              <TextInput style={styles.input} value={height} onChangeText={setHeight} keyboardType="numeric" placeholder="e.g. 165" placeholderTextColor="#aaa" />
+            </View>
+            <View style={styles.halfField}>
+              <Text style={styles.label}>Weight (kg)</Text>
+              <TextInput style={styles.input} value={weight} onChangeText={setWeight} keyboardType="numeric" placeholder="e.g. 60" placeholderTextColor="#aaa" />
+            </View>
+          </View>
+        ) : (
+          <View style={styles.row}>
+            <View style={styles.halfField}>
+              <Text style={styles.label}>Height (ft / in)</Text>
+              <View style={styles.row}>
+                <TextInput style={[styles.input, styles.halfField]} value={feet} onChangeText={setFeet} keyboardType="numeric" placeholder="5" placeholderTextColor="#aaa" />
+                <TextInput style={[styles.input, styles.halfField]} value={inches} onChangeText={setInches} keyboardType="numeric" placeholder="6" placeholderTextColor="#aaa" />
+              </View>
+            </View>
+            <View style={styles.halfField}>
+              <Text style={styles.label}>Weight (lb)</Text>
+              <TextInput style={styles.input} value={pounds} onChangeText={setPounds} keyboardType="numeric" placeholder="e.g. 130" placeholderTextColor="#aaa" />
+            </View>
+          </View>
+        )}
 
         {/* Activity */}
         <Text style={styles.sectionTitle}>🏃 Activity Level</Text>
