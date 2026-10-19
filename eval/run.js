@@ -150,8 +150,8 @@ for (const [suite, [list, run, grade]] of Object.entries(suites)) {
       const pass = Object.values(checks).every(Boolean);
       process.stdout.write(`${pass ? 'PASS' : 'FAIL'}  ${suite}/${c.id}  ${JSON.stringify(checks)}\n`);
       // Process scores: how the answer was reached, recorded but not graded (6.3.6).
-      const process = r.out?.planSource ? { planSource: r.out.planSource } : r.out?.exerciseCheck ? { exercisesInvented: r.out.exerciseCheck.removed, ...r.out.exerciseCheck } : undefined;
-      return { suite, id: c.id, note: c.note, pass, checks, process, ms: r.ms, error: r.error, flags: r.trace.flags, tokens: r.trace.inputTokens + r.trace.outputTokens, toolCalls: r.trace.toolCalls, output: r.out };
+      const processScore = r.out?.planSource ? { planSource: r.out.planSource } : r.out?.exerciseCheck ? { exercisesInvented: r.out.exerciseCheck.removed, ...r.out.exerciseCheck } : undefined;
+      return { suite, id: c.id, note: c.note, pass, checks, process: processScore, ms: r.ms, error: r.error, flags: r.trace.flags, tokens: r.trace.inputTokens + r.trace.outputTokens, toolCalls: r.trace.toolCalls, output: r.out };
     }),
   );
   results.push(...rows);
