@@ -115,7 +115,7 @@ function evaluate(recipe, ctx) {
 
 // Picks one recipe per needed slot. Returns { meals, unfilled } where unfilled lists the slots for the AI planner.
 export function matchRecipes({ fridge, profile, neededTypes, servings = 1, mode = null, today, exclude = [], rng = Math.random }) {
-  const ctx = { fridge, profile, servings, mode, today, target: profile.approxCaloriesPerMeal, soon: soonToExpire(fridge, today), rng };
+  const ctx = { fridge, profile, servings, mode, today, target: profile.approxCaloriesPerMeal, soon: soonToExpire(fridge, today, profile), rng };
   const skip = new Set(exclude);
   const picked = [];
   const usedSoon = new Set();

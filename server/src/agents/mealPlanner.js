@@ -116,7 +116,7 @@ export async function planMeals(args, deps = { runAgent, jsonCompletion }) {
 async function planWithAI({ fridge, profile, neededTypes, servings = 1, mode = null, today = utcToday(), trace }, deps) {
   const serves = `Each meal serves ${servings} ${servings === 1 ? 'person' : 'people'}.`;
   const p = profileView(profile);
-  const block = modeBlock(mode, fridge, today);
+  const block = modeBlock(mode, fridge, today, p);
   const ctx = { mode, profile: p, fridge, today, fullDay: neededTypes.length === 3 };
   const draft = await deps.runAgent({
     system: SYSTEM,

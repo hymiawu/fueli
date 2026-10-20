@@ -112,3 +112,13 @@ test('without a mode, no mode rules apply (older callers and the original eval c
   const out = await planMeals({ fridge: dated, profile: {}, neededTypes: ['Dinner'], useLibrary: false }, deps);
   assert.equal(out.meals.length, 1);
 });
+
+test('Clean out only counts expiring food the user can eat', () => {
+  const fridge = [
+    { name: 'bacon', quantity: '6', unit: 'piece', expiry: '2026-10-22' },
+    { name: 'shrimp', quantity: '200', unit: 'g', expiry: '2026-10-23' },
+    { name: 'spinach', quantity: '200', unit: 'g', expiry: '2026-10-23' },
+  ];
+  assert.deepEqual(soonToExpire(fridge, '2026-10-22', { diet: 'Vegetarian' }).map((r) => r.name), ['spinach']);
+  assert.deepEqual(soonToExpire(fridge, '2026-10-22', { diet: 'No Restriction', allergies: ['Shellfish'] }).map((r) => r.name), ['bacon', 'spinach']);
+});
