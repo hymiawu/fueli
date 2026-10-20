@@ -90,6 +90,8 @@ export const MealRequest = z.object({
   mode: z.enum(['hungry', 'healthy', 'cleanOut']).default('hungry'),
   // The user's local date, so "expires within 3 days" matches their calendar.
   today: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  // Library recipe ids already on screen, so Refresh returns different ones (D-19).
+  exclude: z.array(z.string().max(60)).max(45).default([]),
 });
 export const WorkoutRequest = z.object({
   filterType: z.enum(['Strength', 'Cardio', 'HIIT', 'Flexibility']).nullable().optional(),

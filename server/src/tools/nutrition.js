@@ -20,9 +20,14 @@ const index = db.foods.map((f) => ({ food: f, keys: [f.name, ...f.aliases].map(n
 // Words that describe preparation rather than the food itself.
 const STOP = new Set(['fresh', 'raw', 'cooked', 'chopped', 'diced', 'sliced', 'large', 'small', 'medium', 'organic', 'boneless', 'skinless', 'of', 'and', 'cup', 'g']);
 
+// Zero-calorie staples are never a food: without this "water" matched "tuna in water" and
+// "black pepper" matched bell pepper's alias "pepper".
+const NOT_FOOD = new Set(['water', 'ice', 'salt', 'black pepper', 'white pepper', 'sea salt']);
+const isNotFood = (q) => NOT_FOOD.has(q) || /\b(spice|herb|seasoning)$/.test(q);
+
 export function lookupFood(name) {
   const q = norm(name);
-  if (!q) return null;
+  if (!q || isNotFood(q)) return null;
   let best = null;
   for (const { food, keys } of index) {
     for (const k of keys) {
@@ -61,7 +66,9 @@ export function computeMacros(items) {
   const total = { calories: 0, protein: 0, carbs: 0, fat: 0 };
   const matched = [];
   const unmatched = [];
-  for (const it of items || []) {
+  // Zero-calorie staples (water, salt, spices) add nothing and don't count toward coverage.
+  const countable = (items || []).filter((it) => !isNotFood(norm(it.name)));
+  for (const it of countable) {
     const food = lookupFood(it.name);
     const grams = food ? toGrams(it.quantity, it.unit, food) : null;
     if (!food || grams == null) {
@@ -72,7 +79,7 @@ export function computeMacros(items) {
     for (const k of Object.keys(total)) total[k] += food.per100g[k] * f;
     matched.push({ name: it.name, matchedTo: food.name, grams: Math.round(grams) });
   }
-  const n = (items || []).length;
+  const n = countable.length;
   return {
     calories: Math.round(total.calories),
     protein: Math.round(total.protein),

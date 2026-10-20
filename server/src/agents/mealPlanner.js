@@ -11,6 +11,7 @@ import { ALLERGENS } from '../schemas.js';
 import { verifyMeal } from './nutritionVerifier.js';
 import { checkMeal } from './safetyGuard.js';
 import { checkModes, modeBlock, HELD_BACK } from './mealModes.js';
+import { matchRecipes } from '../plan/recipeMatcher.js';
 
 const SYSTEM = `You are Fueli's meal planner. You plan home-cooked meals that use what is already in the user's fridge and fit their goal and diet.
 ${DATA_RULE}
@@ -81,9 +82,38 @@ function evaluate(meals, ctx) {
 
 const utcToday = () => new Date().toISOString().slice(0, 10);
 
+// The recipe library (D-19) is used first unless RECIPE_LIBRARY=off or the caller passes useLibrary: false.
+const libraryOn = () => process.env.RECIPE_LIBRARY !== 'off';
+
 // `deps` lets tests replace the model calls; production always uses the real ones.
 // `mode` is one of MODES; without it (older callers, the original eval cases) no mode rules apply.
-export async function planMeals({ fridge, profile, neededTypes, servings = 1, mode = null, today = utcToday(), trace }, deps = { runAgent, jsonCompletion }) {
+// Recipes come from the library when one fits each slot; only the slots it can't fill go to the AI planner.
+export async function planMeals(args, deps = { runAgent, jsonCompletion }) {
+  const { fridge, profile, neededTypes, servings = 1, mode = null, today = utcToday(), exclude = [], useLibrary = libraryOn(), rng, trace } = args;
+  if (!useLibrary) return { ...(await planWithAI({ ...args, today }, deps)), source: 'ai' };
+
+  const p = profileView(profile);
+  const lib = matchRecipes({ fridge, profile: p, neededTypes, servings, mode, today, exclude, rng });
+  const libMeals = finalize(lib.meals, fridge, p, servings).map(({ ruleViolations, ...m }) => ({ ...m, recipeSource: 'library' }));
+  const libNote = checkModes(libMeals, { mode, profile: p, fridge, today, fullDay: neededTypes.length === 3 }).note;
+  const withEvidence = checkModes(libMeals, { mode, profile: p, fridge, today, fullDay: false }).meals.map(({ modeViolations, ...m }) => m);
+  if (!lib.unfilled.length) {
+    trace?.flags.push('library');
+    return { mode, modeNote: libNote, meals: withEvidence, blocked: [], source: 'library' };
+  }
+  trace?.flags.push(withEvidence.length ? 'library_partial' : 'library_none');
+  const ai = await planWithAI({ ...args, neededTypes: lib.unfilled, today }, deps);
+  const order = (m) => ['Breakfast', 'Lunch', 'Dinner'].indexOf(m.type);
+  return {
+    mode,
+    modeNote: libNote ?? ai.modeNote,
+    meals: [...withEvidence, ...ai.meals.map((m) => ({ ...m, recipeSource: 'ai' }))].sort((a, b) => order(a) - order(b)),
+    blocked: ai.blocked,
+    source: withEvidence.length ? 'library+ai' : 'ai',
+  };
+}
+
+async function planWithAI({ fridge, profile, neededTypes, servings = 1, mode = null, today = utcToday(), trace }, deps) {
   const serves = `Each meal serves ${servings} ${servings === 1 ? 'person' : 'people'}.`;
   const p = profileView(profile);
   const block = modeBlock(mode, fridge, today);

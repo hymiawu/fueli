@@ -164,7 +164,8 @@ export default function MealScreen() {
     if (neededTypes.length === 0) { Alert.alert('All done! 🎉','You cooked all meals today.'); return; }
     setLoading(true); setExpandedMeal(null);
     try {
-      const res = await getMealSuggestions(neededTypes, servings, mode);
+      const shown = current.map(m => m.recipeId).filter(Boolean);
+      const res = await getMealSuggestions(neededTypes, servings, mode, shown);
       const { meals: suggestions, blocked } = res;
       if (blocked?.length) Alert.alert('Some meals were held back', blocked.map(b => `• ${b.type}: ${b.reason}`).join('\n'));
       const generatedMode = res.mode || mode;
@@ -476,6 +477,8 @@ function MealCard({ meal, expanded, onToggleExpand, onToggleCooked, onTogglePlan
       {meal.generatedMode === 'cleanOut' && meal.modeNote && <Text style={styles.modeNote}>{meal.modeNote}</Text>}
       <Text style={styles.mealName}>{meal.name}</Text>
       <Text style={styles.mealMeta}>⏱ {meal.prepTime || '—'}  ·  🔥 {meal.calories} kcal{meal.servings > 1 ? ` per person  ·  👥 Serves ${meal.servings}` : ''}</Text>
+      {meal.recipeSource === 'library' && <Text style={styles.sourceTag}>📖 From Fueli's recipe library</Text>}
+      {meal.recipeSource === 'ai' && <Text style={styles.sourceTag}>✨ Written by AI for your fridge</Text>}
       {meal.macroSource && meal.macroSource !== 'estimated' && (
         <Text style={styles.verifiedTag}>✓ Macros checked against nutrition database{meal.macroSource === 'corrected' ? ' (corrected)' : ''}</Text>
       )}
@@ -642,6 +645,7 @@ const styles = StyleSheet.create({
   addLogBtn: { backgroundColor:'#9C27B0', borderRadius:12, padding:14, alignItems:'center' },
   addLogBtnText: { color:'#fff', fontSize:15, fontWeight:'700' },
   aiNote: { fontSize:12, color:'#888', marginTop:-8, marginBottom:12 },
+  sourceTag: { fontSize:12, color:'#777', fontWeight:'600', marginTop:-6, marginBottom:8 },
   verifiedTag: { fontSize:12, color:'#0D9E8A', fontWeight:'600', marginTop:-6, marginBottom:10 },
   warnBox: { backgroundColor:'#FFFBEA', borderRadius:10, padding:10, marginTop:4, marginBottom:4 },
   warnText: { fontSize:12, color:'#8A6D00', lineHeight:18 },

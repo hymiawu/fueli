@@ -1,0 +1,1857 @@
+{
+ "source": "Fueli recipe library, written for this app (Oct 2026); every ingredient is priced by the nutrition database or is a pantry staple. Quantities are for one serving; \"optional\" ingredients are dropped when they are not in the fridge.",
+ "recipes": [
+  {
+   "id": "banana-pb-oats",
+   "type": "Breakfast",
+   "name": "Banana peanut butter oats",
+   "prepMinutes": 10,
+   "ingredients": [
+    {
+     "name": "oats",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "milk",
+     "quantity": 200,
+     "unit": "ml"
+    },
+    {
+     "name": "banana",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "peanut butter",
+     "quantity": 1,
+     "unit": "tbsp",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Simmer the oats in the milk for 5 minutes, stirring.",
+    "Slice the banana on top and add the peanut butter."
+   ]
+  },
+  {
+   "id": "yogurt-berry-bowl",
+   "type": "Breakfast",
+   "name": "Greek yogurt berry bowl",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "greek yogurt",
+     "quantity": 200,
+     "unit": "g"
+    },
+    {
+     "name": "blueberries",
+     "quantity": 80,
+     "unit": "g"
+    },
+    {
+     "name": "strawberries",
+     "quantity": 6,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "oats",
+     "quantity": 30,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "honey",
+     "quantity": 1,
+     "unit": "tbsp",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Spoon the yogurt into a bowl.",
+    "Top with the berries and oats, then drizzle with honey."
+   ]
+  },
+  {
+   "id": "spinach-mushroom-omelette",
+   "type": "Breakfast",
+   "name": "Spinach and mushroom omelette",
+   "prepMinutes": 12,
+   "ingredients": [
+    {
+     "name": "egg",
+     "quantity": 3,
+     "unit": "piece"
+    },
+    {
+     "name": "spinach",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "mushroom",
+     "quantity": 4,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "cheddar cheese",
+     "quantity": 20,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "salt",
+     "quantity": 1,
+     "unit": "pinch"
+    }
+   ],
+   "steps": [
+    "Slice the mushrooms and cook them in the oil for 3 minutes, then add the spinach until wilted.",
+    "Beat the eggs with a pinch of salt, pour over the vegetables and cook on low heat.",
+    "Sprinkle the cheese, fold and serve."
+   ]
+  },
+  {
+   "id": "avocado-egg-toast",
+   "type": "Breakfast",
+   "name": "Avocado toast with eggs",
+   "prepMinutes": 10,
+   "ingredients": [
+    {
+     "name": "bread",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "avocado",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "egg",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "lemon",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "salt",
+     "quantity": 1,
+     "unit": "pinch"
+    },
+    {
+     "name": "black pepper",
+     "quantity": 1,
+     "unit": "pinch"
+    }
+   ],
+   "steps": [
+    "Toast the bread and fry or poach the eggs.",
+    "Mash the avocado with lemon juice, salt and pepper, spread on the toast and top with the eggs."
+   ]
+  },
+  {
+   "id": "tofu-scramble",
+   "type": "Breakfast",
+   "name": "Tofu scramble on toast",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "tofu",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "spinach",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "onion",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "bread",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Soften the chopped onion in the oil.",
+    "Crumble in the tofu, add the diced tomato and soy sauce and cook 5 minutes.",
+    "Stir in the spinach and serve on toast."
+   ]
+  },
+  {
+   "id": "breakfast-burrito",
+   "type": "Breakfast",
+   "name": "Egg and bean breakfast burrito",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "tortilla",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "egg",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "black beans",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "cheddar cheese",
+     "quantity": 20,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Cook the diced pepper for 3 minutes, add the beans to warm through.",
+    "Scramble in the eggs.",
+    "Fill the warm tortilla, add the cheese and roll."
+   ]
+  },
+  {
+   "id": "cottage-apple-bowl",
+   "type": "Breakfast",
+   "name": "Cottage cheese with apple and walnuts",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "cottage cheese",
+     "quantity": 200,
+     "unit": "g"
+    },
+    {
+     "name": "apple",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "walnuts",
+     "quantity": 15,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "honey",
+     "quantity": 1,
+     "unit": "tsp",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Dice the apple.",
+    "Top the cottage cheese with apple and walnuts and drizzle with honey."
+   ]
+  },
+  {
+   "id": "sweet-potato-hash",
+   "type": "Breakfast",
+   "name": "Sweet potato hash with eggs",
+   "prepMinutes": 25,
+   "ingredients": [
+    {
+     "name": "sweet potato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "egg",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tbsp"
+    }
+   ],
+   "steps": [
+    "Dice the sweet potato and fry in the oil for 12 minutes.",
+    "Add the onion and pepper and cook 5 minutes more.",
+    "Make two wells, crack in the eggs, cover and cook until set."
+   ]
+  },
+  {
+   "id": "pb-banana-toast",
+   "type": "Breakfast",
+   "name": "Peanut butter banana toast",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "bread",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "peanut butter",
+     "quantity": 2,
+     "unit": "tbsp"
+    },
+    {
+     "name": "banana",
+     "quantity": 1,
+     "unit": "piece"
+    }
+   ],
+   "steps": [
+    "Toast the bread.",
+    "Spread the peanut butter and top with sliced banana."
+   ]
+  },
+  {
+   "id": "overnight-soy-oats",
+   "type": "Breakfast",
+   "name": "Overnight oats with blueberries",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "oats",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "soy milk",
+     "quantity": 200,
+     "unit": "ml"
+    },
+    {
+     "name": "blueberries",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "almonds",
+     "quantity": 12,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Stir the oats into the soy milk and leave in the fridge overnight (or 10 minutes for a quick version).",
+    "Top with blueberries and chopped almonds."
+   ]
+  },
+  {
+   "id": "strawberry-banana-smoothie",
+   "type": "Breakfast",
+   "name": "Strawberry banana smoothie",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "banana",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "strawberries",
+     "quantity": 8,
+     "unit": "piece"
+    },
+    {
+     "name": "greek yogurt",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "milk",
+     "quantity": 150,
+     "unit": "ml"
+    },
+    {
+     "name": "oats",
+     "quantity": 20,
+     "unit": "g",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Blend everything until smooth."
+   ]
+  },
+  {
+   "id": "blueberry-pb-smoothie",
+   "type": "Breakfast",
+   "name": "Blueberry peanut butter smoothie",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "banana",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "blueberries",
+     "quantity": 80,
+     "unit": "g"
+    },
+    {
+     "name": "almond milk",
+     "quantity": 250,
+     "unit": "ml"
+    },
+    {
+     "name": "peanut butter",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "oats",
+     "quantity": 30,
+     "unit": "g",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Blend everything until smooth."
+   ]
+  },
+  {
+   "id": "bacon-eggs-tomato",
+   "type": "Breakfast",
+   "name": "Bacon, eggs and grilled tomato",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "bacon",
+     "quantity": 3,
+     "unit": "piece"
+    },
+    {
+     "name": "egg",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "bread",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Fry the bacon until crisp, then fry the eggs in the same pan.",
+    "Grill the halved tomato for 3 minutes and serve with toast."
+   ]
+  },
+  {
+   "id": "apple-quinoa-porridge",
+   "type": "Breakfast",
+   "name": "Apple cinnamon quinoa porridge",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "quinoa",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "almond milk",
+     "quantity": 200,
+     "unit": "ml"
+    },
+    {
+     "name": "apple",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "walnuts",
+     "quantity": 15,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "cinnamon spice",
+     "quantity": 1,
+     "unit": "pinch"
+    }
+   ],
+   "steps": [
+    "Warm the cooked quinoa in the almond milk for 5 minutes.",
+    "Stir in the grated apple and cinnamon and top with walnuts."
+   ]
+  },
+  {
+   "id": "hummus-veggie-toast",
+   "type": "Breakfast",
+   "name": "Hummus and cucumber toast",
+   "prepMinutes": 5,
+   "ingredients": [
+    {
+     "name": "bread",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "hummus",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.3,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Toast the bread and spread the hummus.",
+    "Top with sliced cucumber and tomato."
+   ]
+  },
+  {
+   "id": "chicken-rice-bowl",
+   "type": "Lunch",
+   "name": "Garlic chicken rice bowl",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "chicken breast",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "white rice",
+     "quantity": 180,
+     "unit": "g"
+    },
+    {
+     "name": "broccoli",
+     "quantity": 100,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Slice the chicken and cook in the oil with the garlic for 7 minutes.",
+    "Steam the broccoli for 4 minutes.",
+    "Serve over warm rice with the soy sauce."
+   ]
+  },
+  {
+   "id": "tuna-wrap",
+   "type": "Lunch",
+   "name": "Tuna salad wrap",
+   "prepMinutes": 10,
+   "ingredients": [
+    {
+     "name": "tortilla",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "tuna",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "lettuce",
+     "quantity": 30,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "greek yogurt",
+     "quantity": 30,
+     "unit": "g"
+    }
+   ],
+   "steps": [
+    "Mix the tuna with the yogurt.",
+    "Fill the tortilla with lettuce, tomato, cucumber and the tuna, then roll."
+   ]
+  },
+  {
+   "id": "chickpea-quinoa-salad",
+   "type": "Lunch",
+   "name": "Chickpea quinoa salad",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "quinoa",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "chickpeas",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.3,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "lemon",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tbsp"
+    }
+   ],
+   "steps": [
+    "Dice the cucumber and tomato.",
+    "Toss with the quinoa and chickpeas, lemon juice and oil."
+   ]
+  },
+  {
+   "id": "lentil-soup",
+   "type": "Lunch",
+   "name": "Tomato lentil soup",
+   "prepMinutes": 30,
+   "ingredients": [
+    {
+     "name": "lentils",
+     "quantity": 200,
+     "unit": "g"
+    },
+    {
+     "name": "carrot",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "water",
+     "quantity": 300,
+     "unit": "ml"
+    }
+   ],
+   "steps": [
+    "Soften the onion, carrot and garlic in the oil for 5 minutes.",
+    "Add the tomato, lentils and water and simmer 20 minutes.",
+    "Season and blend half if you like it thick."
+   ]
+  },
+  {
+   "id": "black-bean-bowl",
+   "type": "Lunch",
+   "name": "Black bean burrito bowl",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "brown rice",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "black beans",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "corn",
+     "quantity": 80,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "avocado",
+     "quantity": 0.33,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "lemon",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Warm the rice, beans and corn.",
+    "Top with diced pepper and avocado and squeeze over the lemon."
+   ]
+  },
+  {
+   "id": "caprese-pasta",
+   "type": "Lunch",
+   "name": "Tomato mozzarella pasta",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "pasta",
+     "quantity": 200,
+     "unit": "g"
+    },
+    {
+     "name": "tomato",
+     "quantity": 1.5,
+     "unit": "piece"
+    },
+    {
+     "name": "mozzarella",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "spinach",
+     "quantity": 30,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Cook the pasta.",
+    "Toss with the chopped tomato, spinach and oil while hot, then add the torn mozzarella."
+   ]
+  },
+  {
+   "id": "egg-fried-rice",
+   "type": "Lunch",
+   "name": "Egg fried rice with peas",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "white rice",
+     "quantity": 200,
+     "unit": "g"
+    },
+    {
+     "name": "egg",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "peas",
+     "quantity": 60,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "carrot",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Fry the diced carrot and peas in the oil for 3 minutes.",
+    "Add the rice and fry 3 minutes, push aside and scramble the eggs.",
+    "Mix together with the soy sauce."
+   ]
+  },
+  {
+   "id": "salmon-spinach-salad",
+   "type": "Lunch",
+   "name": "Salmon and avocado spinach salad",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "salmon",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "spinach",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "avocado",
+     "quantity": 0.33,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "lemon",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Pan-fry the salmon 4 minutes each side.",
+    "Toss the spinach, cucumber and avocado with lemon and oil, then flake the salmon on top."
+   ]
+  },
+  {
+   "id": "tofu-stir-fry",
+   "type": "Lunch",
+   "name": "Tofu and broccoli stir fry",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "tofu",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "broccoli",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "white rice",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Cube the tofu and fry until golden.",
+    "Add the broccoli, pepper and garlic and stir-fry 5 minutes.",
+    "Add the soy sauce and serve with rice."
+   ]
+  },
+  {
+   "id": "hummus-wrap",
+   "type": "Lunch",
+   "name": "Hummus veggie wrap",
+   "prepMinutes": 10,
+   "ingredients": [
+    {
+     "name": "tortilla",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "hummus",
+     "quantity": 60,
+     "unit": "g"
+    },
+    {
+     "name": "spinach",
+     "quantity": 30,
+     "unit": "g"
+    },
+    {
+     "name": "carrot",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Spread the hummus on the tortilla.",
+    "Add the spinach, grated carrot and cucumber and roll."
+   ]
+  },
+  {
+   "id": "chicken-quesadilla",
+   "type": "Lunch",
+   "name": "Chicken quesadilla",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "tortilla",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "chicken breast",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "cheddar cheese",
+     "quantity": 40,
+     "unit": "g"
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Cook the sliced chicken, pepper and onion for 7 minutes.",
+    "Fill the tortillas with the mix and cheese and toast 2 minutes per side."
+   ]
+  },
+  {
+   "id": "beef-broccoli",
+   "type": "Lunch",
+   "name": "Beef and broccoli with rice",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "beef steak",
+     "quantity": 130,
+     "unit": "g"
+    },
+    {
+     "name": "broccoli",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "white rice",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Slice the beef thinly and sear in the oil for 3 minutes.",
+    "Add the broccoli and garlic and cook 4 minutes.",
+    "Add the soy sauce and serve over rice."
+   ]
+  },
+  {
+   "id": "chicken-salad-sandwich",
+   "type": "Lunch",
+   "name": "Chicken salad sandwich",
+   "prepMinutes": 10,
+   "ingredients": [
+    {
+     "name": "bread",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "chicken breast",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "greek yogurt",
+     "quantity": 40,
+     "unit": "g"
+    },
+    {
+     "name": "lettuce",
+     "quantity": 20,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "apple",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Chop the cooked chicken and apple and mix with the yogurt.",
+    "Fill the bread with lettuce and the chicken salad."
+   ]
+  },
+  {
+   "id": "tempeh-grain-bowl",
+   "type": "Lunch",
+   "name": "Tempeh kale grain bowl",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "tempeh",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "quinoa",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "kale",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "carrot",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    }
+   ],
+   "steps": [
+    "Slice and pan-fry the tempeh until golden, add the soy sauce.",
+    "Massage the kale, grate the carrot and serve everything over the quinoa."
+   ]
+  },
+  {
+   "id": "potato-egg-salad",
+   "type": "Lunch",
+   "name": "Potato and egg salad",
+   "prepMinutes": 25,
+   "ingredients": [
+    {
+     "name": "potato",
+     "quantity": 1.5,
+     "unit": "piece"
+    },
+    {
+     "name": "egg",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "greek yogurt",
+     "quantity": 40,
+     "unit": "g"
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Boil the cubed potatoes 12 minutes and the eggs 9 minutes.",
+    "Cool, chop and mix with the yogurt, cucumber and onion."
+   ]
+  },
+  {
+   "id": "salmon-sweet-potato",
+   "type": "Dinner",
+   "name": "Baked salmon with sweet potato and broccoli",
+   "prepMinutes": 30,
+   "ingredients": [
+    {
+     "name": "salmon",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "sweet potato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "broccoli",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "lemon",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Roast the sweet potato wedges at 200 °C for 25 minutes.",
+    "Add the salmon and broccoli for the last 12 minutes and finish with lemon."
+   ]
+  },
+  {
+   "id": "chicken-veg-stir-fry",
+   "type": "Dinner",
+   "name": "Chicken vegetable stir fry",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "chicken breast",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "zucchini",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "white rice",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Stir-fry the sliced chicken 6 minutes.",
+    "Add the pepper, zucchini and garlic for 4 minutes, then the soy sauce.",
+    "Serve with rice."
+   ]
+  },
+  {
+   "id": "spaghetti-bolognese",
+   "type": "Dinner",
+   "name": "Spaghetti bolognese",
+   "prepMinutes": 30,
+   "ingredients": [
+    {
+     "name": "pasta",
+     "quantity": 200,
+     "unit": "g"
+    },
+    {
+     "name": "ground beef",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "tomato",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Brown the beef with the onion and garlic in the oil.",
+    "Add the chopped tomatoes and simmer 15 minutes.",
+    "Serve over the cooked pasta."
+   ]
+  },
+  {
+   "id": "chickpea-spinach-curry",
+   "type": "Dinner",
+   "name": "Chickpea spinach curry",
+   "prepMinutes": 25,
+   "ingredients": [
+    {
+     "name": "chickpeas",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "spinach",
+     "quantity": 60,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1.5,
+     "unit": "piece"
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "brown rice",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    },
+    {
+     "name": "curry spice",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Soften the onion and garlic in the oil, stir in the curry spice.",
+    "Add the tomatoes and chickpeas and simmer 12 minutes.",
+    "Stir in the spinach and serve with rice."
+   ]
+  },
+  {
+   "id": "garlic-shrimp-pasta",
+   "type": "Dinner",
+   "name": "Garlic shrimp pasta",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "shrimp",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "pasta",
+     "quantity": 180,
+     "unit": "g"
+    },
+    {
+     "name": "garlic",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "spinach",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "lemon",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Cook the pasta.",
+    "Sauté the garlic in the oil, add the shrimp for 3 minutes, then the spinach.",
+    "Toss with the pasta and lemon juice."
+   ]
+  },
+  {
+   "id": "pork-potatoes",
+   "type": "Dinner",
+   "name": "Pork loin with roast potatoes and carrots",
+   "prepMinutes": 35,
+   "ingredients": [
+    {
+     "name": "pork loin",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "potato",
+     "quantity": 1.5,
+     "unit": "piece"
+    },
+    {
+     "name": "carrot",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Roast the cubed potatoes and carrots at 200 °C for 30 minutes.",
+    "Sear the pork 4 minutes per side and rest before slicing."
+   ]
+  },
+  {
+   "id": "veg-frittata",
+   "type": "Dinner",
+   "name": "Vegetable frittata",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "egg",
+     "quantity": 3,
+     "unit": "piece"
+    },
+    {
+     "name": "zucchini",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "bell pepper",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "parmesan",
+     "quantity": 15,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Soften the vegetables in the oil for 5 minutes.",
+    "Pour over the beaten eggs and parmesan and cook on low, covered, for 8 minutes."
+   ]
+  },
+  {
+   "id": "lentil-bolognese",
+   "type": "Dinner",
+   "name": "Lentil bolognese",
+   "prepMinutes": 25,
+   "ingredients": [
+    {
+     "name": "lentils",
+     "quantity": 180,
+     "unit": "g"
+    },
+    {
+     "name": "pasta",
+     "quantity": 150,
+     "unit": "g"
+    },
+    {
+     "name": "tomato",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "carrot",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "garlic",
+     "quantity": 1,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Soften the onion, carrot and garlic.",
+    "Add the tomatoes and lentils and simmer 12 minutes.",
+    "Serve over the cooked pasta."
+   ]
+  },
+  {
+   "id": "chicken-thigh-traybake",
+   "type": "Dinner",
+   "name": "Chicken thigh traybake",
+   "prepMinutes": 40,
+   "ingredients": [
+    {
+     "name": "chicken thigh",
+     "quantity": 160,
+     "unit": "g"
+    },
+    {
+     "name": "potato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "zucchini",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "olive oil",
+     "quantity": 1,
+     "unit": "tsp"
+    }
+   ],
+   "steps": [
+    "Toss everything with the oil and a pinch of salt.",
+    "Roast at 200 °C for 35 minutes."
+   ]
+  },
+  {
+   "id": "peanut-tofu-noodles",
+   "type": "Dinner",
+   "name": "Peanut tofu noodles",
+   "prepMinutes": 20,
+   "ingredients": [
+    {
+     "name": "pasta",
+     "quantity": 180,
+     "unit": "g"
+    },
+    {
+     "name": "tofu",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "peanut butter",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "soy sauce",
+     "quantity": 1,
+     "unit": "tbsp"
+    },
+    {
+     "name": "carrot",
+     "quantity": 0.5,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "cucumber",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Cook the noodles and pan-fry the cubed tofu.",
+    "Whisk the peanut butter and soy sauce with a splash of hot water.",
+    "Toss everything with the grated carrot and cucumber."
+   ]
+  },
+  {
+   "id": "steak-potato-broccoli",
+   "type": "Dinner",
+   "name": "Steak with potato and broccoli",
+   "prepMinutes": 25,
+   "ingredients": [
+    {
+     "name": "beef steak",
+     "quantity": 160,
+     "unit": "g"
+    },
+    {
+     "name": "potato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "broccoli",
+     "quantity": 100,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "butter",
+     "quantity": 5,
+     "unit": "g",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Boil the potato 15 minutes and steam the broccoli 4 minutes.",
+    "Sear the steak 3 to 4 minutes per side and rest.",
+    "Serve with the butter on the potato."
+   ]
+  },
+  {
+   "id": "black-bean-tacos",
+   "type": "Dinner",
+   "name": "Black bean tacos",
+   "prepMinutes": 15,
+   "ingredients": [
+    {
+     "name": "tortilla",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "black beans",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "corn",
+     "quantity": 60,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "avocado",
+     "quantity": 0.33,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "cheddar cheese",
+     "quantity": 20,
+     "unit": "g",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Warm the beans and corn.",
+    "Fill the tortillas with beans, corn, tomato, avocado and cheese."
+   ]
+  },
+  {
+   "id": "mushroom-spinach-rice",
+   "type": "Dinner",
+   "name": "Creamy mushroom spinach rice",
+   "prepMinutes": 25,
+   "ingredients": [
+    {
+     "name": "brown rice",
+     "quantity": 180,
+     "unit": "g"
+    },
+    {
+     "name": "mushroom",
+     "quantity": 6,
+     "unit": "piece"
+    },
+    {
+     "name": "spinach",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "onion",
+     "quantity": 0.5,
+     "unit": "piece"
+    },
+    {
+     "name": "parmesan",
+     "quantity": 15,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "butter",
+     "quantity": 5,
+     "unit": "g",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Cook the onion and sliced mushrooms in the butter for 6 minutes.",
+    "Stir in the rice and a splash of water, then the spinach and parmesan."
+   ]
+  },
+  {
+   "id": "tuna-pasta-bake",
+   "type": "Dinner",
+   "name": "Tuna pasta bake",
+   "prepMinutes": 30,
+   "ingredients": [
+    {
+     "name": "pasta",
+     "quantity": 180,
+     "unit": "g"
+    },
+    {
+     "name": "tuna",
+     "quantity": 100,
+     "unit": "g"
+    },
+    {
+     "name": "peas",
+     "quantity": 60,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "mozzarella",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece"
+    }
+   ],
+   "steps": [
+    "Mix the cooked pasta, tuna, peas and chopped tomato in a dish.",
+    "Top with mozzarella and bake at 200 °C for 15 minutes."
+   ]
+  },
+  {
+   "id": "quinoa-stuffed-peppers",
+   "type": "Dinner",
+   "name": "Quinoa stuffed peppers",
+   "prepMinutes": 35,
+   "ingredients": [
+    {
+     "name": "bell pepper",
+     "quantity": 2,
+     "unit": "piece"
+    },
+    {
+     "name": "quinoa",
+     "quantity": 120,
+     "unit": "g"
+    },
+    {
+     "name": "black beans",
+     "quantity": 80,
+     "unit": "g"
+    },
+    {
+     "name": "tomato",
+     "quantity": 1,
+     "unit": "piece"
+    },
+    {
+     "name": "onion",
+     "quantity": 0.25,
+     "unit": "piece",
+     "optional": true
+    },
+    {
+     "name": "corn",
+     "quantity": 40,
+     "unit": "g",
+     "optional": true
+    }
+   ],
+   "steps": [
+    "Halve and seed the peppers.",
+    "Mix the quinoa, beans, corn, tomato and onion and fill the peppers.",
+    "Bake at 200 °C for 25 minutes."
+   ]
+  }
+ ]
+}
