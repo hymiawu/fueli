@@ -32,7 +32,7 @@ test('a meal that breaks a vegetarian diet is repaired once and the fix is kept'
     },
   };
   const trace = newTrace('meals');
-  const out = await planMeals({ fridge, profile: vegetarian, neededTypes: ['Dinner'], trace }, deps);
+  const out = await planMeals({ fridge, profile: vegetarian, neededTypes: ['Dinner'], useLibrary: false, trace }, deps);
   assert.equal(calls.repair, 1);
   assert.equal(out.meals.length, 1);
   assert.equal(out.meals[0].name, 'Crispy tofu plate');
@@ -46,7 +46,7 @@ test('if the repair still breaks the diet, the meal is held back with the reason
     jsonCompletion: async () => ({ meals: [meal('Chicken stir fry', 'chicken breast')] }),
   };
   const trace = newTrace('meals');
-  const out = await planMeals({ fridge, profile: vegetarian, neededTypes: ['Dinner'], trace }, deps);
+  const out = await planMeals({ fridge, profile: vegetarian, neededTypes: ['Dinner'], useLibrary: false, trace }, deps);
   assert.equal(out.meals.length, 0);
   assert.equal(out.blocked.length, 1);
   assert.equal(out.blocked[0].type, 'Dinner');

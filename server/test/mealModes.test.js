@@ -98,7 +98,7 @@ test('a mode failure shares the single repair round and is held back with Sara\'
     jsonCompletion: async () => { repairs += 1; return { meals: [{ ...slow, name: 'Still slow' }] }; },
   };
   const trace = newTrace('meals');
-  const out = await planMeals({ fridge: dated, profile: { diet: 'No Restriction' }, neededTypes: ['Dinner'], mode: 'hungry', today: '2026-10-22', trace }, deps);
+  const out = await planMeals({ fridge: dated, profile: { diet: 'No Restriction' }, neededTypes: ['Dinner'], mode: 'hungry', today: '2026-10-22', useLibrary: false, trace }, deps);
   assert.equal(repairs, 1);
   assert.equal(out.meals.length, 0);
   assert.deepEqual(out.blocked, [{ type: 'Dinner', reason: HELD_BACK.hungry }]);
@@ -109,6 +109,16 @@ test('a mode failure shares the single repair round and is held back with Sara\'
 test('without a mode, no mode rules apply (older callers and the original eval cases)', async () => {
   const slow = meal('Dinner', 'Slow roast', [['tofu', 200, 'g']], { prepTime: '45 min' });
   const deps = { runAgent: async () => ({ meals: [slow] }), jsonCompletion: async () => assert.fail('no repair expected') };
-  const out = await planMeals({ fridge: dated, profile: {}, neededTypes: ['Dinner'] }, deps);
+  const out = await planMeals({ fridge: dated, profile: {}, neededTypes: ['Dinner'], useLibrary: false }, deps);
   assert.equal(out.meals.length, 1);
+});
+
+test('Clean out only counts expiring food the user can eat', () => {
+  const fridge = [
+    { name: 'bacon', quantity: '6', unit: 'piece', expiry: '2026-10-22' },
+    { name: 'shrimp', quantity: '200', unit: 'g', expiry: '2026-10-23' },
+    { name: 'spinach', quantity: '200', unit: 'g', expiry: '2026-10-23' },
+  ];
+  assert.deepEqual(soonToExpire(fridge, '2026-10-22', { diet: 'Vegetarian' }).map((r) => r.name), ['spinach']);
+  assert.deepEqual(soonToExpire(fridge, '2026-10-22', { diet: 'No Restriction', allergies: ['Shellfish'] }).map((r) => r.name), ['bacon', 'spinach']);
 });

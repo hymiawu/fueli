@@ -2,6 +2,7 @@
 // and adds deterministic checks. It adds no model call: a failed check joins the diet and allergy problems
 // in the planner's single repair round, and a meal that still fails is held back with Sara's message.
 import { findFridgeMatch, daysToExpiry } from '../tools/fridge.js';
+import { checkMeal } from './safetyGuard.js';
 
 export const MODES = ['hungry', 'healthy', 'cleanOut'];
 export const MODE_LABELS = { hungry: 'Feeling hungry', healthy: 'Feeling healthy', cleanOut: 'Clean out my fridge' };
@@ -43,12 +44,16 @@ export function parseMinutes(prepTime) {
   return Math.round((h ? Number(h[1]) * 60 : 0) + (m ? Number(m[1]) : 0));
 }
 
-// Fridge items expiring today or within three days, soonest first (distinct by name).
-export function soonToExpire(fridge, today) {
+// Fridge items expiring today or within three days, soonest first (distinct by name). Items the user can't eat
+// (diet or allergy) don't count: a vegetarian's expiring bacon can't be part of the target.
+const edible = (row, profile) =>
+  !profile || !checkMeal({ name: '', ingredients: [], structuredIngredients: [{ name: row.name }], calories: 400 }, profile, [row]).violations.length;
+
+export function soonToExpire(fridge, today, profile = null) {
   const seen = new Set();
   return fridge
     .map((row) => ({ row, days: daysToExpiry(row.expiry, today) }))
-    .filter(({ days }) => days !== null && days >= 0 && days <= SOON_DAYS)
+    .filter(({ row, days }) => days !== null && days >= 0 && days <= SOON_DAYS && edible(row, profile))
     .sort((a, b) => a.days - b.days)
     .filter(({ row }) => {
       const key = String(row.name).toLowerCase();
@@ -58,11 +63,11 @@ export function soonToExpire(fridge, today) {
 }
 
 // The user-message block for a mode: Sara's rule, plus the dates the rule needs.
-export function modeBlock(mode, fridge, today) {
+export function modeBlock(mode, fridge, today, profile = null) {
   if (!MODES.includes(mode)) return '';
   let extra = '';
   if (mode === 'cleanOut') {
-    const soon = soonToExpire(fridge, today).map((r) => r.name);
+    const soon = soonToExpire(fridge, today, profile).map((r) => r.name);
     extra = `\nToday is ${today}. Fridge items expiring within 3 days: ${soon.length ? soon.join(', ') : 'none'}.`;
   }
   return `Mode for this request. ${MODE_PROMPTS[mode]}${extra}`;
@@ -106,7 +111,7 @@ export function checkModes(meals, { mode, profile, fridge, today, fullDay }) {
   }
 
   // Clean out my fridge
-  const soon = soonToExpire(fridge, today);
+  const soon = soonToExpire(fridge, today, profile);
   const soonNames = new Set(soon.map((r) => r.name));
   const usedSoon = meals.map((m) => [
     ...new Set((m.structuredIngredients || []).map((i) => findFridgeMatch(fridge, i.name)).filter((r) => r && soonNames.has(r.name)).map((r) => r.name)),

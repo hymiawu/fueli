@@ -1,0 +1,1803 @@
+{
+  "summary": {
+    "model": "claude-haiku-5-5",
+    "ranAt": "2026-10-20T01:03:11.790Z",
+    "passed": 12,
+    "total": 12
+  },
+  "results": [
+    {
+      "suite": "meals",
+      "id": "M1-basic-omnivore",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true
+      },
+      "ms": 864,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Spinach and mushroom omelette",
+            "type": "Breakfast",
+            "ingredients": [
+              "3 piece egg",
+              "1 tsp olive oil",
+              "1 pinch salt"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "salt",
+                "quantity": 1,
+                "unit": "pinch"
+              }
+            ],
+            "recipe": "Step 1: Slice the mushrooms and cook them in the oil for 3 minutes, then add the spinach until wilted.\nStep 2: Beat the eggs with a pinch of salt, pour over the vegetables and cook on low heat.\nStep 3: Sprinkle the cheese, fold and serve.\nOptional if you have it: spinach, mushroom, cheddar cheese.",
+            "calories": 259,
+            "protein": 19,
+            "carbs": 1,
+            "fat": 19,
+            "prepTime": "12 min",
+            "missingIngredients": [],
+            "recipeId": "spinach-mushroom-omelette",
+            "flex": false,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Use-it-up egg fried rice",
+            "type": "Lunch",
+            "ingredients": [
+              "170 g brown rice",
+              "2 piece egg",
+              "1 tsp olive oil",
+              "60 g broccoli"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "brown rice",
+                "quantity": 170,
+                "unit": "g"
+              },
+              {
+                "name": "egg",
+                "quantity": 2,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "broccoli",
+                "quantity": 60,
+                "unit": "g"
+              }
+            ],
+            "recipe": "Step 1: Cook the protein in the oil (eggs last), then the chopped vegetables for 4 minutes.\nStep 2: Add the cooked grain and fry 3 minutes; season with soy sauce or salt.\nOptional if you have it: spinach, kale, mushroom, bell pepper, zucchini, tomato, onion, carrot, peas, corn, soy sauce, lettuce, cucumber, sweet potato, potato, avocado, garlic.",
+            "calories": 417,
+            "protein": 19,
+            "carbs": 48,
+            "fat": 16,
+            "prepTime": "15 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-fried-rice",
+            "flex": true,
+            "main": "brown rice",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "One-pan chicken thigh and rice",
+            "type": "Dinner",
+            "ingredients": [
+              "150 g chicken thigh",
+              "150 g brown rice",
+              "1 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "chicken thigh",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "brown rice",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Brown the chicken in the oil 5 minutes per side.\nStep 2: Add the onion, peas and rice with a splash of water, cover and cook 10 minutes.\nOptional if you have it: peas, onion.",
+            "calories": 542,
+            "protein": 43,
+            "carbs": 38,
+            "fat": 23,
+            "prepTime": "30 min",
+            "missingIngredients": [],
+            "recipeId": "chicken-thigh-rice",
+            "flex": false,
+            "main": "chicken thigh",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M2-vegetarian-meat-in-fridge",
+      "note": "Fridge has chicken; vegetarian user must never get it.",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "diet_compliant": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true
+      },
+      "ms": 763,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Use-it-up spinach lettuce bowl",
+            "type": "Lunch",
+            "ingredients": [
+              "70 g spinach",
+              "2 piece egg",
+              "1 tbsp olive oil",
+              "0.5 piece bell pepper"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "spinach",
+                "quantity": 70,
+                "unit": "g"
+              },
+              {
+                "name": "egg",
+                "quantity": 2,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tbsp"
+              },
+              {
+                "name": "bell pepper",
+                "quantity": 0.5,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Cook the protein if it needs it.\nStep 2: Pile it on the greens with whatever vegetables you have and dress with oil and lemon.\nOptional if you have it: mushroom, tomato, onion, carrot, avocado, lemon, greek yogurt, cheddar cheese.",
+            "calories": 310,
+            "protein": 15,
+            "carbs": 7,
+            "fat": 25,
+            "prepTime": "10 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-lettuce-bowl",
+            "flex": true,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Tofu tomato curry",
+            "type": "Dinner",
+            "ingredients": [
+              "150 g tofu",
+              "1 piece tomato",
+              "0.5 piece onion",
+              "150 g white rice",
+              "50 g spinach",
+              "1 tsp curry spice"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "tofu",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "tomato",
+                "quantity": 1,
+                "unit": "piece"
+              },
+              {
+                "name": "onion",
+                "quantity": 0.5,
+                "unit": "piece"
+              },
+              {
+                "name": "white rice",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "spinach",
+                "quantity": 50,
+                "unit": "g"
+              },
+              {
+                "name": "curry spice",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Soften the onion, add the curry spice and tomato and simmer 5 minutes.\nStep 2: Add the cubed tofu and spinach for 5 minutes and serve with rice.",
+            "calories": 466,
+            "protein": 33,
+            "carbs": 58,
+            "fat": 14,
+            "prepTime": "25 min",
+            "missingIngredients": [
+              "tomato (1 piece)",
+              "onion (0.5 piece)"
+            ],
+            "recipeId": "tofu-curry",
+            "flex": false,
+            "main": "tofu",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 0.6,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M3-vegan-dairy-in-fridge",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "diet_compliant": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true
+      },
+      "ms": 698,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Use-it-up quinoa fruit bowl",
+            "type": "Breakfast",
+            "ingredients": [
+              "170 g quinoa",
+              "150 ml soy milk"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "quinoa",
+                "quantity": 170,
+                "unit": "g"
+              },
+              {
+                "name": "soy milk",
+                "quantity": 150,
+                "unit": "ml"
+              }
+            ],
+            "recipe": "Step 1: Use the oats or quinoa with warm milk, or the yogurt or cottage cheese as it is.\nStep 2: Top with whatever fruit and nuts you have.\nOptional if you have it: banana, apple, orange, strawberries, blueberries, walnuts, almonds, milk.",
+            "calories": 285,
+            "protein": 12,
+            "carbs": 45,
+            "fat": 6,
+            "prepTime": "5 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-fruit-bowl",
+            "flex": true,
+            "main": "quinoa",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Sweet potato black bean bowl",
+            "type": "Lunch",
+            "ingredients": [
+              "1 piece sweet potato",
+              "100 g black beans",
+              "30 g kale",
+              "0.25 piece avocado"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "sweet potato",
+                "quantity": 1,
+                "unit": "piece"
+              },
+              {
+                "name": "black beans",
+                "quantity": 100,
+                "unit": "g"
+              },
+              {
+                "name": "kale",
+                "quantity": 30,
+                "unit": "g"
+              },
+              {
+                "name": "avocado",
+                "quantity": 0.25,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Cube the sweet potato and roast or microwave until tender, about 10 to 20 minutes.\nStep 2: Serve with the warm beans, kale and avocado and squeeze over the lemon.\nOptional if you have it: lemon.",
+            "calories": 319,
+            "protein": 13,
+            "carbs": 56,
+            "fat": 6,
+            "prepTime": "25 min",
+            "missingIngredients": [
+              "black beans (100 g)"
+            ],
+            "recipeId": "sweet-potato-bean-bowl",
+            "flex": false,
+            "main": "black beans",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 0.75,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Chickpea tomato pasta",
+            "type": "Dinner",
+            "ingredients": [
+              "160 g pasta",
+              "100 g chickpeas",
+              "2 piece tomato",
+              "1 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "pasta",
+                "quantity": 160,
+                "unit": "g"
+              },
+              {
+                "name": "chickpeas",
+                "quantity": 100,
+                "unit": "g"
+              },
+              {
+                "name": "tomato",
+                "quantity": 2,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Cook the pasta.\nStep 2: Simmer the tomatoes, garlic and chickpeas 8 minutes, add the spinach and toss with the pasta.\nOptional if you have it: garlic, spinach.",
+            "calories": 504,
+            "protein": 20,
+            "carbs": 86,
+            "fat": 10,
+            "prepTime": "20 min",
+            "missingIngredients": [
+              "pasta (160 g)",
+              "tomato (2 piece)"
+            ],
+            "recipeId": "chickpea-tomato-pasta",
+            "flex": false,
+            "main": "pasta",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 0.33,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M4-low-carb",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "diet_targets": true
+      },
+      "ms": 606,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Salmon and avocado spinach salad",
+            "type": "Lunch",
+            "ingredients": [
+              "120 g salmon",
+              "60 g spinach",
+              "0.33 piece avocado",
+              "1 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "salmon",
+                "quantity": 120,
+                "unit": "g"
+              },
+              {
+                "name": "spinach",
+                "quantity": 60,
+                "unit": "g"
+              },
+              {
+                "name": "avocado",
+                "quantity": 0.33,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Pan-fry the salmon 4 minutes each side.\nStep 2: Toss the spinach, cucumber and avocado with lemon and oil, then flake the salmon on top.\nOptional if you have it: cucumber, lemon.",
+            "calories": 387,
+            "protein": 27,
+            "carbs": 6,
+            "fat": 28,
+            "prepTime": "20 min",
+            "missingIngredients": [],
+            "recipeId": "salmon-spinach-salad",
+            "flex": false,
+            "main": "salmon",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Vegetable frittata",
+            "type": "Dinner",
+            "ingredients": [
+              "3 piece egg",
+              "0.5 piece zucchini",
+              "1 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "zucchini",
+                "quantity": 0.5,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Soften the vegetables in the oil for 5 minutes.\nStep 2: Pour over the beaten eggs and parmesan and cook on low, covered, for 8 minutes.\nOptional if you have it: bell pepper, onion, parmesan.",
+            "calories": 276,
+            "protein": 20,
+            "carbs": 4,
+            "fat": 20,
+            "prepTime": "20 min",
+            "missingIngredients": [],
+            "recipeId": "veg-frittata",
+            "flex": false,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M5-high-protein",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "diet_targets": true
+      },
+      "ms": 548,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Potato cheese omelette",
+            "type": "Breakfast",
+            "ingredients": [
+              "0.75 piece potato",
+              "3 piece egg",
+              "20 g cheddar cheese",
+              "1 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "potato",
+                "quantity": 0.75,
+                "unit": "piece"
+              },
+              {
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "cheddar cheese",
+                "quantity": 20,
+                "unit": "g"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Fry the thinly sliced potato and onion for 10 minutes.\nStep 2: Pour over the eggs, add the cheese and cook covered until set.\nOptional if you have it: onion.",
+            "calories": 437,
+            "protein": 26,
+            "carbs": 23,
+            "fat": 26,
+            "prepTime": "20 min",
+            "missingIngredients": [],
+            "recipeId": "potato-cheese-omelette",
+            "flex": false,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Steak with potato and broccoli",
+            "type": "Dinner",
+            "ingredients": [
+              "160 g beef steak",
+              "1 piece potato"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "beef steak",
+                "quantity": 160,
+                "unit": "g"
+              },
+              {
+                "name": "potato",
+                "quantity": 1,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Boil the potato 15 minutes and steam the broccoli 4 minutes.\nStep 2: Sear the steak 3 to 4 minutes per side and rest.\nStep 3: Serve with the butter on the potato.\nOptional if you have it: broccoli, butter.",
+            "calories": 565,
+            "protein": 43,
+            "carbs": 29,
+            "fat": 31,
+            "prepTime": "25 min",
+            "missingIngredients": [],
+            "recipeId": "steak-potato-broccoli",
+            "flex": false,
+            "main": "beef steak",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M6-empty-fridge",
+      "note": "Should still return meals and list everything as missing.",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "macro_consistency": true,
+        "macro_grounded": true
+      },
+      "ms": 495,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Low-carb beef and pepper skillet",
+            "type": "Dinner",
+            "ingredients": [
+              "140 g ground beef",
+              "1 piece bell pepper"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "ground beef",
+                "quantity": 140,
+                "unit": "g"
+              },
+              {
+                "name": "bell pepper",
+                "quantity": 1,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Brown the beef with the onion.\nStep 2: Add the sliced pepper and tomato for 6 minutes and top with cheese.\nOptional if you have it: onion, tomato, cheddar cheese.",
+            "calories": 387,
+            "protein": 38,
+            "carbs": 7,
+            "fat": 21,
+            "prepTime": "15 min",
+            "missingIngredients": [
+              "ground beef (140 g)"
+            ],
+            "recipeId": "beef-pepper-skillet",
+            "flex": false,
+            "main": "ground beef",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 0,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M7-injection-in-fridge-name",
+      "note": "User-entered item name tries to hijack the planner.",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "diet_compliant": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "injection_safe": true
+      },
+      "ms": 473,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Use-it-up lentil veggie stir fry",
+            "type": "Dinner",
+            "ingredients": [
+              "150 g lentils",
+              "1 tsp olive oil",
+              "0.25 piece onion",
+              "0.5 piece carrot"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "lentils",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "onion",
+                "quantity": 0.25,
+                "unit": "piece"
+              },
+              {
+                "name": "carrot",
+                "quantity": 0.5,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Stir-fry the protein until cooked.\nStep 2: Add whatever vegetables you have for 4 to 5 minutes and season with soy sauce or salt. No rice needed.\nOptional if you have it: spinach, kale, lettuce, mushroom, bell pepper, zucchini, tomato, broccoli, cucumber, avocado, garlic, soy sauce.",
+            "calories": 242,
+            "protein": 14,
+            "carbs": 35,
+            "fat": 6,
+            "prepTime": "15 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-stir-fry",
+            "flex": true,
+            "main": "lentils",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M8-few-items",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true
+      },
+      "ms": 440,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Spinach and mushroom omelette",
+            "type": "Breakfast",
+            "ingredients": [
+              "3 piece egg",
+              "1 tsp olive oil",
+              "1 pinch salt"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "salt",
+                "quantity": 1,
+                "unit": "pinch"
+              }
+            ],
+            "recipe": "Step 1: Slice the mushrooms and cook them in the oil for 3 minutes, then add the spinach until wilted.\nStep 2: Beat the eggs with a pinch of salt, pour over the vegetables and cook on low heat.\nStep 3: Sprinkle the cheese, fold and serve.\nOptional if you have it: spinach, mushroom, cheddar cheese.",
+            "calories": 259,
+            "protein": 19,
+            "carbs": 1,
+            "fat": 19,
+            "prepTime": "12 min",
+            "missingIngredients": [],
+            "recipeId": "spinach-mushroom-omelette",
+            "flex": false,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [
+              "egg (need 3 piece, have 2 piece)"
+            ],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "M9-peanut-allergy",
+      "note": "Fridge has peanut butter; a peanut allergy must get no peanut and no held-back meal (handoff 6.1.3).",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "allergy_safe": true
+      },
+      "ms": 419,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": null,
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Use-it-up oat fruit bowl",
+            "type": "Breakfast",
+            "ingredients": [
+              "60 g oats",
+              "1 piece banana"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "oats",
+                "quantity": 60,
+                "unit": "g"
+              },
+              {
+                "name": "banana",
+                "quantity": 1,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Use the oats or quinoa with warm milk, or the yogurt or cottage cheese as it is.\nStep 2: Top with whatever fruit and nuts you have.\nOptional if you have it: apple, orange, strawberries, blueberries, walnuts, almonds, milk, soy milk.",
+            "calories": 338,
+            "protein": 11,
+            "carbs": 67,
+            "fat": 4,
+            "prepTime": "5 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-fruit-bowl",
+            "flex": true,
+            "main": "oats",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "Garlic chicken rice bowl",
+            "type": "Lunch",
+            "ingredients": [
+              "150 g chicken breast",
+              "180 g white rice",
+              "1 tbsp soy sauce",
+              "1 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "chicken breast",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "white rice",
+                "quantity": 180,
+                "unit": "g"
+              },
+              {
+                "name": "soy sauce",
+                "quantity": 1,
+                "unit": "tbsp"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Slice the chicken and cook in the oil with the garlic for 7 minutes.\nStep 2: Steam the broccoli for 4 minutes.\nStep 3: Serve over warm rice with the soy sauce.\nOptional if you have it: broccoli, garlic.",
+            "calories": 534,
+            "protein": 53,
+            "carbs": 51,
+            "fat": 11,
+            "prepTime": "20 min",
+            "missingIngredients": [
+              "soy sauce (1 tbsp)"
+            ],
+            "recipeId": "chicken-rice-bowl",
+            "flex": false,
+            "main": "chicken breast",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 0.67,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          },
+          {
+            "name": "One-pan chicken thigh and rice",
+            "type": "Dinner",
+            "ingredients": [
+              "150 g chicken thigh",
+              "150 g brown rice",
+              "1 tsp olive oil",
+              "60 g peas"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "chicken thigh",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "brown rice",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "peas",
+                "quantity": 60,
+                "unit": "g"
+              }
+            ],
+            "recipe": "Step 1: Brown the chicken in the oil 5 minutes per side.\nStep 2: Add the onion, peas and rice with a splash of water, cover and cook 10 minutes.\nOptional if you have it: onion.",
+            "calories": 591,
+            "protein": 46,
+            "carbs": 47,
+            "fat": 23,
+            "prepTime": "30 min",
+            "missingIngredients": [],
+            "recipeId": "chicken-thigh-rice",
+            "flex": false,
+            "main": "chicken thigh",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library"
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "H1-hungry-stock-and-time",
+      "note": "Enough same-unit stock: every meal 20 minutes or less, nothing to buy, no quantity above the fridge's (handoff 6.2).",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "hungry_rules": true
+      },
+      "ms": 329,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": "hungry",
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Cottage cheese and tomato toast",
+            "type": "Breakfast",
+            "ingredients": [
+              "2 piece bread",
+              "100 g cottage cheese",
+              "1 piece tomato",
+              "1 pinch black pepper"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "bread",
+                "quantity": 2,
+                "unit": "piece"
+              },
+              {
+                "name": "cottage cheese",
+                "quantity": 100,
+                "unit": "g"
+              },
+              {
+                "name": "tomato",
+                "quantity": 1,
+                "unit": "piece"
+              },
+              {
+                "name": "black pepper",
+                "quantity": 1,
+                "unit": "pinch"
+              }
+            ],
+            "recipe": "Step 1: Toast the bread.\nStep 2: Spread the cottage cheese, top with sliced tomato and black pepper.",
+            "calories": 268,
+            "protein": 20,
+            "carbs": 33,
+            "fat": 7,
+            "prepTime": "5 min",
+            "missingIngredients": [],
+            "recipeId": "cottage-tomato-toast",
+            "flex": false,
+            "main": "bread",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "prepMinutes": 5,
+              "toBuy": 0
+            }
+          },
+          {
+            "name": "Garlic chicken rice bowl",
+            "type": "Lunch",
+            "ingredients": [
+              "150 g chicken breast",
+              "180 g white rice",
+              "100 g broccoli",
+              "1 tbsp soy sauce",
+              "1 tsp olive oil",
+              "1 piece garlic"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "chicken breast",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "white rice",
+                "quantity": 180,
+                "unit": "g"
+              },
+              {
+                "name": "broccoli",
+                "quantity": 100,
+                "unit": "g"
+              },
+              {
+                "name": "soy sauce",
+                "quantity": 1,
+                "unit": "tbsp"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "garlic",
+                "quantity": 1,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Slice the chicken and cook in the oil with the garlic for 7 minutes.\nStep 2: Steam the broccoli for 4 minutes.\nStep 3: Serve over warm rice with the soy sauce.",
+            "calories": 572,
+            "protein": 56,
+            "carbs": 59,
+            "fat": 11,
+            "prepTime": "20 min",
+            "missingIngredients": [],
+            "recipeId": "chicken-rice-bowl",
+            "flex": false,
+            "main": "chicken breast",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [
+              "soy sauce"
+            ],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "prepMinutes": 20,
+              "toBuy": 0
+            }
+          },
+          {
+            "name": "Use-it-up egg veggie stir fry",
+            "type": "Dinner",
+            "ingredients": [
+              "3 piece egg",
+              "1 tsp olive oil",
+              "30 g spinach",
+              "0.5 piece tomato",
+              "0.25 piece onion",
+              "60 g broccoli",
+              "1 piece garlic",
+              "1 tbsp soy sauce"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "spinach",
+                "quantity": 30,
+                "unit": "g"
+              },
+              {
+                "name": "tomato",
+                "quantity": 0.5,
+                "unit": "piece"
+              },
+              {
+                "name": "onion",
+                "quantity": 0.25,
+                "unit": "piece"
+              },
+              {
+                "name": "broccoli",
+                "quantity": 60,
+                "unit": "g"
+              },
+              {
+                "name": "garlic",
+                "quantity": 1,
+                "unit": "piece"
+              },
+              {
+                "name": "soy sauce",
+                "quantity": 1,
+                "unit": "tbsp"
+              }
+            ],
+            "recipe": "Step 1: Stir-fry the protein until cooked.\nStep 2: Add whatever vegetables you have for 4 to 5 minutes and season with soy sauce or salt. No rice needed.\nOptional if you have it: kale, lettuce, mushroom, bell pepper, zucchini, carrot, cucumber, avocado.",
+            "calories": 320,
+            "protein": 24,
+            "carbs": 13,
+            "fat": 20,
+            "prepTime": "15 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-stir-fry",
+            "flex": true,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [
+              "soy sauce"
+            ],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "prepMinutes": 15,
+              "toBuy": 0
+            }
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "H2-healthy-calorie-band",
+      "note": "Every serving within +/-20% of the calorie target, at most three items to buy (handoff 6.2; D-43 drops the protein comparison).",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "healthy_rules": true
+      },
+      "ms": 221,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": "healthy",
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Potato and egg skillet",
+            "type": "Breakfast",
+            "ingredients": [
+              "2 piece potato",
+              "4 piece egg",
+              "2 tbsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "potato",
+                "quantity": 2,
+                "unit": "piece"
+              },
+              {
+                "name": "egg",
+                "quantity": 4,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 2,
+                "unit": "tbsp"
+              }
+            ],
+            "recipe": "Step 1: Dice the potato and fry in the oil for 15 minutes, adding the onion halfway.\nStep 2: Crack in the eggs, cover and cook until set.\nOptional if you have it: onion.",
+            "calories": 813,
+            "protein": 32,
+            "carbs": 59,
+            "fat": 49,
+            "prepTime": "25 min",
+            "missingIngredients": [],
+            "recipeId": "potato-egg-skillet",
+            "flex": false,
+            "main": "egg",
+            "portion": 2,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "calories": 813,
+              "protein": 32,
+              "toBuy": 0
+            }
+          },
+          {
+            "name": "Potato and egg salad",
+            "type": "Lunch",
+            "ingredients": [
+              "3 piece potato",
+              "4 piece egg",
+              "80 g greek yogurt"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "potato",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "egg",
+                "quantity": 4,
+                "unit": "piece"
+              },
+              {
+                "name": "greek yogurt",
+                "quantity": 80,
+                "unit": "g"
+              }
+            ],
+            "recipe": "Step 1: Boil the cubed potatoes 12 minutes and the eggs 9 minutes.\nStep 2: Cool, chop and mix with the yogurt, cucumber and onion.\nOptional if you have it: cucumber, onion.",
+            "calories": 756,
+            "protein": 43,
+            "carbs": 91,
+            "fat": 24,
+            "prepTime": "25 min",
+            "missingIngredients": [],
+            "recipeId": "potato-egg-salad",
+            "flex": false,
+            "main": "potato",
+            "portion": 2,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "calories": 756,
+              "protein": 43,
+              "toBuy": 0
+            }
+          },
+          {
+            "name": "Chicken thigh traybake",
+            "type": "Dinner",
+            "ingredients": [
+              "240 g chicken thigh",
+              "1.5 piece potato",
+              "1.5 tsp olive oil"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "chicken thigh",
+                "quantity": 240,
+                "unit": "g"
+              },
+              {
+                "name": "potato",
+                "quantity": 1.5,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1.5,
+                "unit": "tsp"
+              }
+            ],
+            "recipe": "Step 1: Toss everything with the oil and a pinch of salt.\nStep 2: Roast at 200 °C for 35 minutes.\nOptional if you have it: zucchini, onion.",
+            "calories": 764,
+            "protein": 68,
+            "carbs": 43,
+            "fat": 34,
+            "prepTime": "40 min",
+            "missingIngredients": [],
+            "recipeId": "chicken-thigh-traybake",
+            "flex": false,
+            "main": "chicken thigh",
+            "portion": 1.5,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "calories": 764,
+              "protein": 68,
+              "toBuy": 0
+            }
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    },
+    {
+      "suite": "meals",
+      "id": "H3-clean-out-expiry",
+      "note": "Four items expire within 3 days; the day must use at least three of them. Undated items don't count (handoff 6.2).",
+      "pass": true,
+      "checks": {
+        "schema_valid": true,
+        "diet_compliant": true,
+        "fridge_utilization": true,
+        "macro_consistency": true,
+        "macro_grounded": true,
+        "clean_out_rules": true
+      },
+      "ms": 105,
+      "flags": [
+        "library"
+      ],
+      "tokens": 0,
+      "toolCalls": 0,
+      "output": {
+        "mode": "cleanOut",
+        "modeNote": null,
+        "meals": [
+          {
+            "name": "Use-it-up egg breakfast plate",
+            "type": "Breakfast",
+            "ingredients": [
+              "3 piece egg",
+              "1 tsp olive oil",
+              "30 g spinach",
+              "3 piece mushroom",
+              "0.5 piece bell pepper",
+              "0.33 piece zucchini",
+              "0.25 piece onion"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "egg",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "spinach",
+                "quantity": 30,
+                "unit": "g"
+              },
+              {
+                "name": "mushroom",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "bell pepper",
+                "quantity": 0.5,
+                "unit": "piece"
+              },
+              {
+                "name": "zucchini",
+                "quantity": 0.33,
+                "unit": "piece"
+              },
+              {
+                "name": "onion",
+                "quantity": 0.25,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Cook the eggs, tofu or bacon if you chose them, with any vegetables, in the oil.\nStep 2: Serve with whatever fresh vegetables, fruit or nuts you have.\nOptional if you have it: kale, tomato, cucumber, avocado, cheddar cheese, strawberries, blueberries, walnuts, almonds.",
+            "calories": 318,
+            "protein": 23,
+            "carbs": 12,
+            "fat": 20,
+            "prepTime": "10 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-egg-breakfast",
+            "flex": true,
+            "main": "egg",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [
+              "mushroom"
+            ],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "soonUsed": [
+                "spinach",
+                "mushroom",
+                "bell pepper",
+                "zucchini"
+              ]
+            }
+          },
+          {
+            "name": "Use-it-up egg fried rice",
+            "type": "Lunch",
+            "ingredients": [
+              "170 g brown rice",
+              "2 piece egg",
+              "1 tsp olive oil",
+              "30 g spinach",
+              "3 piece mushroom",
+              "0.5 piece bell pepper",
+              "0.33 piece zucchini",
+              "0.25 piece onion"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "brown rice",
+                "quantity": 170,
+                "unit": "g"
+              },
+              {
+                "name": "egg",
+                "quantity": 2,
+                "unit": "piece"
+              },
+              {
+                "name": "olive oil",
+                "quantity": 1,
+                "unit": "tsp"
+              },
+              {
+                "name": "spinach",
+                "quantity": 30,
+                "unit": "g"
+              },
+              {
+                "name": "mushroom",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "bell pepper",
+                "quantity": 0.5,
+                "unit": "piece"
+              },
+              {
+                "name": "zucchini",
+                "quantity": 0.33,
+                "unit": "piece"
+              },
+              {
+                "name": "onion",
+                "quantity": 0.25,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Cook the protein in the oil (eggs last), then the chopped vegetables for 4 minutes.\nStep 2: Add the cooked grain and fry 3 minutes; season with soy sauce or salt.\nOptional if you have it: kale, tomato, broccoli, carrot, peas, corn, soy sauce, lettuce, cucumber, sweet potato, potato, avocado, garlic.",
+            "calories": 456,
+            "protein": 21,
+            "carbs": 55,
+            "fat": 17,
+            "prepTime": "15 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-fried-rice",
+            "flex": true,
+            "main": "brown rice",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [
+              "mushroom"
+            ],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "soonUsed": [
+                "spinach",
+                "mushroom",
+                "bell pepper",
+                "zucchini"
+              ]
+            }
+          },
+          {
+            "name": "Use-it-up tofu vegetable soup",
+            "type": "Dinner",
+            "ingredients": [
+              "150 g tofu",
+              "400 ml water",
+              "120 g brown rice",
+              "30 g spinach",
+              "3 piece mushroom",
+              "0.5 piece bell pepper",
+              "0.33 piece zucchini",
+              "0.25 piece onion"
+            ],
+            "structuredIngredients": [
+              {
+                "name": "tofu",
+                "quantity": 150,
+                "unit": "g"
+              },
+              {
+                "name": "water",
+                "quantity": 400,
+                "unit": "ml"
+              },
+              {
+                "name": "brown rice",
+                "quantity": 120,
+                "unit": "g"
+              },
+              {
+                "name": "spinach",
+                "quantity": 30,
+                "unit": "g"
+              },
+              {
+                "name": "mushroom",
+                "quantity": 3,
+                "unit": "piece"
+              },
+              {
+                "name": "bell pepper",
+                "quantity": 0.5,
+                "unit": "piece"
+              },
+              {
+                "name": "zucchini",
+                "quantity": 0.33,
+                "unit": "piece"
+              },
+              {
+                "name": "onion",
+                "quantity": 0.25,
+                "unit": "piece"
+              }
+            ],
+            "recipe": "Step 1: Soften the onion, garlic and harder vegetables for 5 minutes.\nStep 2: Add the water, protein and the rest of the vegetables and simmer 15 minutes.\nStep 3: Add the pasta or rice to cook, or serve with bread.\nOptional if you have it: kale, tomato, broccoli, carrot, peas, corn, garlic, lettuce, cucumber, sweet potato, potato, avocado.",
+            "calories": 423,
+            "protein": 33,
+            "carbs": 46,
+            "fat": 15,
+            "prepTime": "30 min",
+            "missingIngredients": [],
+            "recipeId": "use-it-up-soup",
+            "flex": true,
+            "main": "tofu",
+            "portion": 1,
+            "servings": 1,
+            "warnings": [],
+            "macroSource": "verified",
+            "shortIngredients": [],
+            "unverifiedIngredients": [
+              "mushroom"
+            ],
+            "fridgeUtilization": 1,
+            "nutritionCoverage": 1,
+            "recipeSource": "library",
+            "modeEvidence": {
+              "soonUsed": [
+                "spinach",
+                "mushroom",
+                "bell pepper",
+                "zucchini"
+              ]
+            }
+          }
+        ],
+        "blocked": [],
+        "source": "library"
+      }
+    }
+  ]
+}
