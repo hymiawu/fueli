@@ -22,7 +22,7 @@ const STOP = new Set(['fresh', 'raw', 'cooked', 'chopped', 'diced', 'sliced', 'l
 
 // Zero-calorie staples are never a food: without this "water" matched "tuna in water" and
 // "black pepper" matched bell pepper's alias "pepper".
-const NOT_FOOD = new Set(['water', 'ice', 'salt', 'black pepper', 'white pepper', 'sea salt']);
+const NOT_FOOD = new Set(['water', 'ice', 'salt', 'black pepper', 'white pepper', 'sea salt', 'cooking spray']);
 const isNotFood = (q) => NOT_FOOD.has(q) || /\b(spice|herb|seasoning)$/.test(q);
 
 export function lookupFood(name) {
@@ -77,7 +77,7 @@ export function computeMacros(items) {
     }
     const f = grams / 100;
     for (const k of Object.keys(total)) total[k] += food.per100g[k] * f;
-    matched.push({ name: it.name, matchedTo: food.name, grams: Math.round(grams) });
+    matched.push({ name: it.name, matchedTo: food.name, grams: Math.round(grams), kcal: Math.round(food.per100g.calories * f) });
   }
   const n = countable.length;
   return {

@@ -14,25 +14,54 @@ export const RECIPES = recipes;
 const round = (n, step) => Math.round(n / step) * step;
 const fmtQty = (q) => String(Math.round(q * 100) / 100);
 
-// One serving is scaled toward the calorie target (0.75x to 1.5x, in quarter steps), then by the number of diners.
-function portionFactor(recipe, target) {
+// One serving is scaled toward the calorie target (0.75x to 2x, in quarter steps), then by the number of diners.
+function portionFactor(ingredients, target) {
   if (!target) return 1;
-  const kcal = computeMacros(recipe.ingredients).calories;
+  const kcal = computeMacros(ingredients).calories;
   if (!kcal) return 1;
-  return Math.min(1.5, Math.max(0.75, round(target / kcal, 0.25)));
+  return Math.min(2, Math.max(0.75, round(target / kcal, 0.25)));
+}
+
+// Whether one ingredient is allowed for this user (diet and allergy rules of the Safety Guard).
+const allowed = (ing, profile, fridge) =>
+  !profile || !checkMeal({ name: '', ingredients: [], structuredIngredients: [ing], calories: 400 }, profile, fridge).violations.length;
+
+// Turns the written recipe into this user's ingredient list, or null if it can't be made for them.
+// - { anyOf: [...] } picks the first option in the fridge that fits the diet, else the first that fits (to buy).
+// - optional ingredients are used only when they are in the fridge and fit the diet; otherwise they are skipped.
+export function resolveIngredients(recipe, fridge = [], profile = null) {
+  const used = [];
+  const picks = [];
+  const skipped = [];
+  for (const ing of recipe.ingredients) {
+    if (ing.anyOf) {
+      const ok = ing.anyOf.filter((o) => allowed(o, profile, fridge));
+      const choice = ok.find((o) => findFridgeMatch(fridge, o.name)) || ok[0];
+      if (!choice) return null;
+      used.push({ ...choice });
+      picks.push(choice.label || choice.name);
+    } else if (ing.optional) {
+      if (findFridgeMatch(fridge, ing.name) && allowed(ing, profile, fridge)) used.push({ name: ing.name, quantity: ing.quantity, unit: ing.unit });
+      else skipped.push(ing.name);
+    } else used.push({ name: ing.name, quantity: ing.quantity, unit: ing.unit });
+  }
+  // "Use-it-up {0} fried rice" -> "Use-it-up tofu fried rice"
+  const name = recipe.name.replace(/\{(\d)\}/g, (_, k) => picks[Number(k)] ?? '').replace(/\s+/g, ' ').trim();
+  return { used, skipped, name };
 }
 
 // A recipe in the planner's Meal shape: quantities for all diners, nutrition per serving.
 // Optional ingredients (garnishes, extras) are left out when the fridge doesn't have them, and named in the steps.
-export function toMeal(recipe, { servings = 1, target = null, fridge = [] } = {}) {
-  const portion = portionFactor(recipe, target);
-  const keep = recipe.ingredients.filter((i) => !i.optional || findFridgeMatch(fridge, i.name));
-  const skipped = recipe.ingredients.filter((i) => !keep.includes(i)).map((i) => i.name);
-  const per = keep.map(({ optional, ...i }) => ({ ...i, quantity: i.quantity * portion }));
+export function toMeal(recipe, { servings = 1, target = null, fridge = [], profile = null } = {}) {
+  const resolved = resolveIngredients(recipe, fridge, profile);
+  if (!resolved) return null;
+  const { used, skipped, name } = resolved;
+  const portion = portionFactor(used, target);
+  const per = used.map((i) => ({ ...i, quantity: i.quantity * portion }));
   const all = per.map((i) => ({ name: i.name, quantity: Math.round(i.quantity * servings * 100) / 100, unit: i.unit }));
   const m = computeMacros(per);
   return {
-    name: recipe.name,
+    name,
     type: recipe.type,
     ingredients: all.map((i) => `${fmtQty(i.quantity)} ${i.unit} ${i.name}`),
     structuredIngredients: all,
@@ -44,13 +73,18 @@ export function toMeal(recipe, { servings = 1, target = null, fridge = [] } = {}
     prepTime: `${recipe.prepMinutes} min`,
     missingIngredients: [],
     recipeId: recipe.id,
+    flex: Boolean(recipe.flex),
+    // The ingredient with the most calories, used to avoid the same main twice in a day.
+    main: m.matched.reduce((best, x) => (!best || x.kcal > best.kcal ? x : best), null)?.matchedTo ?? null,
     portion,
   };
 }
 
 // Score one candidate. Higher is better; null means it breaks a hard rule for this user.
 function evaluate(recipe, ctx) {
-  const meal = verifyMeal(toMeal(recipe, ctx), ctx.fridge, ctx.servings);
+  const draft = toMeal(recipe, ctx);
+  if (!draft) return null;
+  const meal = verifyMeal(draft, ctx.fridge, ctx.servings);
   if (checkMeal(meal, ctx.profile, ctx.fridge).violations.length) return null;
   // The diet targets the guard only warns about are hard rules when choosing from the library.
   const diet = String(ctx.profile.diet || '').toLowerCase();
@@ -73,6 +107,8 @@ function evaluate(recipe, ctx) {
   if (ctx.profile.approxCaloriesPerMeal) score -= Math.abs(meal.calories - ctx.profile.approxCaloriesPerMeal) / ctx.profile.approxCaloriesPerMeal;
   if (/build muscle/i.test(ctx.profile.goal || '')) score += meal.protein / 60;
   if (/lose fat/i.test(ctx.profile.goal || '') && ctx.profile.approxCaloriesPerMeal) score -= Math.max(0, meal.calories - ctx.profile.approxCaloriesPerMeal) / 500;
+  // "Use it up" recipes fit almost any fridge; outside Clean out, prefer real recipes when one fits.
+  if (recipe.flex && ctx.mode !== 'cleanOut') score -= 1;
   score += ctx.rng() * 0.4; // a little variety, so Refresh doesn't always return the same plan
   return { recipe, meal, score, soonUsed };
 }
@@ -86,8 +122,13 @@ export function matchRecipes({ fridge, profile, neededTypes, servings = 1, mode 
   const unfilled = [];
   for (const type of neededTypes) {
     const candidates = RECIPES.filter((r) => r.type === type && !skip.has(r.id)).map((r) => evaluate(r, ctx)).filter(Boolean);
-    // Clean out across the day: prefer recipes that use expiring items not used yet.
-    for (const c of candidates) if (mode === 'cleanOut') c.score += 2 * c.soonUsed.filter((n) => !usedSoon.has(n)).length;
+    for (const c of candidates) {
+      // Clean out across the day: prefer recipes that use expiring items not used yet.
+      if (mode === 'cleanOut') c.score += 2 * c.soonUsed.filter((n) => !usedSoon.has(n)).length;
+      // Variety across the day: at most one "use it up" recipe outside Clean out, and no repeated main ingredient.
+      if (c.recipe.flex && mode !== 'cleanOut' && picked.some((m) => m.flex)) c.score -= 3;
+      if (picked.some((m) => m.main && m.main === c.meal.main)) c.score -= 1.5;
+    }
     candidates.sort((a, b) => b.score - a.score);
     const best = candidates[0];
     if (!best) {

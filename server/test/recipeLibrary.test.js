@@ -1,7 +1,7 @@
 // Recipe library and matcher (D-19). No model calls.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { RECIPES, matchRecipes } from '../src/plan/recipeMatcher.js';
+import { RECIPES, matchRecipes, resolveIngredients } from '../src/plan/recipeMatcher.js';
 import { computeMacros } from '../src/tools/nutrition.js';
 import { isStaple } from '../src/tools/fridge.js';
 import { checkMeal } from '../src/agents/safetyGuard.js';
@@ -14,16 +14,31 @@ const textOf = (m) => [m.name, ...m.structuredIngredients.map((i) => i.name)].jo
 test('every recipe is priced by the nutrition database (staples aside), ids are unique, each slot has vegan options', () => {
   assert.equal(new Set(RECIPES.map((r) => r.id)).size, RECIPES.length);
   for (const r of RECIPES) {
-    const { unmatched, calories } = computeMacros(r.ingredients);
-    assert.deepEqual(unmatched.filter((n) => !isStaple(n)), [], r.id);
-    assert.ok(calories >= 250 && calories <= 800, `${r.id}: ${calories} kcal`);
+    // Every name a recipe can use: fixed items, each anyOf option and each optional extra.
+    const names = r.ingredients.flatMap((i) => (i.anyOf ? i.anyOf : [i]));
+    assert.deepEqual(computeMacros(names).unmatched.filter((n) => !isStaple(n)), [], r.id);
+    // As written for an empty fridge (first options, no extras), a serving is a real meal.
+    const { calories } = computeMacros(resolveIngredients(r, []).used);
+    assert.ok(calories >= 200 && calories <= 850, `${r.id}: ${calories} kcal`);
   }
   for (const type of ['Breakfast', 'Lunch', 'Dinner']) {
     const list = RECIPES.filter((r) => r.type === type);
-    assert.ok(list.length >= 15, type);
-    const vegan = list.filter((r) => !checkMeal({ name: r.name, ingredients: [], structuredIngredients: r.ingredients, calories: 400 }, { diet: 'Vegan' }).violations.length);
-    assert.ok(vegan.length >= 3, `${type}: ${vegan.length} vegan`);
+    assert.ok(list.length >= 35, type);
+    const vegan = list.filter((r) => resolveIngredients(r, [], { diet: 'Vegan' }) &&
+      !checkMeal({ name: '', ingredients: [], structuredIngredients: resolveIngredients(r, [], { diet: 'Vegan' }).used, calories: 400 }, { diet: 'Vegan' }).violations.length);
+    assert.ok(vegan.length >= 8, `${type}: ${vegan.length} vegan`);
   }
+});
+
+test('interchangeable ingredients follow the fridge and the diet, and name the dish', () => {
+  const fried = RECIPES.find((r) => r.id === 'use-it-up-fried-rice');
+  const fridge = rows(['quinoa', 500, 'g'], ['chicken breast', 400, 'g'], ['tofu', 300, 'g'], ['zucchini', 1, 'piece']);
+  const omni = resolveIngredients(fried, fridge, { diet: 'No Restriction' });
+  assert.equal(omni.name, 'Use-it-up tofu fried quinoa'); // first protein option in the fridge, in list order
+  const veg = resolveIngredients(fried, rows(['quinoa', 500, 'g'], ['chicken breast', 400, 'g'], ['egg', 6, 'piece']), { diet: 'Vegetarian' });
+  assert.equal(veg.name, 'Use-it-up egg fried quinoa');
+  assert.ok(!veg.used.some((i) => i.name === 'chicken breast'));
+  assert.ok(omni.used.some((i) => i.name === 'zucchini') && !omni.used.some((i) => i.name === 'spinach'));
 });
 
 test('vegetarian with chicken in the fridge, and a peanut allergy, never get those foods', () => {
