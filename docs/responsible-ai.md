@@ -1,7 +1,7 @@
 # Fueli — Responsible Deployment Notes
 
 ## Privacy
-**What we hold:** email, height, weight, activity level, goal, diet (Supabase auth metadata); fridge items (Postgres); meal/workout history (on the device only).
+**What we hold:** email, height, weight, gender, activity level, goal, diet (Supabase auth metadata); fridge items (Postgres); meal/workout history (on the device only). Gender (Female, Male or Prefer not to say) is stored in the Supabase user profile and used only to adjust the calorie target; it is never sent to the model.
 
 | Risk | Mitigation | Where |
 |---|---|---|
@@ -40,7 +40,7 @@ User-controlled text reaches prompts from: fridge item names (typed by the user)
 - **Human in the loop for every state change:** scanned items are confirmed before saving, and fridge quantities change only when the user marks a meal as cooked (reversible by unchecking).
 - **Blocked meals are surfaced, not hidden:** the user sees which meal was held back and why.
 - **Developer oversight:** metadata logs with flags (`schema_retry`, `diet_repair`, `blocked`, `injection_attempt`) can be reviewed with `fly logs`. The eval suite runs before each deploy (`deploy-fueli` skill).
-- **Scope disclaimer** in the meal screen: "AI suggestions are general guidance, not medical or dietary advice." The app does not handle allergies; users with allergies should not rely on it.
+- **Scope disclaimer** in the meal screen: "AI suggestions are general guidance, not medical or dietary advice." Six allergens (peanuts, tree nuts, shellfish, dairy, eggs, gluten) can be set in the profile and are enforced like the diet: the planner is told to avoid them and the Safety Guard checks every meal by keyword and by the allergens read from scanned labels, with one repair round, then the meal is held back. Keyword checks are not a guarantee, so users with severe allergies should still read every ingredient.
 
 ## Fairness and wellbeing
 - No calorie target below a safe floor is generated. Meals under 150 kcal or over 1500 kcal are flagged.

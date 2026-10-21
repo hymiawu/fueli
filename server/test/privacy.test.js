@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { redactPII, cleanText, stripImageMetadata, cleanImage } from '../src/guard.js';
-import { mealCalorieTarget } from '../src/agents/mealPlanner.js';
+import { mealCalorieTarget, planMeals } from '../src/agents/mealPlanner.js';
 import { summarizeFridge } from '../src/tools/fridge.js';
 
 test('personal identifiers are redacted from text sent to the model', () => {
@@ -54,6 +54,25 @@ test('PNG text and EXIF chunks are removed', () => {
 test('meal calorie target replaces body measurements', () => {
   assert.equal(mealCalorieTarget({ weight: '62', activity: 'Moderately Active', goal: 'Build Muscle' }), 750);
   assert.equal(mealCalorieTarget({ weight: '', activity: 'Sedentary' }), null);
+});
+
+test('gender adjusts the calorie target: Female 10% lower, Male and no answer unchanged', () => {
+  const p = { weight: '62', activity: 'Moderately Active', goal: 'Build Muscle' };
+  assert.equal(mealCalorieTarget({ ...p, gender: 'Female' }), 700);
+  assert.equal(mealCalorieTarget({ ...p, gender: 'Male' }), 750);
+  assert.equal(mealCalorieTarget({ ...p, gender: 'Prefer not to say' }), 750);
+  assert.equal(mealCalorieTarget(p), 750);
+});
+
+test('the meal prompt carries no height, weight or gender', async () => {
+  const sent = [];
+  const meal = { name: 'Tofu bowl', type: 'Dinner', ingredients: ['150g tofu'], structuredIngredients: [{ name: 'tofu', quantity: 150, unit: 'g' }], recipe: 'Step 1: Cook.', calories: 500, protein: 30, carbs: 40, fat: 15, prepTime: '15 min', missingIngredients: [] };
+  const capture = async (args) => { sent.push(JSON.stringify(args.messages)); return { meals: [meal] }; };
+  const profile = { height: '163', weight: '62', gender: 'Female', activity: 'Moderately Active', goal: 'Build Muscle', diet: 'No Restriction' };
+  await planMeals({ fridge: [{ name: 'tofu', quantity: '400', unit: 'g' }], profile, neededTypes: ['Dinner'], useLibrary: false }, { runAgent: capture, jsonCompletion: capture });
+  const prompt = sent.join(' ');
+  assert.ok(prompt.includes('approxCaloriesPerMeal'), 'the calorie target is sent');
+  assert.doesNotMatch(prompt, /163|"weight"|"height"|gender|female/i);
 });
 
 test('only JPEG, PNG, GIF and WebP images are accepted', () => {

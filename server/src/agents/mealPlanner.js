@@ -46,17 +46,21 @@ const tools = {
 const KCAL_PER_KG = { sedentary: 28, 'lightly active': 31, 'moderately active': 34, 'very active': 37 };
 const GOAL_FACTOR = { 'lose fat': 0.8, 'build muscle': 1.1 };
 
+// Female estimates run about 10% lower (Mifflin-St Jeor: 166 kcal a day, 8% to 12% at typical weights).
+// Male, "Prefer not to say" and no answer keep the base figure.
+const GENDER_FACTOR = { female: 0.9 };
+
 // Approximate calories per meal (3 meals a day), rounded to 50 kcal. Computed here so the
-// user's body measurements never reach the model.
+// user's body measurements and gender stay on the server and never reach the model.
 export function mealCalorieTarget(p) {
   const kg = Number(p.weight);
   if (!(kg >= 30 && kg <= 300)) return null;
   const perKg = KCAL_PER_KG[String(p.activity || '').toLowerCase()] ?? 31;
-  const daily = kg * perKg * (GOAL_FACTOR[String(p.goal || '').toLowerCase()] ?? 1);
+  const daily = kg * perKg * (GOAL_FACTOR[String(p.goal || '').toLowerCase()] ?? 1) * (GENDER_FACTOR[String(p.gender || '').toLowerCase()] ?? 1);
   return Math.round(daily / 3 / 50) * 50;
 }
 
-// What the model sees about the user: preferences and a calorie target, never height or weight.
+// What the model sees about the user: preferences and a calorie target, never height, weight or gender.
 const profileView = (p) => ({
   goal: cleanText(p.goal || 'Eat Healthier', 40),
   diet: cleanText(p.diet || 'No Restriction', 40),

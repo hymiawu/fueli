@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
 import { toMetric } from '../lib/units';
-import { ALLERGENS } from '../lib/constants';
+import { ALLERGENS, GENDER_OPTIONS } from '../lib/constants';
 
 const STEPS = ['Stats', 'Activity', 'Goal', 'Diet', 'Account'];
 
@@ -29,6 +29,7 @@ export default function OnboardingScreen({ navigation }) {
   const [feet, setFeet] = useState('');
   const [inches, setInches] = useState('');
   const [pounds, setPounds] = useState('');
+  const [gender, setGender] = useState('');
   const [activity, setActivity] = useState('');
   const [goal, setGoal] = useState('');
   const [diet, setDiet] = useState('');
@@ -40,7 +41,8 @@ export default function OnboardingScreen({ navigation }) {
 
   const canProceed = () => {
     if (step === 0) {
-      return units === 'imperial' ? feet.length > 0 && pounds.length > 0 : height.length > 0 && weight.length > 0;
+      const stats = units === 'imperial' ? feet.length > 0 && pounds.length > 0 : height.length > 0 && weight.length > 0;
+      return stats && gender.length > 0; // "Prefer not to say" counts as an answer
     }
     if (step === 1) return activity.length > 0;
     if (step === 2) return goal.length > 0;
@@ -69,7 +71,7 @@ export default function OnboardingScreen({ navigation }) {
       email,
       password,
       options: {
-        data: { height, weight, units, activity, goal, diet, allergies },
+        data: { height, weight, units, gender, activity, goal, diet, allergies },
       },
     });
     setLoading(false);
@@ -155,6 +157,20 @@ export default function OnboardingScreen({ navigation }) {
                 />
               </>
             )}
+            <Text style={styles.subQuestion}>Gender</Text>
+            <View style={styles.chipGroup}>
+              {GENDER_OPTIONS.map((g) => (
+                <TouchableOpacity
+                  key={g}
+                  style={[styles.chip, gender === g && styles.chipSelected]}
+                  onPress={() => setGender(g)}
+                  accessibilityRole="radio"
+                  accessibilityState={{ selected: gender === g }}
+                >
+                  <Text style={[styles.chipText, gender === g && styles.chipTextSelected]}>{g}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         );
       case 1:
@@ -358,7 +374,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputRow: { flexDirection: 'row', gap: 12 },
-  inputHalf: { flex: 1 },
+  // minWidth 0: on web an <input> won't shrink below ~20 characters, which pushed the inches box past the margin.
+  inputHalf: { flex: 1, minWidth: 0 },
   unitToggle: {
     flexDirection: 'row',
     borderWidth: 1.5,
