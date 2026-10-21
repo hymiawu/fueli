@@ -175,6 +175,7 @@ export default function ExerciseScreen() {
         <View style={styles.dateTitleRow}>
           <Text style={styles.dateTitle}>
             {isToday ? "Today's Workout" : `${DAY_NAMES[selectedDateObj.getDay()]}, ${MONTH_NAMES[selectedDateObj.getMonth()]} ${selectedDateObj.getDate()}`}
+            {focusOn(selectedDate) ? ` · ${focusOn(selectedDate)}` : ''}
           </Text>
           {completedCount > 0 && <Text style={styles.completedCount}>💪 {completedCount} done</Text>}
         </View>
