@@ -6,7 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
 import { toMetric, toImperial } from '../lib/units';
-import { ALLERGENS, parseAllergens } from '../lib/constants';
+import { ALLERGENS, GENDER_OPTIONS, parseAllergens } from '../lib/constants';
 
 const ACTIVITY_OPTIONS = ['Sedentary', 'Lightly Active', 'Moderately Active', 'Very Active'];
 const GOAL_OPTIONS = ['Lose Fat', 'Build Muscle', 'Maintain Weight', 'Eat Healthier'];
@@ -22,6 +22,7 @@ export default function EditProfileScreen({ navigation }) {
   const [feet, setFeet] = useState('');
   const [inches, setInches] = useState('');
   const [pounds, setPounds] = useState('');
+  const [gender, setGender] = useState('');
   const [activity, setActivity] = useState('');
   const [goal, setGoal] = useState('');
   const [diet, setDiet] = useState('');
@@ -46,6 +47,7 @@ export default function EditProfileScreen({ navigation }) {
         setInches(imp.inches);
         setPounds(imp.pounds);
       }
+      setGender(meta.gender || '');
       setActivity(meta.activity || '');
       setGoal(meta.goal || '');
       setDiet(meta.diet || '');
@@ -84,7 +86,7 @@ export default function EditProfileScreen({ navigation }) {
     setWeight(m.weight);
     setSaving(true);
     const { error } = await supabase.auth.updateUser({
-      data: { height: m.height, weight: m.weight, units, activity, goal, diet, allergies, shortTermGoal, longTermGoal },
+      data: { height: m.height, weight: m.weight, units, gender, activity, goal, diet, allergies, shortTermGoal, longTermGoal },
     });
     setSaving(false);
     if (error) Alert.alert('Error', error.message);
@@ -147,6 +149,22 @@ export default function EditProfileScreen({ navigation }) {
             </View>
           </View>
         )}
+
+        {/* Gender: only adjusts the calorie target on the server, never sent to the model */}
+        <Text style={styles.label}>Gender</Text>
+        <View style={styles.chipGroup}>
+          {GENDER_OPTIONS.map((g) => (
+            <TouchableOpacity
+              key={g}
+              style={[styles.chip, gender === g && styles.chipSelected]}
+              onPress={() => setGender(g)}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: gender === g }}
+            >
+              <Text style={[styles.chipText, gender === g && styles.chipTextSelected]}>{g}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
         {/* Activity */}
         <Text style={styles.sectionTitle}>🏃 Activity Level</Text>

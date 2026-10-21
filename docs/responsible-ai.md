@@ -1,7 +1,7 @@
 # Fueli — Responsible Deployment Notes
 
 ## Privacy
-**What we hold:** email, height, weight, activity level, goal, diet (Supabase auth metadata); fridge items (Postgres); meal/workout history (on the device only).
+**What we hold:** email, height, weight, gender, activity level, goal, diet (Supabase auth metadata); fridge items (Postgres); meal/workout history (on the device only). Gender (Female, Male or Prefer not to say) is stored in the Supabase user profile and used only to adjust the calorie target; it is never sent to the model.
 
 | Risk | Mitigation | Where |
 |---|---|---|

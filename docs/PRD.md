@@ -62,7 +62,7 @@
 | Area | Requirement |
 |---|---|
 | Security | No secrets in the client bundle. Every API route requires a valid Supabase JWT. CORS allow-list. |
-| Privacy | Server reads data as the user (RLS). Logs hold metadata only (latency, tokens, flags). No training on user data. |
+| Privacy | Server reads data as the user (RLS). Logs hold metadata only (latency, tokens, flags). No training on user data. Gender (Female, Male or Prefer not to say) is stored in the Supabase user profile and used only to adjust the calorie target; it is never sent to the model. |
 | Payments | Stripe test mode. Webhook signature verified. Only the billing module holds the Supabase service-role key, used only to upsert `subscriptions`. |
 | Abuse | 30 AI requests / 10 min / user. 8 MB body limit, 6 MB image limit. |
 | Latency | Meal plan p50 < 20 s; scan < 8 s. |
