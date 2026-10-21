@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, Modal,
+  View, Text, TouchableOpacity, ScrollView,
   StyleSheet, ActivityIndicator, TextInput,
   Image, KeyboardAvoidingView, Platform,
 } from 'react-native';
@@ -13,6 +13,7 @@ import { supabase } from '../lib/supabase';
 import { getMealSuggestions, analyzeOutsideFood, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
 import { planCooked, deductionRecord, summaryText } from '../lib/cooking';
+import Sheet from '../lib/Sheet';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -391,7 +392,7 @@ export default function MealScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-      <Modal visible={showOutsideModal} animationType="slide" transparent>
+      <Sheet visible={showOutsideModal} onClose={() => setShowOutsideModal(false)}>
         <KeyboardAvoidingView style={{flex:1}} behavior={Platform.OS==='ios'?'padding':'height'}>
           <View style={styles.modalOverlay}>
             <View style={styles.modalSheet}>
@@ -432,7 +433,7 @@ export default function MealScreen() {
             </View>
           </View>
         </KeyboardAvoidingView>
-      </Modal>
+      </Sheet>
     </SafeAreaView>
   );
 }
