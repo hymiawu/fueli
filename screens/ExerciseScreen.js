@@ -413,7 +413,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted, onO
           <View>
             {workout.exercises.map((ex, i) => (
               <View key={i} style={[styles.hiitRow, i % 2 === 0 && styles.tableRowAlt]}>
-                <View style={{flex:1}}>
+                <View style={styles.rowMain}>
                   {nameEl(ex)}
                   {ex.notes && <Text style={styles.exerciseNote}>💡 {ex.notes}</Text>}
                 </View>
@@ -448,7 +448,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted, onO
           <View>
             {workout.exercises.map((ex, i) => (
               <View key={i} style={[styles.flexRow, i % 2 === 0 && styles.tableRowAlt]}>
-                <View style={{flex:1}}>
+                <View style={styles.rowMain}>
                   {nameEl(ex)}
                   {ex.breathingCue && <Text style={styles.exerciseDetail}>🌬️ {ex.breathingCue}</Text>}
                   {ex.notes && <Text style={styles.exerciseNote}>💡 {ex.notes}</Text>}
@@ -615,18 +615,21 @@ const styles = StyleSheet.create({
   exerciseVal: { fontSize:14, color:'#555', textAlign:'center' },
   exerciseDetail: { fontSize:12, color:'#888', paddingLeft:4, paddingBottom:4, lineHeight:18 },
   exerciseNote: { fontSize:12, color:'#aaa', fontStyle:'italic', paddingLeft:4, paddingBottom:6 },
-  hiitRow: { flexDirection:'row', alignItems:'center', paddingVertical:10, paddingHorizontal:4, borderRadius:8 },
-  hiitMeta: { alignItems:'flex-end', gap:2 },
-  hiitWork: { fontSize:13, fontWeight:'700', color:'#FF9800' },
-  hiitRest: { fontSize:12, color:'#888' },
-  hiitRounds: { fontSize:12, fontWeight:'600', color:'#555' },
+  hiitRow: { flexDirection:'row', alignItems:'flex-start', gap:10, paddingVertical:10, paddingHorizontal:4, borderRadius:8 },
+  // The name column gets the room; work/rest/rounds are capped and wrap, since the AI can write long values
+  // ("30 seconds at moderate-hard effort") that otherwise squeezed the name to a few letters.
+  rowMain: { flex:1, minWidth:0 },
+  hiitMeta: { maxWidth:'45%', alignItems:'flex-end', gap:2 },
+  hiitWork: { fontSize:13, fontWeight:'700', color:'#FF9800', textAlign:'right' },
+  hiitRest: { fontSize:12, color:'#888', textAlign:'right' },
+  hiitRounds: { fontSize:12, fontWeight:'600', color:'#555', textAlign:'right' },
   cardioRow: { paddingVertical:10, paddingHorizontal:4, borderRadius:8 },
   cardioStats: { flexDirection:'row', flexWrap:'wrap', gap:6, marginTop:6, marginBottom:4 },
   statTag: { backgroundColor:'#F5F5F5', borderRadius:12, paddingHorizontal:8, paddingVertical:3 },
   statTagText: { fontSize:12, color:'#555', fontWeight:'500' },
   flexRow: { flexDirection:'row', alignItems:'flex-start', paddingVertical:10, paddingHorizontal:4, borderRadius:8 },
-  flexMeta: { alignItems:'flex-end', gap:2, paddingLeft:8 },
-  flexMetaText: { fontSize:13, fontWeight:'600', color:'#4CAF50' },
+  flexMeta: { maxWidth:'45%', alignItems:'flex-end', gap:2, paddingLeft:8 },
+  flexMetaText: { fontSize:13, fontWeight:'600', color:'#4CAF50', textAlign:'right' },
   expandBtn: { marginTop:12, alignItems:'center' },
   expandBtnText: { fontSize:13, color:'#0D9E8A', fontWeight:'600' },
   refreshBtn: { borderWidth:1.5, borderColor:'#0D9E8A', borderRadius:12, padding:14, alignItems:'center', marginTop:4 },
