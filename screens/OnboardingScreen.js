@@ -358,7 +358,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   inputRow: { flexDirection: 'row', gap: 12 },
-  inputHalf: { flex: 1 },
+  // minWidth 0: on web an <input> won't shrink below ~20 characters, which pushed the inches box past the margin.
+  inputHalf: { flex: 1, minWidth: 0 },
   unitToggle: {
     flexDirection: 'row',
     borderWidth: 1.5,

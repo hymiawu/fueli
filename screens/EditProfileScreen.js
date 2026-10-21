@@ -243,7 +243,8 @@ const styles = StyleSheet.create({
   sectionTitle: { fontSize: 16, fontWeight: '700', color: '#1a1a1a', marginBottom: 6, marginTop: 8 },
   goalHint: { fontSize: 12, color: '#aaa', marginBottom: 10, fontStyle: 'italic' },
   row: { flexDirection: 'row', gap: 12, marginBottom: 8 },
-  halfField: { flex: 1 },
+  // minWidth 0: on web an <input> won't shrink below ~20 characters, so the ft/in boxes overflowed.
+  halfField: { flex: 1, minWidth: 0 },
   label: { fontSize: 13, color: '#666', marginBottom: 6 },
   input: { borderWidth: 1.5, borderColor: '#E0E0E0', borderRadius: 10, padding: 12, fontSize: 15, color: '#1a1a1a' },
   goalInput: { minHeight: 72, textAlignVertical: 'top', marginBottom: 8 },
