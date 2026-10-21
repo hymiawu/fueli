@@ -70,6 +70,12 @@ export default function ExerciseScreen() {
     if (!currentPlan || mondayOf(new Date(dateStr + 'T12:00:00')) !== currentPlan.weekStart) return undefined;
     return currentPlan.days[weekdayIndex(new Date(dateStr + 'T12:00:00'))]?.focus;
   };
+  // The plan's focus the day before or after (the week repeats, so Sun's tomorrow is Mon), so the coach
+  // can keep the other workouts off those muscles.
+  const neighbourFocus = (dateStr, delta) => {
+    if (!focusOn(dateStr)) return undefined;
+    return currentPlan.days[(weekdayIndex(new Date(dateStr + 'T12:00:00')) + delta + 7) % 7]?.focus;
+  };
 
   const makeWeekPlan = async () => {
     setPlanning(true);
@@ -106,7 +112,10 @@ export default function ExerciseScreen() {
     try {
       const recentWorkouts = getAllRecentWorkouts();
       const filterType = filter === 'All' ? null : filter;
-      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate));
+      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate), {
+        yesterdayFocus: neighbourFocus(selectedDate, -1),
+        tomorrowFocus: neighbourFocus(selectedDate, 1),
+      });
       const withIds = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, completed:false }));
       await saveWorkoutPlans({ ...workoutPlans, [selectedDate]: withIds });
     } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
