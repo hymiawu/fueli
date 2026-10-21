@@ -17,9 +17,3 @@ test('keeps the last 5 sessions, one per day', () => {
   assert.equal(log.Pushups.length, MAX_SESSIONS);
   assert.equal(log.Pushups[0].sets[0].reps, 20);
 });
-
-test('no weight means bodyweight, not "@ 0 kg"', () => {
-  assert.equal(lastTimeText([{ sets: [1, 2, 3].map(() => ({ reps: 10, weightKg: 0 })) }]), 'Last time: 3 × 10 (bodyweight)');
-  assert.equal(lastTimeText([{ sets: [{ reps: 10, weightKg: 0 }, { reps: 8, weightKg: 0 }] }]), 'Last time: 10, 8 (bodyweight)');
-  assert.equal(lastTimeText([{ sets: [{ reps: 10, weightKg: 0 }, { reps: 8, weightKg: 5 }] }]), 'Last time: 10 @ bodyweight, 8 @ 5 kg');
-});

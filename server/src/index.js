@@ -92,7 +92,7 @@ app.post(
 app.post(
   '/v1/workouts/suggest',
   ...ai('workouts', WorkoutRequest, (req, body, trace) =>
-    suggestWorkouts({ profile: req.user.user_metadata || {}, recentWorkouts: body.recentWorkouts, filterType: body.filterType ?? null, todayFocus: body.todayFocus, yesterdayFocus: body.yesterdayFocus, tomorrowFocus: body.tomorrowFocus, trace }),
+    suggestWorkouts({ profile: req.user.user_metadata || {}, recentWorkouts: body.recentWorkouts, filterType: body.filterType ?? null, todayFocus: body.todayFocus, trace }),
   ),
 );
 
