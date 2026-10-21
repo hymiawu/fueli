@@ -70,6 +70,7 @@ export default function ExerciseScreen() {
     if (!currentPlan || mondayOf(new Date(dateStr + 'T12:00:00')) !== currentPlan.weekStart) return undefined;
     return currentPlan.days[weekdayIndex(new Date(dateStr + 'T12:00:00'))]?.focus;
   };
+  const shiftDay = (dateStr, n) => { const d = new Date(dateStr + 'T12:00:00'); d.setDate(d.getDate() + n); return toDateStr(d); };
 
   const makeWeekPlan = async () => {
     setPlanning(true);
@@ -106,7 +107,8 @@ export default function ExerciseScreen() {
     try {
       const recentWorkouts = getAllRecentWorkouts();
       const filterType = filter === 'All' ? null : filter;
-      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate));
+      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate),
+        focusOn(shiftDay(selectedDate, -1)), focusOn(shiftDay(selectedDate, 1)));
       const withIds = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, completed:false }));
       await saveWorkoutPlans({ ...workoutPlans, [selectedDate]: withIds });
     } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
@@ -125,6 +127,7 @@ export default function ExerciseScreen() {
   const selectedDateObj = new Date(selectedDate + 'T12:00:00');
   const isToday = selectedDate === todayStr;
   const completedCount = selectedWorkouts.filter(w => w.completed).length;
+  const selectedFocus = focusOn(selectedDate);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -166,6 +169,7 @@ export default function ExerciseScreen() {
         <View style={styles.dateTitleRow}>
           <Text style={styles.dateTitle}>
             {isToday ? "Today's Workout" : `${DAY_NAMES[selectedDateObj.getDay()]}, ${MONTH_NAMES[selectedDateObj.getMonth()]} ${selectedDateObj.getDate()}`}
+            {selectedFocus ? ` · ${selectedFocus}` : ''}
           </Text>
           {completedCount > 0 && <Text style={styles.completedCount}>💪 {completedCount} done</Text>}
         </View>
@@ -667,8 +671,8 @@ const styles = StyleSheet.create({
   detailLine: { fontSize:13, color:'#555', marginBottom:8 },
   stepText: { fontSize:14, color:'#333', lineHeight:21, marginBottom:8 },
   logRow: { flexDirection:'row', alignItems:'center', gap:8, marginBottom:10 },
-  logSet: { width:48, fontSize:13, fontWeight:'700', color:'#555' },
-  logInput: { flex:1, borderWidth:1.5, borderColor:'#E0E0E0', borderRadius:10, padding:10, fontSize:15, color:'#1a1a1a' },
-  logUnit: { width:22, fontSize:13, color:'#888' },
+  logSet: { width:48, flexShrink:0, fontSize:13, fontWeight:'700', color:'#555' },
+  logInput: { flex:1, minWidth:0, width:0, borderWidth:1.5, borderColor:'#E0E0E0', borderRadius:10, padding:10, fontSize:15, color:'#1a1a1a' },
+  logUnit: { width:22, flexShrink:0, fontSize:13, color:'#888' },
   warnText: { fontSize:12, color:'#8A6D00', backgroundColor:'#FFFBEA', borderRadius:8, padding:8, marginBottom:8 },
 });

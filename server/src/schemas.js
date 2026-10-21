@@ -97,6 +97,9 @@ export const WorkoutRequest = z.object({
   filterType: z.enum(['Strength', 'Cardio', 'HIIT', 'Flexibility']).nullable().optional(),
   // Today's focus from the weekly plan, if the user has one (6.3.3).
   todayFocus: z.enum(FOCUS).optional(),
+  // The days either side, so no option trains the muscles of yesterday's or tomorrow's plan.
+  yesterdayFocus: z.enum(FOCUS).optional(),
+  tomorrowFocus: z.enum(FOCUS).optional(),
   recentWorkouts: z
     .array(z.object({ date: z.string().max(10), name: z.string().max(100), type: z.string().max(20) }))
     .max(14)

@@ -2,7 +2,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { verifyExercises, allowedExercises } from '../src/agents/exerciseVerifier.js';
-import { suggestWorkouts } from '../src/agents/workoutCoach.js';
+import { suggestWorkouts, fitsWeekPlan } from '../src/agents/workoutCoach.js';
 
 const workout = (exercises, type = 'Strength') => ({ name: 'W', type, duration: '30 min', caloriesBurned: 200, difficulty: 'Beginner', muscleGroups: [], description: '', exercises });
 
@@ -37,4 +37,42 @@ test('a workout left empty is asked for once more, then dropped', async () => {
   const out = await suggestWorkouts({ profile: { activity: 'Moderately Active' }, recentWorkouts: [], filterType: null }, deps);
   assert.equal(calls, 2);
   assert.deepEqual(out.workouts.map((w) => w.exercises[0].exerciseId), ['Pushups', 'Jogging_Treadmill']);
+});
+
+// Workouts follow the weekly plan (6.3.3): the code check runs whatever the model returns.
+const moderate = { activity: 'Moderately Active' };
+const upper = workout([{ exerciseId: 'Dumbbell_Bench_Press', sets: 4, reps: 8 }]);
+const legsHiit = workout([{ exerciseId: 'Freehand_Jump_Squat', work: '40 sec' }], 'HIIT');
+const stretch = workout([{ exerciseId: 'Childs_Pose', hold: '45 sec' }], 'Flexibility');
+const bike = workout([{ exerciseId: 'Bicycling_Stationary', duration: '20 min' }], 'Cardio');
+
+test('a rest day never returns Strength or HIIT; dropped ones are replaced with light workouts once', async () => {
+  const prompts = [];
+  let calls = 0;
+  const deps = {
+    jsonCompletion: async ({ messages }) => {
+      prompts.push(messages.at(-1).content);
+      return ++calls === 1 ? { workouts: [stretch, upper, legsHiit] } : { workouts: [bike, upper] };
+    },
+  };
+  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: null, todayFocus: 'Rest' }, deps);
+  assert.equal(calls, 2);
+  assert.deepEqual(out.workouts.map((w) => w.type), ['Flexibility', 'Cardio']);
+  assert.match(prompts[0], /No Strength or HIIT/);
+});
+
+test('on a training day, Strength or HIIT that trains yesterday\'s or tomorrow\'s muscles is dropped', async () => {
+  const lower = verifyExercises(workout([{ exerciseId: 'Goblet_Squat', sets: 3, reps: 10 }]), moderate).workout;
+  let calls = 0;
+  const deps = { jsonCompletion: async () => (++calls === 1 ? { workouts: [upper, stretch, legsHiit] } : { workouts: [] }) };
+  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: null, todayFocus: 'Upper', tomorrowFocus: 'Lower' }, deps);
+  assert.deepEqual(out.workouts.map((w) => w.exercises[0].exerciseId), ['Dumbbell_Bench_Press', 'Childs_Pose']);
+  assert.ok(fitsWeekPlan(lower, { todayFocus: 'Lower', yesterdayFocus: 'Rest', tomorrowFocus: 'Upper' }));
+  assert.ok(!fitsWeekPlan(lower, { todayFocus: 'Upper', yesterdayFocus: 'Lower' }));
+});
+
+test('a filter the user picked wins over the rest day', async () => {
+  const deps = { jsonCompletion: async () => ({ workouts: [upper] }) };
+  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: 'Strength', todayFocus: 'Rest' }, deps);
+  assert.deepEqual(out.workouts.map((w) => w.type), ['Strength']);
 });
