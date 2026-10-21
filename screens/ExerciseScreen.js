@@ -70,12 +70,6 @@ export default function ExerciseScreen() {
     if (!currentPlan || mondayOf(new Date(dateStr + 'T12:00:00')) !== currentPlan.weekStart) return undefined;
     return currentPlan.days[weekdayIndex(new Date(dateStr + 'T12:00:00'))]?.focus;
   };
-  // The plan's focus the day before or after (the week repeats, so Sun's tomorrow is Mon), so the coach
-  // can keep the other workouts off those muscles.
-  const neighbourFocus = (dateStr, delta) => {
-    if (!focusOn(dateStr)) return undefined;
-    return currentPlan.days[(weekdayIndex(new Date(dateStr + 'T12:00:00')) + delta + 7) % 7]?.focus;
-  };
 
   const makeWeekPlan = async () => {
     setPlanning(true);
@@ -112,10 +106,7 @@ export default function ExerciseScreen() {
     try {
       const recentWorkouts = getAllRecentWorkouts();
       const filterType = filter === 'All' ? null : filter;
-      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate), {
-        yesterdayFocus: neighbourFocus(selectedDate, -1),
-        tomorrowFocus: neighbourFocus(selectedDate, 1),
-      });
+      const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate));
       const withIds = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, completed:false }));
       await saveWorkoutPlans({ ...workoutPlans, [selectedDate]: withIds });
     } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
@@ -175,7 +166,6 @@ export default function ExerciseScreen() {
         <View style={styles.dateTitleRow}>
           <Text style={styles.dateTitle}>
             {isToday ? "Today's Workout" : `${DAY_NAMES[selectedDateObj.getDay()]}, ${MONTH_NAMES[selectedDateObj.getMonth()]} ${selectedDateObj.getDate()}`}
-            {focusOn(selectedDate) ? ` · ${focusOn(selectedDate)}` : ''}
           </Text>
           {completedCount > 0 && <Text style={styles.completedCount}>💪 {completedCount} done</Text>}
         </View>
@@ -677,9 +667,8 @@ const styles = StyleSheet.create({
   detailLine: { fontSize:13, color:'#555', marginBottom:8 },
   stepText: { fontSize:14, color:'#333', lineHeight:21, marginBottom:8 },
   logRow: { flexDirection:'row', alignItems:'center', gap:8, marginBottom:10 },
-  // minWidth 0: on web an <input> won't shrink below ~20 characters, which pushed the weight box off the screen.
-  logSet: { width:48, flexShrink:0, fontSize:13, fontWeight:'700', color:'#555' },
-  logInput: { flex:1, minWidth:0, width:0, borderWidth:1.5, borderColor:'#E0E0E0', borderRadius:10, padding:10, fontSize:15, color:'#1a1a1a' },
-  logUnit: { width:22, flexShrink:0, fontSize:13, color:'#888' },
+  logSet: { width:48, fontSize:13, fontWeight:'700', color:'#555' },
+  logInput: { flex:1, borderWidth:1.5, borderColor:'#E0E0E0', borderRadius:10, padding:10, fontSize:15, color:'#1a1a1a' },
+  logUnit: { width:22, fontSize:13, color:'#888' },
   warnText: { fontSize:12, color:'#8A6D00', backgroundColor:'#FFFBEA', borderRadius:8, padding:8, marginBottom:8 },
 });
