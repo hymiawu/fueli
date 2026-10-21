@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, ScrollView, Modal, Image, TextInput,
+  View, Text, TouchableOpacity, ScrollView, Image, TextInput,
   StyleSheet, ActivityIndicator, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
@@ -9,6 +9,7 @@ import { handleSubscriptionLapse } from '../lib/route';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import { getWorkoutSuggestions, planMyWeek } from '../lib/api';
 import { supabase } from '../lib/supabase';
+import Sheet from '../lib/Sheet';
 import { addSession, lastTimeText, firstNumber, KG_PER_LB } from '../lib/exerciseLog';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -286,7 +287,7 @@ function ExerciseDetail({ exercise, onClose }) {
   }, [images.length]);
   const muscles = [...(exercise.primaryMuscles || []), ...(exercise.secondaryMuscles || [])];
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Sheet onClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalSheet}>
           <View style={styles.modalHeader}>
@@ -315,7 +316,7 @@ function ExerciseDetail({ exercise, onClose }) {
           </ScrollView>
         </View>
       </View>
-    </Modal>
+    </Sheet>
   );
 }
 
@@ -333,7 +334,7 @@ function LogSheet({ exercise, units, onClose, onSave }) {
     onSave(sets);
   };
   return (
-    <Modal visible transparent animationType="slide" onRequestClose={onClose}>
+    <Sheet onClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalSheet}>
           <View style={styles.modalHeader}>
@@ -355,7 +356,7 @@ function LogSheet({ exercise, units, onClose, onSave }) {
           </ScrollView>
         </View>
       </View>
-    </Modal>
+    </Sheet>
   );
 }
 
