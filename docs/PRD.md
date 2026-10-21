@@ -84,5 +84,4 @@ Acceptance = the eval suite (`eval/`) passes ≥ 90% overall and 100% on diet-co
 ## 7. Open questions / future work
 - Move meal and workout history from device storage (AsyncStorage) to Supabase so plans sync across devices and the planner can use eating history.
 - Replace the 62-item nutrition table with the USDA FoodData Central API or an embedded vector index for long-tail foods.
-- Allergy field in onboarding with hard enforcement (same mechanism as vegan).
 - Streaming responses to cut perceived latency.
