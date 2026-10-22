@@ -4,6 +4,9 @@ import { asData, DATA_RULE, cleanText } from '../guard.js';
 import { checkWorkout } from './safetyGuard.js';
 import { allowedList, verifyExercises } from './exerciseVerifier.js';
 import { coachProfile } from './weekPlanner.js';
+import { FOCUS_MUSCLES, fitsWeekPlan, matchWorkouts } from '../plan/workoutMatcher.js';
+
+export { fitsWeekPlan };
 
 const SYSTEM = `You are Fueli's workout coach. Create safe, goal-appropriate workouts.
 ${DATA_RULE}
@@ -19,36 +22,48 @@ Flexibility: {"exerciseId","name","hold","sets","breathingCue","notes"}
 Final JSON format:
 {"workouts":[{"name":"","type":"Strength|Cardio|HIIT|Flexibility","duration":"45 min","caloriesBurned":300,"difficulty":"Beginner|Intermediate|Advanced","muscleGroups":[],"description":"why this fits the user","warmup":"","cooldown":"","exercises":[...]}]}`;
 
-// Muscles each weekly-plan focus trains, in the library's muscle names (exercises.json).
-const PUSH = ['chest', 'shoulders', 'triceps'];
-const PULL = ['lats', 'middle back', 'biceps'];
-const LOWER = ['quadriceps', 'hamstrings', 'glutes', 'calves'];
-const FOCUS_MUSCLES = { Push: PUSH, Pull: PULL, Lower: LOWER, Upper: [...PUSH, ...PULL], 'Full Body': [...PUSH, ...PULL, ...LOWER] };
-const LIGHT = ['Flexibility', 'Cardio'];
-
 // Today's line from the weekly plan (6.3.3), with yesterday's and tomorrow's focus so no option repeats their muscles.
-const focusLine = (todayFocus, yesterdayFocus, tomorrowFocus) => {
+// `lead` is false when the library already gave the user the workout for today's focus.
+const focusLine = (todayFocus, yesterdayFocus, tomorrowFocus, lead = true) => {
   if (!todayFocus) return '';
   if (todayFocus === 'Rest') {
-    return 'Today is a rest day. All workouts must be light recovery: Flexibility or easy, low-intensity Cardio. No Strength or HIIT. Make the first workout a Flexibility session called "Optional recovery".\n';
+    return `Today is a rest day. All workouts must be light recovery: Flexibility or easy, low-intensity Cardio. No Strength or HIIT.${lead ? ' Make the first workout a Flexibility session called "Optional recovery".' : ''}\n`;
   }
   const sides = [['yesterday', yesterdayFocus], ['tomorrow', tomorrowFocus]].filter(([, f]) => FOCUS_MUSCLES[f]);
   const blocked = [...new Set(sides.flatMap(([, f]) => FOCUS_MUSCLES[f]))];
   const why = sides.map(([when, f]) => `${when} is ${f}`).join(' and ');
-  return `Today's planned focus is ${todayFocus}. Make the first workout match it; the other two can vary.${blocked.length ? ` No Strength or HIIT workout may train ${blocked.join(', ')} (${why}).` : ''}\n`;
+  return `Today's planned focus is ${todayFocus}. ${lead ? 'Make the first workout match it; the others can vary.' : 'The user already has a workout for it; these can vary.'}${blocked.length ? ` No Strength or HIIT workout may train ${blocked.join(', ')} (${why}).` : ''}\n`;
 };
 
-// Code check after the model (6.3.3): on a rest day only light types pass, and Strength or HIIT may not train
-// yesterday's or tomorrow's muscles. Muscles come from the library, not the model. A filter the user picked wins.
-export function fitsWeekPlan(workout, { todayFocus, yesterdayFocus, tomorrowFocus, filterType }) {
-  if (LIGHT.includes(workout.type) || filterType) return true;
-  if (todayFocus === 'Rest') return false;
-  const blocked = [yesterdayFocus, tomorrowFocus].flatMap((f) => FOCUS_MUSCLES[f] || []);
-  return !(workout.exercises || []).some((ex) => (ex.primaryMuscles || []).some((m) => blocked.includes(m)));
-}
+// The workout library is used first unless WORKOUT_LIBRARY=off or the caller passes useLibrary: false.
+const libraryOn = () => process.env.WORKOUT_LIBRARY !== 'off';
 
 // `deps` lets tests replace the model call.
-export async function suggestWorkouts({ profile, recentWorkouts, filterType, todayFocus, yesterdayFocus, tomorrowFocus, trace }, deps = { jsonCompletion }) {
+// Workouts come from the library when enough fit the day; only the missing ones go to the AI coach.
+export async function suggestWorkouts(args, deps = { jsonCompletion }) {
+  const { profile, recentWorkouts = [], filterType, todayFocus, yesterdayFocus, tomorrowFocus, exclude = [], useLibrary = libraryOn(), rng, trace } = args;
+  if (!useLibrary) return { ...(await suggestWithAI(args, deps)), source: 'ai' };
+
+  const lib = matchWorkouts({ profile: coachProfile(profile), todayFocus, yesterdayFocus, tomorrowFocus, filterType, recentWorkouts, exclude, rng });
+  const libStats = { byId: lib.workouts.reduce((n, w) => n + w.exercises.length, 0), byName: 0, removed: 0 };
+  if (!lib.missing) {
+    trace?.flags.push('library');
+    return { workouts: lib.workouts, exerciseCheck: libStats, source: 'library' };
+  }
+  trace?.flags.push(lib.workouts.length ? 'library_partial' : 'library_none');
+  let ai;
+  try {
+    ai = await suggestWithAI({ ...args, count: lib.missing, avoid: lib.workouts.map((w) => w.name), lead: !lib.workouts.length }, deps);
+  } catch (e) {
+    // The library's picks still fit the day; show them rather than an error.
+    if (lib.workouts.length) return { workouts: lib.workouts, exerciseCheck: libStats, source: 'library' };
+    throw e;
+  }
+  const exerciseCheck = Object.fromEntries(Object.keys(libStats).map((k) => [k, libStats[k] + ai.exerciseCheck[k]]));
+  return { workouts: [...lib.workouts, ...ai.workouts], exerciseCheck, source: lib.workouts.length ? 'library+ai' : 'ai' };
+}
+
+async function suggestWithAI({ profile, recentWorkouts, filterType, todayFocus, yesterdayFocus, tomorrowFocus, count = 3, avoid = [], lead = true, trace }, deps) {
   const p = coachProfile(profile);
   const recent = recentWorkouts.slice(0, 7).map((w) => ({ date: w.date, name: cleanText(w.name, 60), type: w.type }));
   // The allowed list is short enough to send whole; a tool loop would add seconds to a 12-16 s call (6.3.4).
@@ -61,8 +76,8 @@ ${allowedList(p)}`;
     messages: [
       {
         role: 'user',
-        content: `Create 3 workouts. ${filterType ? `All must be type ${filterType}.` : 'Mix types (Strength, Cardio, HIIT, Flexibility).'}
-${focusLine(todayFocus, yesterdayFocus, tomorrowFocus)}${context}`,
+        content: `Create ${count} workout${count === 1 ? '' : 's'}. ${filterType ? `All must be type ${filterType}.` : 'Mix types (Strength, Cardio, HIIT, Flexibility).'}${avoid.length ? ` The user already has: ${avoid.join(', ')}; make different ones.` : ''}
+${focusLine(todayFocus, yesterdayFocus, tomorrowFocus, lead)}${context}`,
       },
     ],
     schema: WorkoutPlan,
@@ -89,7 +104,7 @@ ${focusLine(todayFocus, yesterdayFocus, tomorrowFocus)}${context}`,
     const types = [...empty.map((w) => w.type), ...Array(offPlan).fill(todayFocus === 'Rest' ? 'Flexibility or easy Cardio' : 'any type')];
     const retry = await deps.jsonCompletion({
       system: SYSTEM,
-      messages: [{ role: 'user', content: `Create ${types.length} workout(s) of type ${types.join(', ')}, using only exercises from the allowed list.\n${focusLine(todayFocus, yesterdayFocus, tomorrowFocus)}${context}` }],
+      messages: [{ role: 'user', content: `Create ${types.length} workout(s) of type ${types.join(', ')}, using only exercises from the allowed list.\n${focusLine(todayFocus, yesterdayFocus, tomorrowFocus, lead)}${context}` }],
       schema: WorkoutPlan,
       trace,
     }).catch(() => ({ workouts: [] }));
@@ -98,5 +113,5 @@ ${focusLine(todayFocus, yesterdayFocus, tomorrowFocus)}${context}`,
     workouts.push(...fixed.slice(0, offPlan));
   }
   if (!workouts.length) throw Object.assign(new Error('Could not build workouts from the exercise library. Please try again.'), { status: 502 });
-  return { workouts, exerciseCheck: stats };
+  return { workouts: workouts.slice(0, count).map((w) => ({ ...w, workoutSource: 'ai' })), exerciseCheck: stats };
 }

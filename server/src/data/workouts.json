@@ -1,0 +1,1990 @@
+{
+  "_note": "Workout library, the same pattern as the recipe library (D-19). Written once; plain code picks from it (plan/workoutMatcher.js). Exercise ids are from exercises.json. focus lists the weekly-plan days a workout matches; easy marks Cardio that also fits a rest day.",
+  "workouts": [
+    {
+      "id": "fb-bodyweight",
+      "name": "Full Body Bodyweight Basics",
+      "type": "Strength",
+      "focus": [
+        "Full Body"
+      ],
+      "difficulty": "Beginner",
+      "duration": "35 min",
+      "caloriesBurned": 200,
+      "muscleGroups": [
+        "Legs",
+        "Chest",
+        "Back",
+        "Core"
+      ],
+      "description": "Five simple moves that train every major muscle with little or no equipment. A good first session.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Bodyweight_Squat",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Sit back as if onto a chair and keep your heels down."
+        },
+        {
+          "exerciseId": "Pushups",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep a straight line from head to heels; drop to your knees if needed."
+        },
+        {
+          "exerciseId": "One-Arm_Dumbbell_Row",
+          "sets": 3,
+          "reps": "10 each side",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pull the elbow toward your hip and keep your back flat."
+        },
+        {
+          "exerciseId": "Butt_Lift_Bridge",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Squeeze your glutes at the top and hold for a second."
+        },
+        {
+          "exerciseId": "Plank",
+          "sets": 3,
+          "reps": "30 sec",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level and brace like someone is about to poke your stomach."
+        }
+      ]
+    },
+    {
+      "id": "fb-dumbbell",
+      "name": "Full Body Dumbbell Circuit",
+      "type": "Strength",
+      "focus": [
+        "Full Body"
+      ],
+      "difficulty": "Beginner",
+      "duration": "40 min",
+      "caloriesBurned": 230,
+      "muscleGroups": [
+        "Legs",
+        "Chest",
+        "Back",
+        "Core"
+      ],
+      "description": "One pair of dumbbells covers the whole body: squat, press, row and lunge.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Goblet_Squat",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Hold the weight at your chest and keep your elbows inside your knees."
+        },
+        {
+          "exerciseId": "Dumbbell_Bench_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Lower the dumbbells slowly to chest level, then press up."
+        },
+        {
+          "exerciseId": "Bent_Over_Two-Dumbbell_Row",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Hinge at the hips with a flat back and pull to your ribs."
+        },
+        {
+          "exerciseId": "Dumbbell_Lunges",
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Step long enough that your front knee stays over your ankle."
+        },
+        {
+          "exerciseId": "Dead_Bug",
+          "sets": 3,
+          "reps": "8 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Press your lower back into the floor the whole time."
+        }
+      ]
+    },
+    {
+      "id": "fb-gym",
+      "name": "Full Body Gym Starter",
+      "type": "Strength",
+      "focus": [
+        "Full Body"
+      ],
+      "difficulty": "Beginner",
+      "duration": "45 min",
+      "caloriesBurned": 260,
+      "muscleGroups": [
+        "Legs",
+        "Chest",
+        "Back",
+        "Shoulders"
+      ],
+      "description": "The classic barbell and cable lifts at a light weight, to learn the movements.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Barbell_Squat",
+          "sets": 3,
+          "reps": "10",
+          "rest": "90 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Brace your core before each rep and push the floor away."
+        },
+        {
+          "exerciseId": "Barbell_Bench_Press_-_Medium_Grip",
+          "sets": 3,
+          "reps": "10",
+          "rest": "90 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Touch the bar to your lower chest and keep your feet planted."
+        },
+        {
+          "exerciseId": "Seated_Cable_Rows",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Sit tall and squeeze your shoulder blades together."
+        },
+        {
+          "exerciseId": "Standing_Military_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Squeeze your glutes so your lower back does not arch."
+        },
+        {
+          "exerciseId": "Plank",
+          "sets": 3,
+          "reps": "30 sec",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level."
+        }
+      ]
+    },
+    {
+      "id": "fb-machines",
+      "name": "Full Body Machines",
+      "type": "Strength",
+      "focus": [
+        "Full Body"
+      ],
+      "difficulty": "Beginner",
+      "duration": "40 min",
+      "caloriesBurned": 220,
+      "muscleGroups": [
+        "Legs",
+        "Back",
+        "Chest",
+        "Core"
+      ],
+      "description": "Machines guide the movement, so you can focus on effort instead of balance.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Leg_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Lower until your knees reach about 90 degrees; do not lock them at the top."
+        },
+        {
+          "exerciseId": "Wide-Grip_Lat_Pulldown",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pull the bar to your upper chest, not behind your neck."
+        },
+        {
+          "exerciseId": "Incline_Push-Up",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Hands on a bench; the higher the bench, the easier it is."
+        },
+        {
+          "exerciseId": "Standing_Calf_Raises",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pause at the top and lower slowly."
+        },
+        {
+          "exerciseId": "Crunches",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lift your shoulders with your stomach, not by pulling your neck."
+        }
+      ]
+    },
+    {
+      "id": "fb-intermediate",
+      "name": "Full Body Strength Builder",
+      "type": "Strength",
+      "focus": [
+        "Full Body"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "50 min",
+      "caloriesBurned": 320,
+      "muscleGroups": [
+        "Back",
+        "Legs",
+        "Shoulders",
+        "Core"
+      ],
+      "description": "Heavier compound lifts for users who already know the basics.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Barbell_Deadlift",
+          "sets": 4,
+          "reps": "6",
+          "rest": "2 min",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Keep the bar against your legs and your back flat."
+        },
+        {
+          "exerciseId": "Dumbbell_Shoulder_Press",
+          "sets": 3,
+          "reps": "8",
+          "rest": "90 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Press straight up and keep your ribs down."
+        },
+        {
+          "exerciseId": "Chin-Up",
+          "sets": 3,
+          "reps": "6",
+          "rest": "90 sec",
+          "weight": "Bodyweight",
+          "formTip": "Start from a dead hang and pull your chest toward the bar."
+        },
+        {
+          "exerciseId": "Dumbbell_Step_Ups",
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest": "60 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Drive through the heel on the box."
+        },
+        {
+          "exerciseId": "Russian_Twist",
+          "sets": 3,
+          "reps": "12 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Turn your chest, not just your arms."
+        }
+      ]
+    },
+    {
+      "id": "upper-dumbbell",
+      "name": "Upper Body Dumbbell Day",
+      "type": "Strength",
+      "focus": [
+        "Upper"
+      ],
+      "difficulty": "Beginner",
+      "duration": "40 min",
+      "caloriesBurned": 210,
+      "muscleGroups": [
+        "Chest",
+        "Back",
+        "Shoulders",
+        "Arms"
+      ],
+      "description": "Chest, back, shoulders and arms with dumbbells, balanced between pushing and pulling.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Dumbbell_Bench_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Lower slowly to chest level."
+        },
+        {
+          "exerciseId": "Bent_Over_Two-Dumbbell_Row",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Keep your back flat and pull to your ribs."
+        },
+        {
+          "exerciseId": "Side_Lateral_Raise",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Raise to shoulder height with a slight bend in the elbows."
+        },
+        {
+          "exerciseId": "Dumbbell_Bicep_Curl",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Keep your elbows at your sides."
+        },
+        {
+          "exerciseId": "Triceps_Pushdown",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Only your forearms move."
+        }
+      ]
+    },
+    {
+      "id": "upper-bodyweight",
+      "name": "Upper Body Bodyweight",
+      "type": "Strength",
+      "focus": [
+        "Upper"
+      ],
+      "difficulty": "Beginner",
+      "duration": "30 min",
+      "caloriesBurned": 180,
+      "muscleGroups": [
+        "Chest",
+        "Back",
+        "Arms"
+      ],
+      "description": "Push-ups, chin-ups and dips: an upper-body session you can do in a park.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Pushups",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep a straight line from head to heels."
+        },
+        {
+          "exerciseId": "Chin-Up",
+          "sets": 3,
+          "reps": "5",
+          "rest": "90 sec",
+          "weight": "Bodyweight",
+          "formTip": "Use a band or a jump to the top and lower slowly if you cannot pull up yet."
+        },
+        {
+          "exerciseId": "Dips_-_Triceps_Version",
+          "sets": 3,
+          "reps": "8",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lower until your elbows reach 90 degrees."
+        },
+        {
+          "exerciseId": "Incline_Push-Up",
+          "sets": 2,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Finish with easier push-ups to add volume."
+        }
+      ]
+    },
+    {
+      "id": "upper-intermediate",
+      "name": "Upper Body Strength",
+      "type": "Strength",
+      "focus": [
+        "Upper"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "50 min",
+      "caloriesBurned": 280,
+      "muscleGroups": [
+        "Chest",
+        "Back",
+        "Shoulders",
+        "Arms"
+      ],
+      "description": "Heavier presses and pull-ups for a full upper-body day.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Barbell_Bench_Press_-_Medium_Grip",
+          "sets": 4,
+          "reps": "8",
+          "rest": "2 min",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Keep your shoulder blades pinned back."
+        },
+        {
+          "exerciseId": "Pullups",
+          "sets": 4,
+          "reps": "6",
+          "rest": "90 sec",
+          "weight": "Bodyweight",
+          "formTip": "Pull your elbows down toward your hips."
+        },
+        {
+          "exerciseId": "Dumbbell_Shoulder_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Press straight up."
+        },
+        {
+          "exerciseId": "Face_Pull",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pull the rope toward your eyes with elbows high."
+        },
+        {
+          "exerciseId": "Hammer_Curls",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Thumbs up, elbows still."
+        }
+      ]
+    },
+    {
+      "id": "push-dumbbell",
+      "name": "Push Day: Chest and Shoulders",
+      "type": "Strength",
+      "focus": [
+        "Push"
+      ],
+      "difficulty": "Beginner",
+      "duration": "40 min",
+      "caloriesBurned": 200,
+      "muscleGroups": [
+        "Chest",
+        "Shoulders",
+        "Triceps"
+      ],
+      "description": "Pressing moves for chest, shoulders and triceps.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Dumbbell_Bench_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Lower slowly to chest level."
+        },
+        {
+          "exerciseId": "Standing_Military_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Squeeze your glutes to protect your lower back."
+        },
+        {
+          "exerciseId": "Incline_Push-Up",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Hands on a bench, body straight."
+        },
+        {
+          "exerciseId": "Side_Lateral_Raise",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Raise to shoulder height."
+        },
+        {
+          "exerciseId": "Triceps_Pushdown",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Keep your elbows at your sides."
+        }
+      ]
+    },
+    {
+      "id": "push-bodyweight",
+      "name": "Push Day Bodyweight",
+      "type": "Strength",
+      "focus": [
+        "Push"
+      ],
+      "difficulty": "Beginner",
+      "duration": "30 min",
+      "caloriesBurned": 170,
+      "muscleGroups": [
+        "Chest",
+        "Triceps",
+        "Core"
+      ],
+      "description": "Push-up variations and dips, no equipment needed.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Pushups",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Drop to your knees for the last reps if needed."
+        },
+        {
+          "exerciseId": "Incline_Push-Up",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Hands on a bench."
+        },
+        {
+          "exerciseId": "Dips_-_Triceps_Version",
+          "sets": 3,
+          "reps": "8",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your body upright to focus on the triceps."
+        },
+        {
+          "exerciseId": "Plank",
+          "sets": 3,
+          "reps": "30 sec",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level."
+        }
+      ]
+    },
+    {
+      "id": "push-intermediate",
+      "name": "Push Day Strength",
+      "type": "Strength",
+      "focus": [
+        "Push"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "45 min",
+      "caloriesBurned": 260,
+      "muscleGroups": [
+        "Chest",
+        "Shoulders",
+        "Triceps"
+      ],
+      "description": "Heavier pressing for chest, shoulders and triceps.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Barbell_Bench_Press_-_Medium_Grip",
+          "sets": 4,
+          "reps": "8",
+          "rest": "2 min",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Keep your feet planted."
+        },
+        {
+          "exerciseId": "Dumbbell_Shoulder_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "90 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Press straight up."
+        },
+        {
+          "exerciseId": "Dips_-_Triceps_Version",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lower until your elbows reach 90 degrees."
+        },
+        {
+          "exerciseId": "Side_Lateral_Raise",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Slow on the way down."
+        },
+        {
+          "exerciseId": "Triceps_Pushdown",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Only your forearms move."
+        }
+      ]
+    },
+    {
+      "id": "pull-cable",
+      "name": "Pull Day: Back and Biceps",
+      "type": "Strength",
+      "focus": [
+        "Pull"
+      ],
+      "difficulty": "Beginner",
+      "duration": "40 min",
+      "caloriesBurned": 200,
+      "muscleGroups": [
+        "Back",
+        "Biceps"
+      ],
+      "description": "Pulling moves for the back and biceps, using cables and dumbbells.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Wide-Grip_Lat_Pulldown",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pull to your upper chest."
+        },
+        {
+          "exerciseId": "Seated_Cable_Rows",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Squeeze your shoulder blades together."
+        },
+        {
+          "exerciseId": "One-Arm_Dumbbell_Row",
+          "sets": 3,
+          "reps": "10 each side",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pull the elbow toward your hip."
+        },
+        {
+          "exerciseId": "Dumbbell_Bicep_Curl",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Keep your elbows at your sides."
+        },
+        {
+          "exerciseId": "Hammer_Curls",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Thumbs up."
+        }
+      ]
+    },
+    {
+      "id": "pull-bodyweight",
+      "name": "Pull Day Bodyweight",
+      "type": "Strength",
+      "focus": [
+        "Pull"
+      ],
+      "difficulty": "Beginner",
+      "duration": "30 min",
+      "caloriesBurned": 170,
+      "muscleGroups": [
+        "Back",
+        "Biceps",
+        "Lower back"
+      ],
+      "description": "Chin-ups, pull-ups and rows with your own body weight and one pair of dumbbells.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Chin-Up",
+          "sets": 3,
+          "reps": "5",
+          "rest": "90 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lower slowly, about 3 seconds down."
+        },
+        {
+          "exerciseId": "Pullups",
+          "sets": 3,
+          "reps": "5",
+          "rest": "90 sec",
+          "weight": "Bodyweight",
+          "formTip": "Use a band if you cannot do 5 yet."
+        },
+        {
+          "exerciseId": "Bent_Over_Two-Dumbbell_Row",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Keep your back flat."
+        },
+        {
+          "exerciseId": "Superman",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lift arms and legs together and hold for a second."
+        }
+      ]
+    },
+    {
+      "id": "pull-intermediate",
+      "name": "Pull Day Strength",
+      "type": "Strength",
+      "focus": [
+        "Pull"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "45 min",
+      "caloriesBurned": 260,
+      "muscleGroups": [
+        "Back",
+        "Biceps",
+        "Shoulders"
+      ],
+      "description": "Heavier pulling for the back and arms.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Pullups",
+          "sets": 4,
+          "reps": "6",
+          "rest": "2 min",
+          "weight": "Bodyweight",
+          "formTip": "Pull your elbows down toward your hips."
+        },
+        {
+          "exerciseId": "Seated_Cable_Rows",
+          "sets": 4,
+          "reps": "8",
+          "rest": "90 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Sit tall."
+        },
+        {
+          "exerciseId": "Face_Pull",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Elbows high."
+        },
+        {
+          "exerciseId": "Hammer_Curls",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Elbows still."
+        }
+      ]
+    },
+    {
+      "id": "lower-dumbbell",
+      "name": "Lower Body Dumbbell Day",
+      "type": "Strength",
+      "focus": [
+        "Lower"
+      ],
+      "difficulty": "Beginner",
+      "duration": "40 min",
+      "caloriesBurned": 230,
+      "muscleGroups": [
+        "Quads",
+        "Glutes",
+        "Hamstrings",
+        "Calves"
+      ],
+      "description": "Squats, lunges and bridges for the legs and glutes.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Goblet_Squat",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Keep your chest up."
+        },
+        {
+          "exerciseId": "Dumbbell_Lunges",
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Step long and keep your front knee over your ankle."
+        },
+        {
+          "exerciseId": "Butt_Lift_Bridge",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Squeeze your glutes at the top."
+        },
+        {
+          "exerciseId": "Standing_Calf_Raises",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Pause at the top."
+        },
+        {
+          "exerciseId": "Dead_Bug",
+          "sets": 3,
+          "reps": "8 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lower back stays on the floor."
+        }
+      ]
+    },
+    {
+      "id": "lower-bodyweight",
+      "name": "Lower Body Bodyweight",
+      "type": "Strength",
+      "focus": [
+        "Lower"
+      ],
+      "difficulty": "Beginner",
+      "duration": "30 min",
+      "caloriesBurned": 180,
+      "muscleGroups": [
+        "Quads",
+        "Glutes",
+        "Core"
+      ],
+      "description": "Squats and glute bridges with no equipment.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Bodyweight_Squat",
+          "sets": 3,
+          "reps": "12",
+          "rest": "60 sec",
+          "weight": "Bodyweight",
+          "formTip": "Sit back as if onto a chair."
+        },
+        {
+          "exerciseId": "Single_Leg_Glute_Bridge",
+          "sets": 3,
+          "reps": "10 each leg",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level."
+        },
+        {
+          "exerciseId": "Butt_Lift_Bridge",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Hold the top for a second."
+        },
+        {
+          "exerciseId": "Plank",
+          "sets": 3,
+          "reps": "30 sec",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level."
+        }
+      ]
+    },
+    {
+      "id": "lower-gym",
+      "name": "Lower Body Gym Starter",
+      "type": "Strength",
+      "focus": [
+        "Lower"
+      ],
+      "difficulty": "Beginner",
+      "duration": "45 min",
+      "caloriesBurned": 260,
+      "muscleGroups": [
+        "Quads",
+        "Glutes",
+        "Calves"
+      ],
+      "description": "Barbell squat and leg press at a light weight.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Barbell_Squat",
+          "sets": 3,
+          "reps": "10",
+          "rest": "90 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Brace before each rep."
+        },
+        {
+          "exerciseId": "Leg_Press",
+          "sets": 3,
+          "reps": "10",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Do not lock your knees at the top."
+        },
+        {
+          "exerciseId": "Dumbbell_Lunges",
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest": "60 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Step long."
+        },
+        {
+          "exerciseId": "Standing_Calf_Raises",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Lower slowly."
+        }
+      ]
+    },
+    {
+      "id": "lower-intermediate",
+      "name": "Lower Body Strength",
+      "type": "Strength",
+      "focus": [
+        "Lower"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "50 min",
+      "caloriesBurned": 320,
+      "muscleGroups": [
+        "Quads",
+        "Hamstrings",
+        "Glutes",
+        "Calves"
+      ],
+      "description": "Heavier squats, hinges and hip thrusts.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Barbell_Squat",
+          "sets": 4,
+          "reps": "6",
+          "rest": "2 min",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Brace before each rep."
+        },
+        {
+          "exerciseId": "Romanian_Deadlift",
+          "sets": 3,
+          "reps": "8",
+          "rest": "90 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Push your hips back and keep the bar close."
+        },
+        {
+          "exerciseId": "Barbell_Hip_Thrust",
+          "sets": 3,
+          "reps": "10",
+          "rest": "90 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Chin tucked, ribs down at the top."
+        },
+        {
+          "exerciseId": "Dumbbell_Step_Ups",
+          "sets": 3,
+          "reps": "8 each leg",
+          "rest": "60 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Drive through the heel."
+        },
+        {
+          "exerciseId": "Standing_Calf_Raises",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Moderate: the last 2 reps are hard",
+          "formTip": "Pause at the top."
+        }
+      ]
+    },
+    {
+      "id": "core-basics",
+      "name": "Core Basics",
+      "type": "Strength",
+      "focus": [],
+      "difficulty": "Beginner",
+      "duration": "20 min",
+      "caloriesBurned": 100,
+      "muscleGroups": [
+        "Core",
+        "Lower back"
+      ],
+      "description": "A short core session that does not tire the muscles of your main training days.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Plank",
+          "sets": 3,
+          "reps": "30 sec",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level."
+        },
+        {
+          "exerciseId": "Dead_Bug",
+          "sets": 3,
+          "reps": "8 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Lower back stays on the floor."
+        },
+        {
+          "exerciseId": "Crunches",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Do not pull on your neck."
+        },
+        {
+          "exerciseId": "Oblique_Crunches_-_On_The_Floor",
+          "sets": 3,
+          "reps": "10 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Move slowly."
+        },
+        {
+          "exerciseId": "Superman",
+          "sets": 3,
+          "reps": "10",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Hold the top for a second."
+        }
+      ]
+    },
+    {
+      "id": "core-intermediate",
+      "name": "Core Strength",
+      "type": "Strength",
+      "focus": [],
+      "difficulty": "Intermediate",
+      "duration": "25 min",
+      "caloriesBurned": 130,
+      "muscleGroups": [
+        "Core"
+      ],
+      "description": "A harder core session with twists and side bends.",
+      "warmup": "5 min easy walk or bike, then 10 bodyweight squats and 10 arm circles each way.",
+      "cooldown": "5 min easy walk, then stretch the muscles you trained for 30 sec each.",
+      "exercises": [
+        {
+          "exerciseId": "Plank",
+          "sets": 3,
+          "reps": "45 sec",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Keep your hips level."
+        },
+        {
+          "exerciseId": "Russian_Twist",
+          "sets": 3,
+          "reps": "12 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Turn your chest."
+        },
+        {
+          "exerciseId": "3_4_Sit-Up",
+          "sets": 3,
+          "reps": "12",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Come up only three quarters of the way."
+        },
+        {
+          "exerciseId": "Dumbbell_Side_Bend",
+          "sets": 3,
+          "reps": "12 each side",
+          "rest": "45 sec",
+          "weight": "Light: you could do 2 to 3 more reps",
+          "formTip": "Bend straight to the side."
+        },
+        {
+          "exerciseId": "Air_Bike",
+          "sets": 3,
+          "reps": "12 each side",
+          "rest": "45 sec",
+          "weight": "Bodyweight",
+          "formTip": "Slow and controlled."
+        }
+      ]
+    },
+    {
+      "id": "hiit-fb",
+      "name": "Full Body HIIT Starter",
+      "type": "HIIT",
+      "focus": [
+        "Full Body"
+      ],
+      "difficulty": "Beginner",
+      "duration": "20 min",
+      "caloriesBurned": 220,
+      "muscleGroups": [
+        "Full body",
+        "Heart"
+      ],
+      "description": "Short bursts with full rests. Raises your heart rate without complicated moves.",
+      "warmup": "5 min march in place and easy jumping jacks, then 2 slow rounds of the first exercise.",
+      "cooldown": "3 to 5 min easy walk until your breathing settles, then stretch your legs and hips.",
+      "exercises": [
+        {
+          "exerciseId": "Mountain_Climbers",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Keep your hips low."
+        },
+        {
+          "exerciseId": "Bodyweight_Squat",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Steady pace, full range."
+        },
+        {
+          "exerciseId": "Pushups",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Drop to your knees when tired."
+        },
+        {
+          "exerciseId": "Air_Bike",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Elbow toward the opposite knee."
+        }
+      ]
+    },
+    {
+      "id": "hiit-lower",
+      "name": "Lower Body HIIT",
+      "type": "HIIT",
+      "focus": [
+        "Lower"
+      ],
+      "difficulty": "Beginner",
+      "duration": "20 min",
+      "caloriesBurned": 230,
+      "muscleGroups": [
+        "Legs",
+        "Glutes",
+        "Heart"
+      ],
+      "description": "A leg-focused circuit with jumps and bridges.",
+      "warmup": "5 min march in place and easy jumping jacks, then 2 slow rounds of the first exercise.",
+      "cooldown": "3 to 5 min easy walk until your breathing settles, then stretch your legs and hips.",
+      "exercises": [
+        {
+          "exerciseId": "Bodyweight_Squat",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Full range."
+        },
+        {
+          "exerciseId": "Box_Jump_Multiple_Response",
+          "work": "20 sec",
+          "rest": "40 sec",
+          "rounds": 4,
+          "notes": "Use a low box and land softly."
+        },
+        {
+          "exerciseId": "Butt_Lift_Bridge",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Squeeze at the top."
+        },
+        {
+          "exerciseId": "Mountain_Climbers",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Keep your hips low."
+        }
+      ]
+    },
+    {
+      "id": "hiit-upper",
+      "name": "Upper Body HIIT",
+      "type": "HIIT",
+      "focus": [
+        "Upper",
+        "Push"
+      ],
+      "difficulty": "Beginner",
+      "duration": "20 min",
+      "caloriesBurned": 190,
+      "muscleGroups": [
+        "Chest",
+        "Triceps",
+        "Core"
+      ],
+      "description": "Push-up based intervals for the chest and arms.",
+      "warmup": "5 min march in place and easy jumping jacks, then 2 slow rounds of the first exercise.",
+      "cooldown": "3 to 5 min easy walk until your breathing settles, then stretch your legs and hips.",
+      "exercises": [
+        {
+          "exerciseId": "Pushups",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Knees down if needed."
+        },
+        {
+          "exerciseId": "Incline_Push-Up",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Hands on a bench."
+        },
+        {
+          "exerciseId": "Dips_-_Triceps_Version",
+          "work": "20 sec",
+          "rest": "40 sec",
+          "rounds": 4,
+          "notes": "Use a bench behind you."
+        },
+        {
+          "exerciseId": "Plank",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Hips level."
+        }
+      ]
+    },
+    {
+      "id": "hiit-core",
+      "name": "Core HIIT",
+      "type": "HIIT",
+      "focus": [],
+      "difficulty": "Beginner",
+      "duration": "15 min",
+      "caloriesBurned": 140,
+      "muscleGroups": [
+        "Core",
+        "Heart"
+      ],
+      "description": "Fast core intervals that leave your arms and legs fresh.",
+      "warmup": "5 min march in place and easy jumping jacks, then 2 slow rounds of the first exercise.",
+      "cooldown": "3 to 5 min easy walk until your breathing settles, then stretch your legs and hips.",
+      "exercises": [
+        {
+          "exerciseId": "Air_Bike",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 3,
+          "notes": "Elbow toward the opposite knee."
+        },
+        {
+          "exerciseId": "Crunches",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 3,
+          "notes": "Breathe out on the way up."
+        },
+        {
+          "exerciseId": "Plank",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 3,
+          "notes": "Hips level."
+        },
+        {
+          "exerciseId": "Dead_Bug",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 3,
+          "notes": "Slow and controlled."
+        }
+      ]
+    },
+    {
+      "id": "hiit-fb-intermediate",
+      "name": "Full Body HIIT Burner",
+      "type": "HIIT",
+      "focus": [
+        "Full Body",
+        "Cardio"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "25 min",
+      "caloriesBurned": 320,
+      "muscleGroups": [
+        "Full body",
+        "Heart"
+      ],
+      "description": "Jumps and rope work for a harder full-body interval session.",
+      "warmup": "5 min march in place and easy jumping jacks, then 2 slow rounds of the first exercise.",
+      "cooldown": "3 to 5 min easy walk until your breathing settles, then stretch your legs and hips.",
+      "exercises": [
+        {
+          "exerciseId": "Freehand_Jump_Squat",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 5,
+          "notes": "Land softly with bent knees."
+        },
+        {
+          "exerciseId": "Rope_Jumping",
+          "work": "45 sec",
+          "rest": "15 sec",
+          "rounds": 5,
+          "notes": "Small jumps on the balls of your feet."
+        },
+        {
+          "exerciseId": "Pushups",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 5,
+          "notes": "Steady pace."
+        },
+        {
+          "exerciseId": "Mountain_Climbers",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 5,
+          "notes": "Fast feet, hips low."
+        },
+        {
+          "exerciseId": "Russian_Twist",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 5,
+          "notes": "Turn your chest."
+        }
+      ]
+    },
+    {
+      "id": "hiit-cardio",
+      "name": "Cardio HIIT Intervals",
+      "type": "HIIT",
+      "focus": [
+        "Cardio",
+        "Lower"
+      ],
+      "difficulty": "Intermediate",
+      "duration": "20 min",
+      "caloriesBurned": 280,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Jump rope, box jumps and jump squats in short hard intervals.",
+      "warmup": "5 min march in place and easy jumping jacks, then 2 slow rounds of the first exercise.",
+      "cooldown": "3 to 5 min easy walk until your breathing settles, then stretch your legs and hips.",
+      "exercises": [
+        {
+          "exerciseId": "Rope_Jumping",
+          "work": "45 sec",
+          "rest": "15 sec",
+          "rounds": 4,
+          "notes": "Stay light on your feet."
+        },
+        {
+          "exerciseId": "Box_Jump_Multiple_Response",
+          "work": "20 sec",
+          "rest": "40 sec",
+          "rounds": 4,
+          "notes": "Step down, do not jump down."
+        },
+        {
+          "exerciseId": "Freehand_Jump_Squat",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Land softly."
+        },
+        {
+          "exerciseId": "Mountain_Climbers",
+          "work": "30 sec",
+          "rest": "30 sec",
+          "rounds": 4,
+          "notes": "Hips low."
+        }
+      ]
+    },
+    {
+      "id": "cardio-walk",
+      "name": "Easy Treadmill Walk",
+      "type": "Cardio",
+      "focus": [
+        "Cardio",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "easy": true,
+      "duration": "30 min",
+      "caloriesBurned": 150,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "A relaxed walk that keeps you moving without tiring you for your next training day.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Walking_Treadmill",
+          "duration": "30 min",
+          "intensity": "Easy",
+          "targetHR": "50-60% max",
+          "structure": "Steady pace you could hold a conversation at."
+        }
+      ]
+    },
+    {
+      "id": "cardio-bike-easy",
+      "name": "Easy Bike Ride",
+      "type": "Cardio",
+      "focus": [
+        "Cardio",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "easy": true,
+      "duration": "25 min",
+      "caloriesBurned": 150,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Low-impact cardio that is easy on the knees.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Bicycling_Stationary",
+          "duration": "25 min",
+          "intensity": "Easy",
+          "targetHR": "50-60% max",
+          "structure": "Light resistance, smooth pedalling."
+        }
+      ]
+    },
+    {
+      "id": "cardio-walk-bike",
+      "name": "Walk and Bike Recovery",
+      "type": "Cardio",
+      "focus": [
+        "Cardio",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "easy": true,
+      "duration": "30 min",
+      "caloriesBurned": 160,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Two easy machines back to back for gentle recovery cardio.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Walking_Treadmill",
+          "duration": "15 min",
+          "intensity": "Easy",
+          "targetHR": "50-60% max",
+          "structure": "Relaxed pace."
+        },
+        {
+          "exerciseId": "Bicycling_Stationary",
+          "duration": "15 min",
+          "intensity": "Easy",
+          "targetHR": "50-60% max",
+          "structure": "Light resistance."
+        }
+      ]
+    },
+    {
+      "id": "cardio-jog",
+      "name": "Steady Jog",
+      "type": "Cardio",
+      "focus": [
+        "Cardio"
+      ],
+      "difficulty": "Beginner",
+      "easy": false,
+      "duration": "25 min",
+      "caloriesBurned": 250,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "A steady jog that builds your base fitness and burns calories.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Jogging_Treadmill",
+          "duration": "25 min",
+          "intensity": "Moderate",
+          "targetHR": "65-75% max",
+          "structure": "Steady pace; slow down if you cannot speak in short sentences."
+        }
+      ]
+    },
+    {
+      "id": "cardio-walk-jog",
+      "name": "Walk-Jog Intervals",
+      "type": "Cardio",
+      "focus": [
+        "Cardio"
+      ],
+      "difficulty": "Beginner",
+      "easy": false,
+      "duration": "30 min",
+      "caloriesBurned": 230,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Alternating walking and jogging, a common way to start running.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Walking_Treadmill",
+          "duration": "15 min total",
+          "intensity": "Easy",
+          "targetHR": "55-65% max",
+          "structure": "Walk 2 min between each jog."
+        },
+        {
+          "exerciseId": "Jogging_Treadmill",
+          "duration": "15 min total",
+          "intensity": "Moderate",
+          "targetHR": "65-75% max",
+          "structure": "Jog 1 min, walk 2 min, 5 times through."
+        }
+      ]
+    },
+    {
+      "id": "cardio-bike-intervals",
+      "name": "Bike Intervals",
+      "type": "Cardio",
+      "focus": [
+        "Cardio"
+      ],
+      "difficulty": "Beginner",
+      "easy": false,
+      "duration": "25 min",
+      "caloriesBurned": 260,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Short harder efforts on the bike with easy recovery between them.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Bicycling_Stationary",
+          "duration": "25 min",
+          "intensity": "Moderate",
+          "targetHR": "65-80% max",
+          "structure": "1 min hard, 2 min easy, 6 times, after the warm-up."
+        }
+      ]
+    },
+    {
+      "id": "cardio-elliptical",
+      "name": "Easy Elliptical",
+      "type": "Cardio",
+      "focus": [
+        "Cardio",
+        "Rest"
+      ],
+      "difficulty": "Intermediate",
+      "easy": true,
+      "duration": "30 min",
+      "caloriesBurned": 220,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Smooth, low-impact cardio for the whole body.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Elliptical_Trainer",
+          "duration": "30 min",
+          "intensity": "Easy",
+          "targetHR": "55-65% max",
+          "structure": "Steady pace, light resistance."
+        }
+      ]
+    },
+    {
+      "id": "cardio-row",
+      "name": "Steady Row",
+      "type": "Cardio",
+      "focus": [
+        "Cardio"
+      ],
+      "difficulty": "Intermediate",
+      "easy": false,
+      "duration": "20 min",
+      "caloriesBurned": 220,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Rowing works the legs, back and heart at the same time.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Rowing_Stationary",
+          "duration": "20 min",
+          "intensity": "Moderate",
+          "targetHR": "65-75% max",
+          "structure": "Push with the legs first, then pull with the arms."
+        }
+      ]
+    },
+    {
+      "id": "cardio-mix",
+      "name": "Cardio Machine Mix",
+      "type": "Cardio",
+      "focus": [
+        "Cardio"
+      ],
+      "difficulty": "Intermediate",
+      "easy": false,
+      "duration": "35 min",
+      "caloriesBurned": 330,
+      "muscleGroups": [
+        "Legs",
+        "Heart"
+      ],
+      "description": "Three machines in a row to keep a longer session interesting.",
+      "warmup": "5 min at a very easy pace.",
+      "cooldown": "5 min at a very easy pace, then a short calf and hamstring stretch.",
+      "exercises": [
+        {
+          "exerciseId": "Rowing_Stationary",
+          "duration": "10 min",
+          "intensity": "Moderate",
+          "targetHR": "65-75% max",
+          "structure": "Steady strokes."
+        },
+        {
+          "exerciseId": "Elliptical_Trainer",
+          "duration": "15 min",
+          "intensity": "Moderate",
+          "targetHR": "65-75% max",
+          "structure": "Steady pace."
+        },
+        {
+          "exerciseId": "Rope_Jumping",
+          "duration": "5 min",
+          "intensity": "Hard",
+          "targetHR": "75-85% max",
+          "structure": "30 sec on, 30 sec rest."
+        }
+      ]
+    },
+    {
+      "id": "optional-recovery",
+      "name": "Optional recovery",
+      "type": "Flexibility",
+      "focus": [
+        "Rest",
+        "Flexibility"
+      ],
+      "difficulty": "Beginner",
+      "duration": "15 min",
+      "caloriesBurned": 40,
+      "muscleGroups": [
+        "Back",
+        "Hips",
+        "Hamstrings"
+      ],
+      "description": "A gentle stretch for your rest day. Skip it if you would rather rest completely.",
+      "warmup": "2 min of slow, deep breaths and gentle shoulder rolls.",
+      "cooldown": "Lie on your back for 1 min and breathe slowly.",
+      "exercises": [
+        {
+          "exerciseId": "Childs_Pose",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Breathe into your lower back."
+        },
+        {
+          "exerciseId": "Cat_Stretch",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Breathe in as you arch, out as you round."
+        },
+        {
+          "exerciseId": "Spinal_Stretch",
+          "hold": "30 sec each side",
+          "sets": 2,
+          "breathingCue": "Turn a little further on each breath out."
+        },
+        {
+          "exerciseId": "Hamstring_Stretch",
+          "hold": "30 sec each leg",
+          "sets": 2,
+          "breathingCue": "Relax your shoulders."
+        }
+      ]
+    },
+    {
+      "id": "stretch-full",
+      "name": "Full Body Stretch",
+      "type": "Flexibility",
+      "focus": [
+        "Flexibility",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "duration": "20 min",
+      "caloriesBurned": 50,
+      "muscleGroups": [
+        "Shoulders",
+        "Hips",
+        "Hamstrings",
+        "Back"
+      ],
+      "description": "Head-to-toe stretching to loosen up after a training week.",
+      "warmup": "2 min of slow, deep breaths and gentle shoulder rolls.",
+      "cooldown": "Lie on your back for 1 min and breathe slowly.",
+      "exercises": [
+        {
+          "exerciseId": "Upward_Stretch",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Reach up as you breathe in."
+        },
+        {
+          "exerciseId": "Kneeling_Hip_Flexor",
+          "hold": "30 sec each side",
+          "sets": 2,
+          "breathingCue": "Breathe out as you sink forward."
+        },
+        {
+          "exerciseId": "Hamstring_Stretch",
+          "hold": "30 sec each leg",
+          "sets": 2,
+          "breathingCue": "Keep your back long."
+        },
+        {
+          "exerciseId": "Spinal_Stretch",
+          "hold": "30 sec each side",
+          "sets": 2,
+          "breathingCue": "Turn on the breath out."
+        },
+        {
+          "exerciseId": "Childs_Pose",
+          "hold": "45 sec",
+          "sets": 1,
+          "breathingCue": "Slow breaths into your back."
+        }
+      ]
+    },
+    {
+      "id": "stretch-lower",
+      "name": "Hips and Legs Stretch",
+      "type": "Flexibility",
+      "focus": [
+        "Flexibility",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "duration": "15 min",
+      "caloriesBurned": 40,
+      "muscleGroups": [
+        "Hips",
+        "Hamstrings",
+        "Lower back"
+      ],
+      "description": "Loosens tight hips and hamstrings, good the day after a leg day.",
+      "warmup": "2 min of slow, deep breaths and gentle shoulder rolls.",
+      "cooldown": "Lie on your back for 1 min and breathe slowly.",
+      "exercises": [
+        {
+          "exerciseId": "Kneeling_Hip_Flexor",
+          "hold": "30 sec each side",
+          "sets": 2,
+          "breathingCue": "Breathe out as you sink forward."
+        },
+        {
+          "exerciseId": "Hamstring_Stretch",
+          "hold": "30 sec each leg",
+          "sets": 2,
+          "breathingCue": "Relax into it; do not bounce."
+        },
+        {
+          "exerciseId": "Childs_Pose",
+          "hold": "45 sec",
+          "sets": 2,
+          "breathingCue": "Let your hips sink to your heels."
+        }
+      ]
+    },
+    {
+      "id": "stretch-back",
+      "name": "Back and Shoulders Stretch",
+      "type": "Flexibility",
+      "focus": [
+        "Flexibility",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "duration": "15 min",
+      "caloriesBurned": 40,
+      "muscleGroups": [
+        "Back",
+        "Shoulders"
+      ],
+      "description": "Eases a stiff back and shoulders, good after a day at a desk.",
+      "warmup": "2 min of slow, deep breaths and gentle shoulder rolls.",
+      "cooldown": "Lie on your back for 1 min and breathe slowly.",
+      "exercises": [
+        {
+          "exerciseId": "Upward_Stretch",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Reach up as you breathe in."
+        },
+        {
+          "exerciseId": "Cat_Stretch",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Move with your breath."
+        },
+        {
+          "exerciseId": "Spinal_Stretch",
+          "hold": "30 sec each side",
+          "sets": 2,
+          "breathingCue": "Turn on the breath out."
+        },
+        {
+          "exerciseId": "Childs_Pose",
+          "hold": "45 sec",
+          "sets": 1,
+          "breathingCue": "Arms long in front of you."
+        }
+      ]
+    },
+    {
+      "id": "stretch-desk",
+      "name": "Desk Reset Stretch",
+      "type": "Flexibility",
+      "focus": [
+        "Flexibility",
+        "Rest"
+      ],
+      "difficulty": "Beginner",
+      "duration": "10 min",
+      "caloriesBurned": 30,
+      "muscleGroups": [
+        "Hips",
+        "Shoulders",
+        "Back"
+      ],
+      "description": "Ten minutes to undo sitting all day.",
+      "warmup": "2 min of slow, deep breaths and gentle shoulder rolls.",
+      "cooldown": "Lie on your back for 1 min and breathe slowly.",
+      "exercises": [
+        {
+          "exerciseId": "Kneeling_Hip_Flexor",
+          "hold": "30 sec each side",
+          "sets": 2,
+          "breathingCue": "Squeeze the glute of the back leg."
+        },
+        {
+          "exerciseId": "Upward_Stretch",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Breathe in as you reach."
+        },
+        {
+          "exerciseId": "Cat_Stretch",
+          "hold": "30 sec",
+          "sets": 2,
+          "breathingCue": "Slow and smooth."
+        },
+        {
+          "exerciseId": "Childs_Pose",
+          "hold": "30 sec",
+          "sets": 1,
+          "breathingCue": "Breathe slowly."
+        }
+      ]
+    }
+  ]
+}
