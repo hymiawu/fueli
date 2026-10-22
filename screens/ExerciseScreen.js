@@ -58,7 +58,10 @@ export default function ExerciseScreen() {
 
   const loadWorkoutPlans = async () => {
     try { const s = await getUserItem('workoutPlans'); if (s) setWorkoutPlans(JSON.parse(s)); } catch(e) {}
-    try { const w = await getUserItem('weekPlan'); if (w) setWeekPlan(JSON.parse(w)); } catch(e) {}
+    try {
+      const w = await getUserItem('weekPlan');
+      if (w) { const plan = JSON.parse(w); setWeekPlan(plan); if (plan.daysPerWeek) setDaysPerWeek(plan.daysPerWeek); }
+    } catch(e) {}
     try { const l = await getUserItem('exerciseLog'); if (l) setExerciseLog(JSON.parse(l)); } catch(e) {}
     try { const { data: { user } } = await supabase.auth.getUser(); if (user?.user_metadata?.units === 'imperial') setUnits('imperial'); } catch(e) {}
   };
@@ -77,6 +80,13 @@ export default function ExerciseScreen() {
     try {
       const plan = await planMyWeek(daysPerWeek);
       const saved = { ...plan, weekStart: thisMonday, daysPerWeek };
+      // Workouts suggested for an old focus (today to Sunday) no longer fit; drop them unless one was done.
+      if (currentPlan) {
+        const stale = Object.keys(workoutPlans).filter(ds => ds >= todayStr && mondayOf(new Date(ds + 'T12:00:00')) === thisMonday
+          && focusOn(ds) !== saved.days[weekdayIndex(new Date(ds + 'T12:00:00'))]?.focus
+          && !workoutPlans[ds].some(w => w.completed));
+        if (stale.length) await saveWorkoutPlans(Object.fromEntries(Object.entries(workoutPlans).filter(([ds]) => !stale.includes(ds))));
+      }
       setWeekPlan(saved);
       setWeekOpen(false);
       try { await setUserItem('weekPlan', JSON.stringify(saved)); } catch(e) {}
@@ -107,8 +117,9 @@ export default function ExerciseScreen() {
     try {
       const recentWorkouts = getAllRecentWorkouts();
       const filterType = filter === 'All' ? null : filter;
+      const onScreen = (workoutPlans[selectedDate] || []).map(w => w.libraryId).filter(Boolean);
       const suggestions = await getWorkoutSuggestions(recentWorkouts, filterType, focusOn(selectedDate),
-        focusOn(shiftDay(selectedDate, -1)), focusOn(shiftDay(selectedDate, 1)));
+        focusOn(shiftDay(selectedDate, -1)), focusOn(shiftDay(selectedDate, 1)), onScreen);
       const withIds = suggestions.map(s => ({ ...s, id:`${Date.now()}-${Math.random()}`, completed:false }));
       await saveWorkoutPlans({ ...workoutPlans, [selectedDate]: withIds });
     } catch(e) { if (!handleSubscriptionLapse(e, navigation)) Alert.alert('Error', e.message || 'Could not get workout suggestions. Please try again.'); }
@@ -270,8 +281,18 @@ function WeekCard({ plan, open, onToggle, daysPerWeek, onDaysPerWeek, planning, 
               </View>
             </View>
           ))}
-          <TouchableOpacity onPress={onPlan} disabled={planning} style={{ marginTop:6 }}>
-            <Text style={styles.weekReplan}>{planning ? 'Planning…' : 'Re-plan'}</Text>
+          {/* Change the number of training days, then plan the week again */}
+          <View style={styles.weekChips}>
+            <Text style={styles.weekLabel}>Days per week:</Text>
+            {[2, 3, 4, 5].map(n => (
+              <TouchableOpacity key={n} style={[styles.weekChip, daysPerWeek === n && styles.weekChipOn]} onPress={() => onDaysPerWeek(n)}
+                accessibilityRole="radio" accessibilityState={{ selected: daysPerWeek === n }}>
+                <Text style={[styles.weekChipText, daysPerWeek === n && styles.weekChipTextOn]}>{n}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <TouchableOpacity onPress={onPlan} disabled={planning}>
+            <Text style={styles.weekReplan}>{planning ? 'Planning…' : daysPerWeek === plan.daysPerWeek ? 'Re-plan' : `Re-plan with ${daysPerWeek} days`}</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -501,7 +522,9 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted, onO
         <StatPill icon="📋" value={`${workout.exercises?.length || 0} exercises`} />
       </View>
 
-      {workout.exerciseSource === 'verified' && <Text style={styles.verifiedTag}>✓ Exercises checked against the exercise library</Text>}
+      {workout.workoutSource === 'library'
+        ? <Text style={styles.verifiedTag}>📖 From Fueli's workout library</Text>
+        : workout.exerciseSource === 'verified' && <Text style={styles.verifiedTag}>✓ Exercises checked against the exercise library</Text>}
       {workout.description && <Text style={styles.description}>{workout.description}</Text>}
       {workout.warnings?.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
 

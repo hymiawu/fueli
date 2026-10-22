@@ -100,6 +100,8 @@ export const WorkoutRequest = z.object({
   // The days either side, so no option trains the muscles of yesterday's or tomorrow's plan.
   yesterdayFocus: z.enum(FOCUS).optional(),
   tomorrowFocus: z.enum(FOCUS).optional(),
+  // Library workout ids already on screen for that day, so asking again returns different ones.
+  exclude: z.array(z.string().max(60)).max(10).default([]),
   recentWorkouts: z
     .array(z.object({ date: z.string().max(10), name: z.string().max(100), type: z.string().max(20) }))
     .max(14)

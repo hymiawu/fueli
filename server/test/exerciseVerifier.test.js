@@ -34,7 +34,7 @@ test('a workout left empty is asked for once more, then dropped', async () => {
       ? { workouts: [workout([{ exerciseId: 'Pushups', sets: 3, reps: 10 }]), workout([{ name: 'Invented Move' }], 'Cardio')] }
       : { workouts: [workout([{ exerciseId: 'Jogging_Treadmill', duration: '20 min' }], 'Cardio')] }),
   };
-  const out = await suggestWorkouts({ profile: { activity: 'Moderately Active' }, recentWorkouts: [], filterType: null }, deps);
+  const out = await suggestWorkouts({ profile: { activity: 'Moderately Active' }, recentWorkouts: [], filterType: null, useLibrary: false }, deps);
   assert.equal(calls, 2);
   assert.deepEqual(out.workouts.map((w) => w.exercises[0].exerciseId), ['Pushups', 'Jogging_Treadmill']);
 });
@@ -55,7 +55,7 @@ test('a rest day never returns Strength or HIIT; dropped ones are replaced with 
       return ++calls === 1 ? { workouts: [stretch, upper, legsHiit] } : { workouts: [bike, upper] };
     },
   };
-  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: null, todayFocus: 'Rest' }, deps);
+  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: null, todayFocus: 'Rest', useLibrary: false }, deps);
   assert.equal(calls, 2);
   assert.deepEqual(out.workouts.map((w) => w.type), ['Flexibility', 'Cardio']);
   assert.match(prompts[0], /No Strength or HIIT/);
@@ -65,7 +65,7 @@ test('on a training day, Strength or HIIT that trains yesterday\'s or tomorrow\'
   const lower = verifyExercises(workout([{ exerciseId: 'Goblet_Squat', sets: 3, reps: 10 }]), moderate).workout;
   let calls = 0;
   const deps = { jsonCompletion: async () => (++calls === 1 ? { workouts: [upper, stretch, legsHiit] } : { workouts: [] }) };
-  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: null, todayFocus: 'Upper', tomorrowFocus: 'Lower' }, deps);
+  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: null, todayFocus: 'Upper', tomorrowFocus: 'Lower', useLibrary: false }, deps);
   assert.deepEqual(out.workouts.map((w) => w.exercises[0].exerciseId), ['Dumbbell_Bench_Press', 'Childs_Pose']);
   assert.ok(fitsWeekPlan(lower, { todayFocus: 'Lower', yesterdayFocus: 'Rest', tomorrowFocus: 'Upper' }));
   assert.ok(!fitsWeekPlan(lower, { todayFocus: 'Upper', yesterdayFocus: 'Lower' }));
@@ -73,6 +73,6 @@ test('on a training day, Strength or HIIT that trains yesterday\'s or tomorrow\'
 
 test('a filter the user picked wins over the rest day', async () => {
   const deps = { jsonCompletion: async () => ({ workouts: [upper] }) };
-  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: 'Strength', todayFocus: 'Rest' }, deps);
+  const out = await suggestWorkouts({ profile: moderate, recentWorkouts: [], filterType: 'Strength', todayFocus: 'Rest', useLibrary: false }, deps);
   assert.deepEqual(out.workouts.map((w) => w.type), ['Strength']);
 });
