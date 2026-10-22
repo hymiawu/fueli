@@ -522,9 +522,7 @@ function WorkoutCard({ workout, expanded, onToggleExpand, onToggleCompleted, onO
         <StatPill icon="📋" value={`${workout.exercises?.length || 0} exercises`} />
       </View>
 
-      {workout.workoutSource === 'library'
-        ? <Text style={styles.verifiedTag}>📖 From Fueli's workout library</Text>
-        : workout.exerciseSource === 'verified' && <Text style={styles.verifiedTag}>✓ Exercises checked against the exercise library</Text>}
+      {workout.workoutSource !== 'library' && workout.exerciseSource === 'verified' && <Text style={styles.verifiedTag}>✓ Exercises checked against the exercise library</Text>}
       {workout.description && <Text style={styles.description}>{workout.description}</Text>}
       {workout.warnings?.map((w, i) => <Text key={i} style={styles.warnText}>⚠️ {w}</Text>)}
 

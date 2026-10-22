@@ -286,12 +286,14 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 26, fontWeight: '800', color: '#1a1a1a' },
   headerBtns: { flexDirection: 'row', gap: 8 },
+  // Both buttons centre their label; the row stretches Add to Scan's height (Scan has a border).
   scanBtn: {
     backgroundColor: '#F0FAF8', borderRadius: 10, paddingHorizontal: 14,
     paddingVertical: 8, borderWidth: 1.5, borderColor: '#0D9E8A',
+    alignItems: 'center', justifyContent: 'center',
   },
   scanBtnText: { fontSize: 14, color: '#0D9E8A', fontWeight: '700' },
-  addBtn: { backgroundColor: '#0D9E8A', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8 },
+  addBtn: { backgroundColor: '#0D9E8A', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8, alignItems: 'center', justifyContent: 'center' },
   addBtnText: { fontSize: 14, color: '#fff', fontWeight: '700' },
   list: { padding: 16 },
   controls: { paddingHorizontal: 16, paddingTop: 10 },
