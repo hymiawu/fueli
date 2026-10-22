@@ -74,7 +74,7 @@ Then make sure the Vercel domain is listed in `ALLOWED_ORIGINS` in `server/fly.t
 
 **Supabase:** run 000 to 003 in order (`supabase/migrations/000_ingredients.sql`, `001_ingredients_rls.sql`, `002_subscriptions.sql`, `003_serving_allergens.sql`) in the SQL editor once. 002 creates the subscription table and marks accounts that already exist as `grandfathered` (free); 003 adds serving size, servings per package and allergens to fridge items. Run 003 before deploying the app version that writes those columns.
 
-**Payments → Stripe (test mode).** New accounts must subscribe ($4.99/month) before using the app; the API refuses AI requests from unpaid accounts (HTTP 402).
+**Payments → Stripe (test mode).** New accounts must subscribe ($9.99/month) before using the app; the API refuses AI requests from unpaid accounts (HTTP 402).
 1. In the Stripe Dashboard with **Test mode** on, copy the secret key (`sk_test_...`).
 2. Developers → Webhooks → Add endpoint: `https://<app>.fly.dev/v1/billing/webhook`, events `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`. Copy its signing secret (`whsec_...`).
 3. Supabase → Project Settings → API Keys → copy the **secret / service_role** key. Only the API's billing module uses it, to write subscription status.

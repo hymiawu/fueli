@@ -4,6 +4,7 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { dailyUsage } from './rateLimit.js';
+import { PRICE_CENTS, PRICE_PER_MONTH } from './price.js';
 
 const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
 const WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -18,7 +19,7 @@ const admin = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const PLAN = {
   currency: 'usd',
-  unit_amount: 499,
+  unit_amount: PRICE_CENTS,
   recurring: { interval: 'month' },
   product_data: { name: 'Fueli monthly' },
 };
@@ -58,7 +59,7 @@ const fromSubscription = (sub) => ({
 export async function getStatus(req) {
   const row = await readStatus(req);
   const status = row?.status ?? 'none';
-  return { active: ACTIVE.has(status), status, price: '$4.99/month' };
+  return { active: ACTIVE.has(status), status, price: PRICE_PER_MONTH };
 }
 
 // Status plus live renewal details from Stripe, for the Membership screen.

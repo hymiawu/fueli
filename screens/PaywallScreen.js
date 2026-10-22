@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../lib/supabase';
 import { getBillingStatus, startCheckout, confirmCheckout } from '../lib/api';
 import { checkoutReturn } from '../lib/route';
+import { PRICE_LABEL } from '../lib/membership';
 
 const FEATURES = [
   '🧊 Fridge inventory with photo scanning',
@@ -68,7 +69,7 @@ export default function PaywallScreen({ navigation }) {
 
         <View style={styles.card}>
           <Text style={styles.price}>
-            $4.99<Text style={styles.per}> / month</Text>
+            {PRICE_LABEL}<Text style={styles.per}> / month</Text>
           </Text>
           {FEATURES.map((f) => (
             <Text key={f} style={styles.feature}>{f}</Text>

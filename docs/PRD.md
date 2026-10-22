@@ -52,7 +52,7 @@
 - Input `{ recentWorkouts (≤ 14), filterType? }`. Output 1–3 workouts. The guard caps difficulty (sedentary → Beginner, lightly active → Intermediate) and adds warnings.
 
 ### 3.5 Billing — Stripe Checkout (test mode)
-- New accounts subscribe to a **$4.99/month** plan before using the app. Accounts that existed before payments were added are `grandfathered` (free).
+- New accounts subscribe to a **$9.99/month** plan before using the app. Accounts that existed before payments were added are `grandfathered` (free).
 - Routes (all require a signed-in user): `GET /v1/billing/status`, `GET /v1/billing/membership` (status plus renewal date from Stripe), `POST /v1/billing/checkout` (returns the Checkout URL), `POST /v1/billing/confirm` (called on return from Checkout; checks the session belongs to the user), `POST /v1/billing/cancel`, `POST /v1/billing/resume`, and the signed webhook `POST /v1/billing/webhook`.
 - Status is stored in the `subscriptions` table. Users can read their own row (RLS) but not write it; only the API's billing module writes it, from Stripe-verified data.
 - Every AI route returns **402** unless the status is `active`, `trialing` or `grandfathered`.

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { getMembership, cancelMembership, resumeMembership, startCheckout } from '../lib/api';
-import { membershipLabel, formatDate } from '../lib/membership';
+import { membershipLabel, formatDate, PRICE_LABEL, PRICE_PER_MONTH } from '../lib/membership';
 
 export default function MembershipScreen({ navigation }) {
   const [info, setInfo] = useState(null);
@@ -28,7 +28,7 @@ export default function MembershipScreen({ navigation }) {
     if (status === 'grandfathered') {
       Alert.alert(
         'Cancel membership?',
-        'Your free access ends right away. To use Fueli again you will need a $4.99/month subscription.',
+        `Your free access ends right away. To use Fueli again you will need a ${PRICE_PER_MONTH} subscription.`,
         [
           { text: 'Keep It', style: 'cancel' },
           { text: 'Cancel Membership', style: 'destructive', onPress: async () => {
@@ -91,7 +91,7 @@ export default function MembershipScreen({ navigation }) {
               <View style={styles.card}>
                 <Text style={styles.plan}>Fueli Monthly</Text>
                 <Text style={styles.price}>
-                  $4.99<Text style={styles.per}> / month</Text>
+                  {PRICE_LABEL}<Text style={styles.per}> / month</Text>
                 </Text>
                 <View style={[styles.badge, (subscribed || status === 'grandfathered') && !info.cancelAtPeriodEnd ? styles.badgeOn : styles.badgeOff]}>
                   <Text style={styles.badgeText}>{info.cancelAtPeriodEnd ? 'Canceling' : membershipLabel(status).split(' · ')[0]}</Text>

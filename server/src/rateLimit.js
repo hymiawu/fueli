@@ -1,4 +1,5 @@
 // Small in-memory sliding window per user. Fine for one Fly machine; use Redis/Upstash if you scale out.
+import { PRICE_LABEL } from './price.js';
 const WINDOW_MS = 10 * 60 * 1000;
 const LIMIT = Number(process.env.AI_RATE_LIMIT || 30);
 const hits = new Map();
@@ -32,7 +33,7 @@ export function takeDaily(userId, family, now = Date.now()) {
   const day = utcDay(now);
   const entry = daily.get(key);
   const count = entry?.day === day ? entry.count : 0;
-  if (count >= f.limit()) return `Daily limit reached: ${f.limit()} ${f.noun} a day on the $4.99 plan. Resets at midnight UTC.`;
+  if (count >= f.limit()) return `Daily limit reached: ${f.limit()} ${f.noun} a day on the ${PRICE_LABEL} plan. Resets at midnight UTC.`;
   daily.set(key, { day, count: count + 1 });
   return null;
 }
