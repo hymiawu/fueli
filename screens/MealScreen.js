@@ -14,6 +14,7 @@ import { getMealSuggestions, analyzeOutsideFood, assetBase64 } from '../lib/api'
 import { handleSubscriptionLapse } from '../lib/route';
 import { planCooked, deductionRecord, summaryText } from '../lib/cooking';
 import Sheet from '../lib/Sheet';
+import { scaleMeal } from '../lib/servings';
 
 const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -147,9 +148,16 @@ export default function MealScreen() {
     setSelectedMode(m);
     try { await setUserItem('mealMode', m); } catch(e) {}
   };
+  // Changing "Cooking for" rescales the day's uncooked meals right away (no new AI call): amounts are for all
+  // diners, calories stay per person, and the shopping list is rechecked against the cached fridge.
   const chooseServings = async (n) => {
     setServings(n);
     try { await setUserItem('mealServings', String(n)); } catch(e) {}
+    const dayMeals = mealPlans[selectedDate] || [];
+    if (!dayMeals.some(m => !m.cooked && m.type !== 'Outside' && (m.servings || 1) !== n)) return;
+    let fridgeRows = null;
+    try { const cached = await getUserItem('ingredients'); if (cached) fridgeRows = JSON.parse(cached); } catch(e) {}
+    await saveMealPlans({ ...mealPlans, [selectedDate]: dayMeals.map(m => scaleMeal(m, n, fridgeRows)) });
   };
   const saveMealPlans = async (plans) => {
     setMealPlans(plans);
