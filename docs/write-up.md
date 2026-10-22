@@ -18,7 +18,7 @@ We see three connected problems:
 
 Fueli turns the food you already have into a goal-aligned day of meals and workouts, with nutrition numbers checked against a database.
 
-1. **Sign up and subscribe.** Email sign-in, a short profile (goal, diet, activity), then a $4.99/month subscription through Stripe Checkout (test mode).
+1. **Sign up and subscribe.** Email sign-in, a short profile (goal, diet, activity), then a $9.99/month subscription through Stripe Checkout (test mode).
 2. **Stock the fridge.** Add items by hand or photograph them; the vision model identifies the food and the nutrition database fills in its values. The user reviews the result before saving.
 3. **Get a day of meals.** Breakfast, lunch and dinner for 1–6 people, using items that expire soonest. Missing ingredients become a shopping list.
 4. **Cook and check off.** Marking a meal as cooked deducts its ingredients from the fridge; unchecking restores them.

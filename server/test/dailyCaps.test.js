@@ -8,7 +8,7 @@ test('the third meal plan is refused at DAILY_MEALS=2, and the count resets at m
   const t = Date.parse('2026-10-22T23:00:00Z');
   assert.equal(takeDaily('u1', 'meals', t), null);
   assert.equal(takeDaily('u1', 'meals', t), null);
-  assert.equal(takeDaily('u1', 'meals', t), 'Daily limit reached: 2 meal plans a day on the $4.99 plan. Resets at midnight UTC.');
+  assert.equal(takeDaily('u1', 'meals', t), 'Daily limit reached: 2 meal plans a day on the $9.99 plan. Resets at midnight UTC.');
   assert.equal(takeDaily('u2', 'meals', t), null, 'other users are counted separately');
   assert.equal(takeDaily('u1', 'scans', t), null, 'other families are counted separately');
   assert.equal(takeDaily('u1', 'meals', Date.parse('2026-10-23T00:00:01Z')), null);
