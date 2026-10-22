@@ -18,7 +18,8 @@ primary_region = "lax"
   force_https = true
   auto_stop_machines = "stop"
   auto_start_machines = true
-  min_machines_running = 0
+  # One machine always on for demo day (D-28): no ~3.5 s cold start after idle. Set back to 0 after class.
+  min_machines_running = 1
 
   [[http_service.checks]]
     grace_period = "10s"
