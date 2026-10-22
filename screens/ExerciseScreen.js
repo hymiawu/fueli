@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { handleSubscriptionLapse } from '../lib/route';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import { getWorkoutSuggestions, planMyWeek } from '../lib/api';
-import { supabase } from '../lib/supabase';
+import { currentUser } from '../lib/session';
 import Sheet from '../lib/Sheet';
 import { addSession, lastTimeText, firstNumber, KG_PER_LB } from '../lib/exerciseLog';
 
@@ -63,7 +63,7 @@ export default function ExerciseScreen() {
       if (w) { const plan = JSON.parse(w); setWeekPlan(plan); if (plan.daysPerWeek) setDaysPerWeek(plan.daysPerWeek); }
     } catch(e) {}
     try { const l = await getUserItem('exerciseLog'); if (l) setExerciseLog(JSON.parse(l)); } catch(e) {}
-    try { const { data: { user } } = await supabase.auth.getUser(); if (user?.user_metadata?.units === 'imperial') setUnits('imperial'); } catch(e) {}
+    try { const user = await currentUser(); if (user?.user_metadata?.units === 'imperial') setUnits('imperial'); } catch(e) {}
   };
 
   // A plan belongs to one Monday-to-Sunday week; "Plan my week" comes back when a new week starts.

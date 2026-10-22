@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
+import { currentUser } from '../lib/session';
 import { getBillingStatus } from '../lib/api';
 import { membershipLabel } from '../lib/membership';
 
@@ -27,7 +28,7 @@ export default function SettingsScreen({ navigation }) {
   // Refresh when coming back from the sub-pages (e.g. after canceling).
   useFocusEffect(
     useCallback(() => {
-      supabase.auth.getUser().then(({ data: { user } }) => setEmail(user?.email || ''));
+      currentUser().then((user) => setEmail(user?.email || ''));
       getBillingStatus()
         .then(({ status }) => setMembership(membershipLabel(status)))
         .catch(() => setMembership(''));

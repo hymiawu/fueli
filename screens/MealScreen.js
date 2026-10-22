@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import * as ImagePicker from 'expo-image-picker';
 import { supabase } from '../lib/supabase';
+import { currentUser } from '../lib/session';
 import { getMealSuggestions, analyzeOutsideFood, assetBase64 } from '../lib/api';
 import { handleSubscriptionLapse } from '../lib/route';
 import { planCooked, deductionRecord, summaryText } from '../lib/cooking';
@@ -60,7 +61,7 @@ const getIngredientList = (meal) => {
 };
 
 const loadFridgeRows = async () => {
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await currentUser();
   if (!user) throw new Error('Please sign in again.');
   const { data, error } = await supabase.from('ingredients').select('*').eq('user_id', user.id);
   if (error) throw error;
@@ -69,7 +70,7 @@ const loadFridgeRows = async () => {
 
 const refreshFridgeCache = async () => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await currentUser();
     if (!user) return;
     const { data } = await supabase.from('ingredients').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
     if (data) await setUserItem('ingredients', JSON.stringify(data));

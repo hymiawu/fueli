@@ -8,6 +8,7 @@ import { Alert } from '../lib/alert';
 import { useFocusEffect } from '@react-navigation/native';
 import { getUserItem, setUserItem } from '../lib/userStorage';
 import { supabase } from '../lib/supabase';
+import { currentUser } from '../lib/session';
 import { caloriesPerServing, formatNutrient, toNum } from '../lib/nutrition';
 import { expiryLabel } from '../lib/expiry';
 import { CATEGORIES, parseAllergens } from '../lib/constants';
@@ -59,7 +60,7 @@ export default function FridgeScreen({ navigation }) {
   const loadIngredients = async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await currentUser();
       if (!user) return;
       setAllergies(parseAllergens(user.user_metadata?.allergies));
       const { data, error } = await supabase
@@ -79,7 +80,7 @@ export default function FridgeScreen({ navigation }) {
   // prepending to a list that a focus reload may have replaced meanwhile (bug 9.2).
   const handleSave = async (item) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await currentUser();
       if (!user) return false;
       const { error } = await supabase.from('ingredients').insert([{ ...item, user_id: user.id }]);
       if (error) throw error;

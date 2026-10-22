@@ -5,6 +5,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Alert } from '../lib/alert';
 import { supabase } from '../lib/supabase';
+import { currentUser } from '../lib/session';
 import { toMetric, toImperial } from '../lib/units';
 import { ALLERGENS, GENDER_OPTIONS, parseAllergens } from '../lib/constants';
 
@@ -34,7 +35,7 @@ export default function EditProfileScreen({ navigation }) {
   useEffect(() => { loadProfile(); }, []);
 
   const loadProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await currentUser();
     if (user) {
       setEmail(user.email || '');
       const meta = user.user_metadata || {};
