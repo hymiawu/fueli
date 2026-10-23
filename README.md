@@ -10,7 +10,7 @@ AI meal and workout planner that cooks from **your fridge**: snap ingredients, g
 
 | Capstone deliverable | Location |
 |---|---|
-| Write-up (4–5 pages) | [docs/write-up.md](docs/write-up.md), [docs/write-up.pdf](docs/write-up.pdf) |
+| Write-up (5 pages) | [docs/write-up.pdf](docs/write-up.pdf) (final, as submitted); [docs/write-up.md](docs/write-up.md) is an earlier draft |
 | Product brief | [docs/product-brief.md](docs/product-brief.md) |
 | Demo-day checklist | [docs/demo-day.md](docs/demo-day.md) |
 | PRD | [docs/PRD.md](docs/PRD.md) |
